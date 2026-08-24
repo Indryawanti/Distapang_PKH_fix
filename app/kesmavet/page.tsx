@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '../../supabase';
+import { supabase } from '@/lib/supabase';
 
 /* ─────────────────────────────────────────────
    KOMPONEN KARTU 3D LIQUID GLASS (UNGU KESMAVET)

@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 // MAS REZA: PASTE 3 VARIABEL (initialDataBroiler, initialDataPetelur, 
 // dan initialDataGeneral) DARI FILE page.tsx KE BAWAH BARIS INI:
 // =========================================================================
-const initialDataBroiler: BroilerItem[] = [
+const initialDataBroiler: any[] = [
   {
     no: 1,
     kecamatan: 'AYAH',
@@ -2119,7 +2119,7 @@ const initialDataBroiler: BroilerItem[] = [
   },
 ];
 
-const initialDataPetelur: PetelurItem[] = [
+const initialDataPetelur: any[] = [
   {
     no: 1,
     kecamatan: 'AYAH',
@@ -4362,7 +4362,7 @@ const initialDataPetelur: PetelurItem[] = [
   },
 ];
 
-const initialDataGeneral: GeneralItem[] = [
+const initialDataGeneral: any[] = [
   {
     no: 1,
     jenis_ternak: 'Babi',

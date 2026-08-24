@@ -2,10 +2,16 @@ import OpenAI from "openai";
 import pool from "@/lib/db";
 import { NextResponse } from "next/server";
 
-const groq = new OpenAI({
-  apiKey: process.env.GROQ_API_KEY!,
-  baseURL: "https://api.groq.com/openai/v1",
-});
+let _groq: OpenAI | null = null;
+function getGroqClient() {
+  if (!_groq) {
+    _groq = new OpenAI({
+      apiKey: process.env.GROQ_API_KEY!,
+      baseURL: "https://api.groq.com/openai/v1",
+    });
+  }
+  return _groq;
+}
 
 // ============================================================
 // LABEL KOLOM POPULASI TERNAK (60 kolom, urutan sesuai halaman Populasi 2025)
@@ -225,7 +231,7 @@ Kalau pengguna tanya jenis ternak lain (Kelinci, Ayam, Itik, dsb), field-nya sud
 Jika kamu memanggil function dan hasilnya berupa data JSON, ringkas dan sajikan poin pentingnya saja ke pengguna dengan format yang mudah dibaca, 
 jangan tampilkan JSON mentah. Jika data tidak ditemukan, katakan dengan jujur bahwa datanya tidak ada.`;
 
-const MODEL = "openai/gpt-oss-120b";
+const MODEL = "llama-3.3-70b-versatile";
 
 // ============================================================
 // RETRY HELPER
@@ -233,7 +239,7 @@ const MODEL = "openai/gpt-oss-120b";
 async function callGroqWithRetry(params: any, retries = 2): Promise<any> {
   for (let i = 0; i <= retries; i++) {
     try {
-      return await groq.chat.completions.create(params);
+      return await getGroqClient().chat.completions.create(params);
     } catch (err: any) {
       if (err?.code === "tool_use_failed" && i < retries) {
         console.log(`Tool call gagal parsing, coba ulang (percobaan ${i + 1})...`);

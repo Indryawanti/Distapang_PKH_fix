@@ -1,11 +1,8 @@
 import { NextResponse } from 'next/server';
-import pool from '@/lib/db'; // Mengambil jembatan database yang kita buat kemarin
-export const dynamic = 'force-dynamic'; // <--- Tulis baris penolak cache ini
+import pool from '@/lib/db';
 
-export async function GET() {
-   // ... (biarkan kodingan bawahnya tetap sama)
+export const dynamic = 'force-dynamic';
 
-// Masukkan seluruh variabel DATA_LENGKAP Mas di bawah ini:
 const DATA_LENGKAP = [
   {
     kec: 'AYAH',

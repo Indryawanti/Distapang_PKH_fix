@@ -190,7 +190,7 @@ export default function UnifiedSKLBPage() {
           </thead>
           <tbody>
             {data.length === 0 ? (
-              <tr><td colSpan={8} className="p-8 text-slate-400 font-bold italic">Klik tombol "Tarik Data" atau "+ Tambah".</td></tr>
+              <tr><td colSpan={8} className="p-8 text-slate-400 font-bold italic">Klik tombol &quot;Tarik Data&quot; atau &quot;+ Tambah&quot;.</td></tr>
             ) : (
               data.map((row) => (
                 <tr key={row.id || row.no_urut} className="border-b border-emerald-900 hover:bg-emerald-50">
@@ -346,7 +346,7 @@ export default function UnifiedSKLBPage() {
                     {filteredData.length === 0 ? (
                       <tr>
                         <td colSpan={11} className="p-12 text-slate-500 font-bold italic text-sm">
-                          Data masih kosong. Silakan klik tombol "Tarik Data Detail Sapi" di atas.
+                          Data masih kosong. Silakan klik tombol &quot;Tarik Data Detail Sapi&quot; di atas.
                         </td>
                       </tr>
                     ) : (

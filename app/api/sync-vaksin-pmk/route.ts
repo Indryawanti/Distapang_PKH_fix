@@ -106,7 +106,7 @@ export async function POST() {
     let no_urut = 1;
     const dataHasil = [];
 
-    for (const [key, data] of dataMap.entries()) {
+    for (const [key, data] of Array.from(dataMap.entries())) {
         const persentase = data.target > 0 ? Number(((data.capaian / data.target) * 100).toFixed(2)) : 0;
         dataHasil.push({ ...data, persentase, no_urut, desa: '-' });
 

@@ -48,7 +48,7 @@ export default function LaporanPuskeswanPage() {
     if (!acc[row.bulan]) acc[row.bulan] = [];
     acc[row.bulan].push(row);
     return acc;
-  }, {} as Record<string, typeof dataAwal>);
+  }, {} as Record<string, any[]>);
 
   return (
     <div className="min-h-screen bg-slate-100 font-sans">
@@ -124,7 +124,7 @@ export default function LaporanPuskeswanPage() {
               </thead>
 
               {/* ─── ISI TABEL (TBODY) ─── */}
-              {Object.entries(groupedData).map(([bulan, rows]) => (
+              {(Object.entries(groupedData) as [string, any[]][]).map(([bulan, rows]) => (
                 <tbody key={bulan} className="border-b-4 border-slate-900">
                   
                   {rows.map((row, idx) => (

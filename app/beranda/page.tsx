@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { supabase } from '../../supabase'; // Pastikan path ini benar
+import { supabase } from '@/lib/supabase';
 import AuroraBackground from '@/components/ui/animated-background';
 
 /* ─────────────────────────────────────────────
