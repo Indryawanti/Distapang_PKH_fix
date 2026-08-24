@@ -1,156 +1,160 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useRef } from 'react';
+import { ArrowLeft, ChevronRight, BarChart3, TrendingUp, Calendar, ArrowRight } from 'lucide-react';
 
-/* ─────────────────────────────────────────────
-   KOMPONEN TOMBOL 3D (REUSABLE)
-───────────────────────────────────────────── */
-function YearCard({
-  href,
-  title,
-  theme,
-}: {
-  href: string;
-  title: string;
-  theme: 'emerald' | 'blue';
-}) {
-  const cardRef = useRef<HTMLAnchorElement>(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [hovered, setHovered] = useState(false);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const card = cardRef.current;
-    if (!card) return;
-    const rect = card.getBoundingClientRect();
-    const dx = (e.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
-    const dy = (e.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
-    setTilt({ x: -dy * 15, y: dx * 15 });
-  };
-
-  const themeClasses =
-    theme === 'emerald'
-      ? 'bg-emerald-800/40 border-emerald-500/30 hover:bg-emerald-600/60 hover:border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.15)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)]'
-      : 'bg-blue-900/40 border-blue-500/30 hover:bg-blue-600/60 hover:border-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.15)] hover:shadow-[0_0_30px_rgba(59,130,246,0.4)]';
-
+export default function PopulasiDanProduksiPage() {
   return (
-    <Link
-      ref={cardRef}
-      href={href}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => {
-        setTilt({ x: 0, y: 0 });
-        setHovered(false);
-      }}
-      style={{
-        transform: hovered
-          ? `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(-5px) scale(1.03)`
-          : 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)',
-        transition: hovered
-          ? 'transform 0.1s ease-out'
-          : 'transform 0.5s cubic-bezier(0.23,1,0.32,1)',
-      }}
-      className={`relative group flex items-center justify-center p-6 rounded-2xl font-black text-xl text-white backdrop-blur-md border ${themeClasses}`}
-    >
-      <span className="drop-shadow-md">{title}</span>
-    </Link>
-  );
-}
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white pb-20">
+      
+      {/* ── TOP HEADER ── */}
+      <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+          
+          <div className="flex items-center gap-3">
+            <Link
+              href="/bitpro"
+              className="min-h-touch min-w-touch w-10 h-10 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors"
+              aria-label="Kembali ke Bitpro"
+            >
+              <ArrowLeft size={18} />
+            </Link>
 
-/* ─────────────────────────────────────────────
-   HALAMAN UTAMA POPULASI & PRODUKSI
-───────────────────────────────────────────── */
-export default function PopulasiDanProduksi() {
-  return (
-    <div className="relative min-h-screen flex flex-col items-center pt-10 px-6 pb-16 font-sans text-gray-100 overflow-hidden bg-gradient-to-br from-[#022c22] via-[#064e3b] to-[#022c22]">
-      {/* LATAR BELAKANG ESTETIK (Orbs) */}
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[120px] animate-pulse" />
-        <div
-          className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] animate-pulse"
-          style={{ animationDelay: '2s' }}
-        />
-      </div>
-
-      {/* NAVIGASI ATAS */}
-      <div className="relative z-10 w-full max-w-4xl flex justify-start mb-12">
-        <Link
-          href="/bitpro"
-          className="bg-emerald-900/60 hover:bg-emerald-800 backdrop-blur-md px-6 py-2.5 rounded-full font-bold transition-all border border-emerald-500/30 shadow-md text-white flex items-center gap-2"
-        >
-          ← Kembali ke Modul Bitpro
-        </Link>
-      </div>
-
-      <div className="relative z-10 text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-black text-white drop-shadow-xl tracking-tight">
-          Pilih Kategori & Tahun Data
-        </h1>
-        <p className="text-emerald-200/70 mt-3 font-medium">
-          Sistem Rekapitulasi Populasi dan Produksi Peternakan
-        </p>
-      </div>
-
-      <div className="relative z-10 w-full max-w-4xl flex flex-col gap-10">
-        {/* =========================================
-            BAGIAN ATAS: POPULASI TERNAK
-        ========================================= */}
-        <div className="bg-[#0b1c17]/60 backdrop-blur-xl p-8 md:p-10 rounded-[2rem] shadow-2xl border border-emerald-500/20 relative overflow-hidden group">
-          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-600 via-emerald-400 to-emerald-600" />
-
-          <div className="text-center mb-8">
-            <span className="text-5xl block mb-4 drop-shadow-lg group-hover:scale-110 transition-transform">
-              🐄
-            </span>
-            <h2 className="text-2xl font-black text-white uppercase tracking-widest drop-shadow-md">
-              Populasi Ternak
-            </h2>
+            <div>
+              <div className="flex items-center gap-2">
+                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                  Bitpro
+                </Link>
+                <span className="text-slate-300">/</span>
+                <span className="text-xs font-bold text-azure">Populasi & Produksi</span>
+              </div>
+              <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
+                Statistik Populasi dan Produksi Peternakan
+              </h1>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <YearCard
-              href="/bitpro/populasi-dan-produksi/2025"
-              title="DATA POPULASI 2025"
-              theme="emerald"
-            />
-            <YearCard
-              href="/bitpro/populasi-dan-produksi/2026"
-              title="DATA POPULASI 2026"
-              theme="emerald"
-            />
-          </div>
+        </div>
+      </header>
+
+      {/* ── MAIN WORKSPACE ── */}
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+        
+        {/* Intro */}
+        <div className="text-center max-w-2xl mx-auto space-y-2">
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            Pilih Kategori & Periode Laporan
+          </h2>
+          <p className="text-sm text-slate-600">
+            Akses sensus rekapitulasi populasi 16 komoditas ternak atau laporan tonase produksi daging dan telur Kabupaten Kebumen.
+          </p>
         </div>
 
-        {/* =========================================
-            BAGIAN BAWAH: PRODUKSI TERNAK
-        ========================================= */}
-        <div className="bg-[#081824]/60 backdrop-blur-xl p-8 md:p-10 rounded-[2rem] shadow-2xl border border-blue-500/20 relative overflow-hidden group">
-          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 via-blue-400 to-blue-600" />
+        {/* Categories */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          {/* SECTION 1: POPULASI */}
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm flex flex-col justify-between space-y-6">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center text-2xl">
+                  🐄
+                </div>
+                <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  Sensus Populasi
+                </span>
+              </div>
 
-          <div className="text-center mb-8">
-            <span className="text-5xl block mb-4 drop-shadow-lg group-hover:scale-110 transition-transform">
-              📈
-            </span>
-            <h2 className="text-2xl font-black text-white uppercase tracking-widest drop-shadow-md">
-              Produksi Ternak
-            </h2>
+              <h3 className="text-xl font-bold text-slate-900 mb-1">
+                Populasi Ternak Kabupaten
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Rangkuman jumlah ternak ruminansia besar, kecil, unggas, dan aneka ternak per desa dan kecamatan.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+              <Link
+                href="/bitpro/populasi-dan-produksi/2025"
+                className="group p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-azure hover:shadow-sm transition-all text-left flex flex-col justify-between min-h-[96px]"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-bold text-slate-500 uppercase">Tahun 2025</span>
+                  <ChevronRight size={16} className="text-slate-400 group-hover:text-azure transition-colors" />
+                </div>
+                <span className="font-bold text-sm text-slate-900 group-hover:text-azure transition-colors">
+                  Data Populasi 2025 →
+                </span>
+              </Link>
+
+              <Link
+                href="/bitpro/populasi-dan-produksi/2026"
+                className="group p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-azure hover:shadow-sm transition-all text-left flex flex-col justify-between min-h-[96px]"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-bold text-emerald-600 uppercase">Tahun 2026 (Live)</span>
+                  <ChevronRight size={16} className="text-slate-400 group-hover:text-azure transition-colors" />
+                </div>
+                <span className="font-bold text-sm text-slate-900 group-hover:text-azure transition-colors">
+                  Data Populasi 2026 →
+                </span>
+              </Link>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <YearCard
-              href="/bitpro/populasi-dan-produksi/produksi-2025"
-              title="DATA PRODUKSI 2025"
-              theme="blue"
-            />
-            <YearCard
-              href="/bitpro/populasi-dan-produksi/produksi-2026"
-              title="DATA PRODUKSI 2026"
-              theme="blue"
-            />
+          {/* SECTION 2: PRODUKSI */}
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm flex flex-col justify-between space-y-6">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 text-blue-700 flex items-center justify-center text-2xl">
+                  📈
+                </div>
+                <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                  Produksi Ternak
+                </span>
+              </div>
+
+              <h3 className="text-xl font-bold text-slate-900 mb-1">
+                Produksi Daging & Telur
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Rekapitulasi tonase produksi daging siap potong dan komoditas telur konsumsi per triwulan.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+              <Link
+                href="/bitpro/populasi-dan-produksi/produksi-2025"
+                className="group p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-azure hover:shadow-sm transition-all text-left flex flex-col justify-between min-h-[96px]"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-bold text-slate-500 uppercase">Tahun 2025</span>
+                  <ChevronRight size={16} className="text-slate-400 group-hover:text-azure transition-colors" />
+                </div>
+                <span className="font-bold text-sm text-slate-900 group-hover:text-azure transition-colors">
+                  Data Produksi 2025 →
+                </span>
+              </Link>
+
+              <Link
+                href="/bitpro/populasi-dan-produksi/produksi-2026"
+                className="group p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-azure hover:shadow-sm transition-all text-left flex flex-col justify-between min-h-[96px]"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-bold text-azure uppercase">Tahun 2026 (Live)</span>
+                  <ChevronRight size={16} className="text-slate-400 group-hover:text-azure transition-colors" />
+                </div>
+                <span className="font-bold text-sm text-slate-900 group-hover:text-azure transition-colors">
+                  Data Produksi 2026 →
+                </span>
+              </Link>
+            </div>
           </div>
+
         </div>
-      </div>
+
+      </main>
+
     </div>
   );
 }

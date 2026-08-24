@@ -6,26 +6,38 @@ const config: Config = {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  darkMode: 'class',
   theme: {
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-      },
-      keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-16px)' },
-        },
-        'glow-pulse': {
-          '0%, 100%': { opacity: '0.6', transform: 'scale(1)' },
-          '50%': { opacity: '1', transform: 'scale(1.08)' },
+      colors: {
+        azure: '#2192FF',
+        vitality: '#38E54D',
+        lime: '#9CFF2E',
+        radiant: '#FDFF00',
+        obsidian: {
+          DEFAULT: '#090A0F',
+          surface: '#12151E',
+          soft: '#181C28',
+          border: '#262C3D',
+          hover: '#1F2433',
         },
       },
-      animation: {
-        float: 'float 4s ease-in-out infinite',
-        'glow-pulse': 'glow-pulse 3s ease-in-out infinite',
+      fontFamily: {
+        editorial: ['var(--font-editorial)', 'Georgia', 'serif'],
+        sans: ['var(--font-sans)', 'sans-serif'],
+        mono: ['var(--font-mono)', 'monospace'],
+      },
+      spacing: {
+        '18': '4.5rem',
+        '22': '5.5rem',
+      },
+      minHeight: {
+        'touch': '44px',
+        'touch-lg': '48px',
+      },
+      minWidth: {
+        'touch': '44px',
+        'touch-lg': '48px',
       },
     },
   },

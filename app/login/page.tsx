@@ -10,10 +10,9 @@ import {
   Mail,
   Lock,
   ShieldCheck,
-  Zap,
-  Layers,
   ArrowRight,
   Loader2,
+  AlertCircle,
 } from 'lucide-react';
 
 export default function LoginPage() {
@@ -37,93 +36,79 @@ export default function LoginPage() {
     setLoading(false);
 
     if (error) {
-      setErrorMsg('Login gagal. Periksa kembali email dan kata sandi Anda.');
+      setErrorMsg('Login gagal. Periksa kembali ID Petugas atau kata sandi Anda.');
     } else {
-      router.push('/');
+      router.push('/beranda');
     }
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#0a0118] flex flex-col items-center justify-center px-6 py-16">
-      {/* ambient blob orbs — consistent with SiMantap glassmorphism baseline */}
-      <div className="pointer-events-none absolute -top-40 left-1/4 h-96 w-96 rounded-full bg-violet-600/25 blur-3xl" />
-      <div className="pointer-events-none absolute top-1/3 -right-32 h-96 w-96 rounded-full bg-fuchsia-500/15 blur-3xl" />
-
-      {/* radial spotlight glow behind the card, matches reference */}
-      <div
-        className="pointer-events-none absolute left-1/2 top-[8%] h-[36rem] w-[46rem] -translate-x-1/2 rounded-full"
-        style={{
-          background:
-            'radial-gradient(ellipse at center, rgba(168,85,247,0.35) 0%, rgba(124,58,237,0.15) 40%, transparent 70%)',
-        }}
-      />
-
-      {/* back link */}
+    <div className="relative min-h-screen bg-[#090A0F] text-slate-100 font-sans flex flex-col items-center justify-center px-4 sm:px-6 py-12 selection:bg-azure selection:text-white">
+      
+      {/* Back button (44px target) */}
       <Link
         href="/"
-        className="absolute left-6 top-6 z-20 flex items-center gap-1 text-sm text-white/50 transition-colors hover:text-white"
+        className="min-h-touch min-w-touch h-11 px-4 rounded-xl border border-[#262C3D] bg-[#12151E] text-slate-300 text-xs font-semibold absolute left-4 sm:left-8 top-6 z-20 flex items-center gap-2 hover:bg-[#181C28] transition-colors"
       >
-        ← Kembali
+        ← Kembali ke Portal Publik
       </Link>
 
-      <div className="relative z-10 flex w-full flex-col items-center">
-        {/* eyebrow badge */}
-        <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm">
-          <span className="text-xs text-white/60">
-            Portal Internal SiMantap
+      <div className="relative z-10 flex w-full flex-col items-center max-w-md mx-auto pt-10 sm:pt-0">
+        
+        {/* Eyebrow badge */}
+        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#262C3D] bg-[#12151E] px-4 py-1.5">
+          <span className="w-2 h-2 rounded-full bg-lime shrink-0" />
+          <span className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-300">
+            Portal Internal Dinas
           </span>
         </div>
 
-        {/* headline, same treatment as reference hero */}
-        <h1
-          className="mb-3 max-w-lg px-4 text-center text-4xl md:text-5xl font-medium leading-tight"
-          style={{
-            background:
-              'linear-gradient(to bottom, #ffffff, #ffffff, rgba(255,255,255,0.6))',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            letterSpacing: '-0.03em',
-          }}
-        >
-          Masuk ke SiMantap
-        </h1>
-        <p className="mb-10 max-w-md px-4 text-center text-sm text-white/50">
-          Sistem Informasi Manajemen Ternak Terpadu — Dinas Pertanian dan
-          Pangan Kabupaten Kebumen
-        </p>
-
-        {/* glass login card */}
-        <form
-          onSubmit={handleLogin}
-          className="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-8 md:p-9 shadow-2xl backdrop-blur-xl"
-        >
-          <div className="mb-6 flex justify-center">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
+        {/* Editorial Headline */}
+        <div className="text-center mb-8">
+          <div className="w-14 h-14 rounded-2xl bg-white border-2 border-azure/40 p-2 mx-auto mb-4 flex items-center justify-center shadow-lg">
             <img
-              src="/ChatGPT_Image_29_Jun_2026,_19.58.30.png"
+              src="/logo-simantap.png"
               alt="Logo SiMantap"
-              className="h-16 w-16 rounded-full border-2 border-white/20 object-cover shadow-md"
+              className="w-full h-full object-contain"
+              onError={(e: any) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextSibling.style.display = 'block';
+              }}
             />
+            <span className="hidden text-2xl">🏛️</span>
           </div>
 
+          <h1 className="font-editorial text-3xl sm:text-4xl font-bold tracking-tight text-white mb-2">
+            Masuk SiMantap
+          </h1>
+          <p className="text-sm text-slate-400 font-normal">
+            Bidang Peternakan dan Kesehatan Hewan Kabupaten Kebumen
+          </p>
+        </div>
+
+        {/* Login Form Box */}
+        <form
+          onSubmit={handleLogin}
+          className="w-full rounded-3xl border border-[#262C3D] bg-[#12151E] p-6 sm:p-8 shadow-2xl space-y-4"
+        >
           {errorMsg && (
-            <div className="mb-5 rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
-              {errorMsg}
+            <div className="p-3.5 rounded-xl border border-red-500/40 bg-red-500/10 text-red-400 text-xs sm:text-sm font-semibold flex items-center gap-2">
+              <AlertCircle size={18} className="shrink-0" />
+              <span>{errorMsg}</span>
             </div>
           )}
 
           <div>
             <label
               htmlFor="email"
-              className="mb-1.5 block text-xs font-medium text-white/50"
+              className="mb-2 block text-xs font-mono font-bold uppercase tracking-wider text-slate-300"
             >
               ID Petugas (Email)
             </label>
             <div className="relative">
               <Mail
                 size={18}
-                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-white/30"
+                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
               />
               <input
                 id="email"
@@ -132,47 +117,37 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 py-3.5 pl-11 pr-4 text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-violet-400/60"
+                className="w-full min-h-touch-lg h-12 rounded-xl border border-[#262C3D] bg-[#090A0F] py-3.5 pl-11 pr-4 text-sm text-white placeholder-slate-600 outline-none focus:border-azure transition-colors font-sans"
               />
             </div>
           </div>
 
-          <div className="mt-4">
-            <div className="mb-1.5 flex items-center justify-between">
-              <label
-                htmlFor="password"
-                className="block text-xs font-medium text-white/50"
-              >
-                Kata Sandi
-              </label>
-              <Link
-                href="/lupa-sandi"
-                className="text-xs font-medium text-violet-300 hover:text-white transition-colors"
-              >
-                Lupa kata sandi?
-              </Link>
-            </div>
+          <div>
+            <label
+              htmlFor="password"
+              className="mb-2 block text-xs font-mono font-bold uppercase tracking-wider text-slate-300"
+            >
+              Kata Sandi
+            </label>
             <div className="relative">
               <Lock
                 size={18}
-                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-white/30"
+                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
               />
               <input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
-                placeholder="••••••••••"
+                placeholder="••••••••••••"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/5 py-3.5 pl-11 pr-11 text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-violet-400/60"
+                className="w-full min-h-touch-lg h-12 rounded-xl border border-[#262C3D] bg-[#090A0F] py-3.5 pl-11 pr-12 text-sm text-white placeholder-slate-600 outline-none focus:border-azure transition-colors font-sans"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                aria-label={
-                  showPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'
-                }
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 transition-colors hover:text-white"
+                aria-label={showPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'}
+                className="min-h-touch min-w-touch w-11 h-11 absolute right-1 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-500 hover:text-white"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
@@ -182,46 +157,38 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="mt-7 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-white via-white/95 to-white/70 py-4 font-bold text-[#4c1d95] transition-transform hover:scale-[1.02] active:scale-95 disabled:opacity-60"
+            className="w-full min-h-touch-lg h-13 rounded-xl bg-azure text-white font-bold text-base flex items-center justify-center gap-2 mt-6 shadow-[0_8px_20px_rgba(33,146,255,0.3)] hover:bg-azure/90 active:scale-[0.98] disabled:opacity-50 transition-all"
           >
             {loading ? (
               <>
                 <Loader2 size={18} className="animate-spin" />
-                Memproses...
+                <span>Memverifikasi Akun...</span>
               </>
             ) : (
               <>
-                Masuk Sekarang
+                <span>Masuk Sekarang</span>
                 <ArrowRight size={18} />
               </>
             )}
           </button>
 
-          <div className="mt-7 grid grid-cols-3 gap-2">
-            <div className="flex flex-col items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 py-3">
-              <ShieldCheck size={16} className="text-violet-300" />
-              <span className="text-center text-[10px] font-medium text-white/50 leading-tight">
-                Aman &amp; Terenkripsi
-              </span>
+          <div className="mt-6 pt-5 border-t border-[#262C3D] grid grid-cols-3 gap-2 text-center text-slate-400">
+            <div className="p-2 rounded-lg bg-[#181C28] border border-[#262C3D] text-[11px] font-mono">
+              🔒 Terenkripsi
             </div>
-            <div className="flex flex-col items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 py-3">
-              <Zap size={16} className="text-violet-300" />
-              <span className="text-center text-[10px] font-medium text-white/50 leading-tight">
-                Data Real-time
-              </span>
+            <div className="p-2 rounded-lg bg-[#181C28] border border-[#262C3D] text-[11px] font-mono">
+              ⚡ Real-time
             </div>
-            <div className="flex flex-col items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 py-3">
-              <Layers size={16} className="text-violet-300" />
-              <span className="text-center text-[10px] font-medium text-white/50 leading-tight">
-                3 Modul Terpadu
-              </span>
+            <div className="p-2 rounded-lg bg-[#181C28] border border-[#262C3D] text-[11px] font-mono">
+              🏛️ Resmi PKH
             </div>
           </div>
         </form>
 
-        <p className="mt-6 text-center text-[11px] text-white/30">
-          Butuh bantuan akses? Hubungi admin bidang PKH
+        <p className="mt-6 text-center text-xs text-slate-500">
+          Butuh bantuan akses? Hubungi admin teknis bidang PKH.
         </p>
+
       </div>
     </div>
   );

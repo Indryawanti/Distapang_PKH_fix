@@ -1,9 +1,9 @@
 'use client';
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { ArrowLeft, Search, Download } from 'lucide-react';
 
-// Header kolom data (60 kolom setelah Kecamatan/No/Desa)
-// Baris TOTAL resmi (sesuai rekapitulasi sumber)
 const TOTAL_ROW = [
   4986, 6337, 6078, 8725, 7291, 31557, 64996, 0, 0, 0, 0, 0, 0, 0, 12, 14, 13,
   23, 38, 70, 170, 4, 3, 28, 17, 112, 110, 274, 8742, 12278, 11846, 13692,
@@ -13,73 +13,22 @@ const TOTAL_ROW = [
 ];
 
 const HEADERS = [
-  'AJ Sapi',
-  'AB Sapi',
-  'MJ Sapi',
-  'MB Sapi',
-  'DJ Sapi',
-  'DB Sapi',
-  'Total Sapi Potong',
-  'AJ Perah',
-  'AB Perah',
-  'MJ Perah',
-  'MB Perah',
-  'DJ Perah',
-  'DB Perah',
-  'Total Sapi Perah',
-  'AJ Kerbau',
-  'AB Kerbau',
-  'MJ Kerbau',
-  'MB Kerbau',
-  'DJ Kerbau',
-  'DB Kerbau',
-  'Total Kerbau',
-  'AJ Kuda',
-  'AB Kuda',
-  'MJ Kuda',
-  'MB Kuda',
-  'DJ Kuda',
-  'DB Kuda',
-  'Total Kuda',
-  'AJ Kambing',
-  'AB Kambing',
-  'MJ Kambing',
-  'MB Kambing',
-  'DJ Kambing',
-  'DB Kambing',
-  'Total Kambing',
-  'AJ Domba',
-  'AB Domba',
-  'MJ Domba',
-  'MB Domba',
-  'DJ Domba',
-  'DB Domba',
-  'Total Domba',
-  'AJ Babi',
-  'AB Babi',
-  'MJ Babi',
-  'MB Babi',
-  'DJ Babi',
-  'DB Babi',
-  'Total Babi',
-  'Ayam Kampung',
-  'Ayam Petelur',
-  'Ayam Broiler',
-  'Puyuh',
-  'Itik',
-  'Entog',
-  'Angsa',
-  'Merpati',
-  'Kelinci Jantan',
-  'Kelinci Betina',
+  'AJ Sapi', 'AB Sapi', 'MJ Sapi', 'MB Sapi', 'DJ Sapi', 'DB Sapi', 'Total Sapi Potong',
+  'AJ Perah', 'AB Perah', 'MJ Perah', 'MB Perah', 'DJ Perah', 'DB Perah', 'Total Sapi Perah',
+  'AJ Kerbau', 'AB Kerbau', 'MJ Kerbau', 'MB Kerbau', 'DJ Kerbau', 'DB Kerbau', 'Total Kerbau',
+  'AJ Kuda', 'AB Kuda', 'MJ Kuda', 'MB Kuda', 'DJ Kuda', 'DB Kuda', 'Total Kuda',
+  'AJ Kambing', 'AB Kambing', 'MJ Kambing', 'MB Kambing', 'DJ Kambing', 'DB Kambing', 'Total Kambing',
+  'AJ Domba', 'AB Domba', 'MJ Domba', 'MB Domba', 'DJ Domba', 'DB Domba', 'Total Domba',
+  'AJ Babi', 'AB Babi', 'MJ Babi', 'MB Babi', 'DJ Babi', 'DB Babi', 'Total Babi',
+  'Ayam Kampung', 'Ayam Petelur', 'Ayam Broiler', 'Puyuh', 'Itik', 'Entog', 'Angsa', 'Merpati',
+  'Kelinci Jantan', 'Kelinci Betina',
 ];
 
 export default function Populasi2025() {
   const [search, setSearch] = useState('');
   const [dataPopulasi, setDataPopulasi] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true); // Tambahan untuk efek loading
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Gunakan useEffect untuk menyedot data otomatis dari API saat halaman dibuka
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -87,12 +36,11 @@ export default function Populasi2025() {
         const data = await response.json();
         setDataPopulasi(data);
       } catch (error) {
-        console.error('Gagal menyedot data:', error);
+        console.error('Gagal menyedot data populasi 2025:', error);
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
@@ -103,77 +51,128 @@ export default function Populasi2025() {
   );
 
   return (
-    <div className="p-4 min-h-screen text-gray-900" style={{background:'linear-gradient(135deg,#052e16 0%,#064e3b 40%,#065f46 100%)'}}>
-      <div className="flex justify-between items-center mb-4 flex-wrap gap-2">
-        <Link
-          href="/bitpro/populasi-dan-produksi"
-          className="bg-emerald-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-500 transition-colors"
-        >
-          ← Kembali
-        </Link>
-        <h1 className="text-lg font-bold text-white">
-          Data Populasi Ternak Tw 4 2025
-        </h1>
-        <input
-          type="text"
-          placeholder="Cari Desa/Kec..."
-          className="p-2 border border-gray-300 rounded shadow-sm w-60 text-gray-900 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white pb-20">
+      
+      {/* ── TOP HEADER ── */}
+      <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+          
+          <div className="flex items-center gap-3">
+            <Link
+              href="/bitpro/populasi-dan-produksi"
+              className="min-h-touch min-w-touch w-10 h-10 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors"
+              aria-label="Kembali ke Menu Populasi"
+            >
+              <ArrowLeft size={18} />
+            </Link>
 
-      <div className="overflow-x-auto bg-white border border-gray-300 rounded shadow-md max-h-[80vh] overflow-y-auto relative">
-        {/* Tampilan saat masih menyedot data */}
-        {isLoading ? (
-          <div className="flex justify-center items-center h-64">
-            <span className="text-emerald-700 font-bold animate-pulse">Menyiapkan Data Kabupaten... 🚀</span>
+            <div>
+              <div className="flex items-center gap-2">
+                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                  Bitpro
+                </Link>
+                <span className="text-slate-300">/</span>
+                <Link href="/bitpro/populasi-dan-produksi" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                  Populasi
+                </Link>
+                <span className="text-slate-300">/</span>
+                <span className="text-xs font-bold text-azure">Tahun 2025</span>
+              </div>
+              <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
+                Sensus Populasi Ternak TW 4 Tahun 2025
+              </h1>
+            </div>
           </div>
-        ) : (
-          <table className="w-full text-[11px] border-collapse whitespace-nowrap">
-            <thead className="bg-emerald-700 text-white uppercase sticky top-0 z-10 shadow-sm">
-              <tr>
-                <th className="p-2 border border-emerald-600 sticky left-0 bg-emerald-700 z-20">No</th>
-                <th className="p-2 border border-emerald-600 sticky left-[40px] bg-emerald-700 z-20 text-left">Kecamatan</th>
-                <th className="p-2 border border-emerald-600 sticky left-[160px] bg-emerald-700 z-20 text-left">Desa</th>
-                {HEADERS.map((h, i) => (
-                  <th key={i} className="p-1.5 border border-emerald-600 font-semibold">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData.map((row, idx) => (
-                <tr key={idx} className={`${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-emerald-100 transition-colors`}>
-                  <td className="p-1 border border-gray-200 text-center font-semibold text-gray-800 sticky left-0 bg-inherit">{row.no}</td>
-                  <td className="p-1 border border-gray-200 font-semibold text-gray-800 sticky left-[40px] bg-inherit text-left">{row.kec}</td>
-                  <td className="p-1 border border-gray-200 text-gray-800 sticky left-[160px] bg-inherit text-left">{row.desa}</td>
-                  {row.v.map((val: any, i: number) => (
-                    <td key={i} className="p-1 border border-gray-200 text-center text-gray-700 tabular-nums">
-                      {Number(val).toLocaleString('id-ID')}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr className="bg-emerald-700 text-white font-bold sticky bottom-0 z-10">
-                <td className="p-1.5 border border-emerald-600 text-center sticky left-0 bg-emerald-700 z-20" colSpan={3}>TOTAL</td>
-                {TOTAL_ROW.map((val, i) => (
-                  <td key={i} className="p-1 border border-emerald-600 text-center tabular-nums">
-                    {Number(val).toLocaleString('id-ID')}
-                  </td>
-                ))}
-              </tr>
-            </tfoot>
-          </table>
-        )}
-      </div>
 
-      {!isLoading && (
-        <p className="text-xs text-gray-200 mt-2">
-          Menampilkan {filteredData.length} dari {dataPopulasi.length} baris data (Live dari Database)
-        </p>
-      )}
+          <div className="flex items-center gap-3">
+            <div className="relative w-48 sm:w-64">
+              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Cari desa atau kecamatan..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full min-h-touch h-10 pl-9 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-900 focus:outline-none focus:border-azure focus:bg-white transition-colors"
+              />
+            </div>
+          </div>
+
+        </div>
+      </header>
+
+      {/* ── MAIN WORKSPACE ── */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
+        
+        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+          
+          <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
+            <h2 className="font-bold text-sm text-slate-900">
+              Tabel Sensus Lengkap (16 Komoditas Ternak)
+            </h2>
+            <span className="font-mono text-xs text-slate-500">
+              Menampilkan {filteredData.length} baris desa terdaftar
+            </span>
+          </div>
+
+          {isLoading ? (
+            <div className="flex justify-center items-center h-64">
+              <span className="font-mono text-xs text-slate-500 uppercase tracking-widest animate-pulse">
+                Memuat data populasi ternak 2025...
+              </span>
+            </div>
+          ) : (
+            <div className="overflow-x-auto max-h-[75vh] overflow-y-auto">
+              <table className="w-full text-xs text-left whitespace-nowrap border-collapse">
+                <thead className="bg-slate-100 text-slate-700 font-semibold uppercase tracking-wider sticky top-0 z-20 border-b border-slate-200 shadow-sm">
+                  <tr>
+                    <th className="p-3 w-12 text-center sticky left-0 bg-slate-100 z-30 border-r border-slate-200">No</th>
+                    <th className="p-3 sticky left-[48px] bg-slate-100 z-30 border-r border-slate-200">Kecamatan</th>
+                    <th className="p-3 sticky left-[168px] bg-slate-100 z-30 border-r border-slate-200">Desa</th>
+                    {HEADERS.map((h, i) => (
+                      <th key={i} className="p-3 text-right font-mono border-r border-slate-200">{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 text-slate-800">
+                  {filteredData.map((row, idx) => (
+                    <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
+                      <td className="p-3 text-center font-mono text-slate-400 sticky left-0 bg-white z-10 border-r border-slate-100">
+                        {row.no}
+                      </td>
+                      <td className="p-3 font-semibold text-slate-900 sticky left-[48px] bg-white z-10 border-r border-slate-100">
+                        {row.kec}
+                      </td>
+                      <td className="p-3 text-slate-700 sticky left-[168px] bg-white z-10 border-r border-slate-100">
+                        {row.desa}
+                      </td>
+                      {row.v.map((val: any, i: number) => (
+                        <td key={i} className="p-3 text-right font-mono tabular-nums border-r border-slate-100">
+                          {Number(val).toLocaleString('id-ID')}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr className="bg-slate-100 text-slate-900 font-bold sticky bottom-0 z-20 border-t-2 border-slate-300">
+                    <td colSpan={3} className="p-3 text-center sticky left-0 bg-slate-100 z-30 border-r border-slate-300 font-mono uppercase">
+                      TOTAL KABUPATEN
+                    </td>
+                    {TOTAL_ROW.map((val, i) => (
+                      <td key={i} className="p-3 text-right font-mono text-azure font-bold border-r border-slate-300">
+                        {Number(val).toLocaleString('id-ID')}
+                      </td>
+                    ))}
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          )}
+
+        </div>
+
+      </main>
+
     </div>
   );
 }

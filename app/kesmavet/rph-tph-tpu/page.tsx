@@ -1,14 +1,24 @@
 'use client';
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import * as XLSX from 'xlsx';
-
-// ============================================================
-// CATATAN INSTALASI
-// Fitur export Excel butuh library "xlsx" (SheetJS).
-// Jalankan di root project Next.js Anda:
-//   npm install xlsx
-// ============================================================
+import {
+  ArrowLeft,
+  Download,
+  Plus,
+  Search,
+  Edit2,
+  Trash2,
+  X,
+  CheckCircle2,
+  Layers,
+  Phone,
+  MapPin,
+  ShieldCheck,
+  Building2,
+  Filter,
+} from 'lucide-react';
 
 // Data JSON Pelaku Usaha Pemotongan Hewan (101 Entri Awal)
 const initialDataRph = [
@@ -1483,12 +1493,12 @@ const FIELD_LABELS: Record<string, string> = {
 export default function RphTphTpuPage() {
   const [dataRph, setDataRph] = useState<RphItem[]>(initialDataRph);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedKategori, setSelectedKategori] = useState('Semua');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingNo, setEditingNo] = useState<number | null>(null); // null = mode tambah
+  const [editingNo, setEditingNo] = useState<number | null>(null);
   const [formValues, setFormValues] = useState<RphItem>(emptyForm);
   const [confirmDeleteNo, setConfirmDeleteNo] = useState<number | null>(null);
 
-  // Muat data tersimpan dari localStorage (jika petugas pernah menambah/mengubah sebelumnya)
   useEffect(() => {
     try {
       const saved = window.localStorage.getItem(LS_KEY);
@@ -1503,7 +1513,6 @@ export default function RphTphTpuPage() {
     }
   }, []);
 
-  // Simpan otomatis setiap kali data berubah
   useEffect(() => {
     try {
       window.localStorage.setItem(LS_KEY, JSON.stringify(dataRph));
@@ -1512,17 +1521,20 @@ export default function RphTphTpuPage() {
     }
   }, [dataRph]);
 
-  // Filter data berdasarkan input pencarian
-  const filteredData = dataRph.filter(
-    (item) =>
-      (item.nama_tph_r_u || '')
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
+  const filteredData = dataRph.filter((item) => {
+    const matchSearch =
+      (item.nama_tph_r_u || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       (item.pemilik || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (item.lokasi_rpu || '').toLowerCase().includes(searchTerm.toLowerCase())
-  );
+      (item.lokasi_rpu || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.lokasi_desa_kecamatan_alamat_pemilik || '').toLowerCase().includes(searchTerm.toLowerCase());
 
-  // ---------- MODAL TAMBAH / EDIT ----------
+    const matchKategori =
+      selectedKategori === 'Semua' ||
+      (item.jenis_unit_usaha || '').toUpperCase().includes(selectedKategori.toUpperCase());
+
+    return matchSearch && matchKategori;
+  });
+
   const openAddModal = () => {
     setEditingNo(null);
     setFormValues(emptyForm);
@@ -1548,38 +1560,28 @@ export default function RphTphTpuPage() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (!formValues.nama_tph_r_u || !formValues.nama_tph_r_u.trim()) {
       alert('Nama TPH/RPU wajib diisi.');
       return;
     }
 
     if (editingNo !== null) {
-      // Mode edit: update entri yang sudah ada
       setDataRph((prev) =>
-        prev.map((item) =>
-          item.no === editingNo ? { ...formValues, no: editingNo } : item
-        )
+        prev.map((item) => (item.no === editingNo ? { ...formValues, no: editingNo } : item))
       );
     } else {
-      // Mode tambah: buat nomor baru otomatis
       const nextNo =
-        dataRph.length > 0
-          ? Math.max(...dataRph.map((d) => Number(d.no) || 0)) + 1
-          : 1;
+        dataRph.length > 0 ? Math.max(...dataRph.map((d) => Number(d.no) || 0)) + 1 : 1;
       setDataRph((prev) => [...prev, { ...formValues, no: nextNo }]);
     }
-
     closeModal();
   };
 
-  // ---------- HAPUS DATA ----------
   const handleDelete = (no: number) => {
     setDataRph((prev) => prev.filter((item) => item.no !== no));
     setConfirmDeleteNo(null);
   };
 
-  // ---------- EXPORT EXCEL ----------
   const handleExportExcel = () => {
     const exportData = dataRph.map((item) => ({
       No: item.no,
@@ -1589,8 +1591,7 @@ export default function RphTphTpuPage() {
       'No. Telp': item.no_telp,
       'Status Ijin Usaha': item.status_ijin_usaha,
       'Lokasi RPU/TPH': item.lokasi_rpu,
-      'Lokasi Desa/Kecamatan/Alamat Pemilik':
-        item.lokasi_desa_kecamatan_alamat_pemilik,
+      'Lokasi Desa/Kecamatan/Alamat Pemilik': item.lokasi_desa_kecamatan_alamat_pemilik,
       'Pemotongan per Hari (ekor)': item.pemotongan_per_hari_ekor,
       'Sertifikat Halal': item.sertifikat_halal,
       'Sertifikat NKV': item.sertifikat_nkv,
@@ -1598,317 +1599,318 @@ export default function RphTphTpuPage() {
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(exportData);
-
-    // Lebar kolom otomatis biar rapi
-    worksheet['!cols'] = Object.keys(exportData[0] || {}).map((key) => ({
-      wch: Math.max(key.length, 18),
-    }));
-
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Data RPH-TPH-TPU');
-
     const today = new Date().toISOString().slice(0, 10);
-    XLSX.writeFile(workbook, `data-rph-tph-tpu-${today}.xlsx`);
+    XLSX.writeFile(workbook, `Data_RPH_TPH_TPU_${today}.xlsx`);
   };
 
+  const countRPU = dataRph.filter((d) => (d.jenis_unit_usaha || '').toUpperCase().includes('RPU')).length;
+  const countTPU = dataRph.filter(
+    (d) =>
+      (d.jenis_unit_usaha || '').toUpperCase().includes('TPU') ||
+      (d.jenis_unit_usaha || '').toUpperCase().includes('TPH')
+  ).length;
+  const countHalal = dataRph.filter(
+    (d) =>
+      (d.sertifikat_halal || '').toLowerCase().includes('sudah') ||
+      (d.sertifikat_halal || '').toLowerCase().includes('ada') ||
+      (d.sertifikat_halal || '').toLowerCase().includes('halal') ||
+      (d.sertifikat_halal || '').toLowerCase().includes('id33')
+  ).length;
+  const countNKV = dataRph.filter(
+    (d) =>
+      (d.sertifikat_nkv || '').toLowerCase().includes('tingkat') ||
+      (d.sertifikat_nkv || '').toLowerCase().includes('rph')
+  ).length;
+
   return (
-    <div className="min-h-screen bg-purple-50 flex flex-col p-4 md:p-6 font-sans text-gray-900">
-      {/* HEADER */}
-      <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 text-center md:text-left">
-        <Link
-          href="/kesmavet"
-          className="w-full md:w-auto text-center bg-purple-700 hover:bg-purple-800 text-white px-5 py-3 md:py-2 rounded-lg font-bold shadow-md transition-colors"
-        >
-          ← Kembali ke Kesmavet
-        </Link>
-        <h1 className="text-2xl md:text-3xl font-black text-purple-900">
-          Data Pelaku Usaha Pemotongan Hewan
-        </h1>
-        <div className="w-full md:w-auto flex flex-col md:flex-row gap-2">
-          <button
-            onClick={openAddModal}
-            className="w-full md:w-auto text-center bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 md:py-2 rounded-lg font-bold shadow-md transition-colors"
-          >
-            ➕ Tambah Data
-          </button>
-          <button
-            onClick={handleExportExcel}
-            className="w-full md:w-auto text-center bg-white border-2 border-purple-600 text-purple-700 hover:bg-purple-50 px-5 py-3 md:py-2 rounded-lg font-bold shadow-md"
-          >
-            📥 Unduh Excel
-          </button>
-        </div>
-      </div>
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white pb-20">
+      
+      {/* ── TOP HEADER ── */}
+      <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+          
+          <div className="flex items-center gap-3">
+            <Link
+              href="/kesmavet"
+              className="min-h-touch min-w-touch w-10 h-10 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors"
+              aria-label="Kembali ke Kesmavet"
+            >
+              <ArrowLeft size={18} />
+            </Link>
 
-      {/* DASHBOARD STATISTIK */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white p-4 md:p-6 rounded-2xl shadow border-l-8 border-purple-600 flex flex-col justify-center">
-          <p className="text-xs md:text-sm font-bold text-gray-500 uppercase">
-            Total Data
-          </p>
-          <p className="text-3xl md:text-4xl font-black text-purple-800">
-            {dataRph.length}
-          </p>
-        </div>
-        <div className="bg-white p-4 md:p-6 rounded-2xl shadow border-l-8 border-emerald-500 flex flex-col justify-center">
-          <p className="text-xs md:text-sm font-bold text-gray-500 uppercase">
-            Unit RPU
-          </p>
-          <p className="text-3xl md:text-4xl font-black text-emerald-700">
-            {
-              dataRph.filter((d) => (d.jenis_unit_usaha || '').includes('RPU'))
-                .length
-            }
-          </p>
-        </div>
-        <div className="bg-white p-4 md:p-6 rounded-2xl shadow border-l-8 border-blue-500 flex flex-col justify-center">
-          <p className="text-xs md:text-sm font-bold text-gray-500 uppercase">
-            Unit TPU/TPH
-          </p>
-          <p className="text-3xl md:text-4xl font-black text-blue-700">
-            {
-              dataRph.filter(
-                (d) =>
-                  (d.jenis_unit_usaha || '').includes('TPU') ||
-                  (d.jenis_unit_usaha || '').includes('TPH')
-              ).length
-            }
-          </p>
-        </div>
-        <div className="bg-white p-4 md:p-6 rounded-2xl shadow border-l-8 border-amber-500 flex flex-col justify-center">
-          <p className="text-xs md:text-sm font-bold text-gray-500 uppercase">
-            Bersertifikat Halal
-          </p>
-          <p className="text-3xl md:text-4xl font-black text-amber-700">
-            {
-              dataRph.filter(
-                (d) =>
-                  (d.sertifikat_halal || '').toLowerCase().includes('sudah') ||
-                  (d.sertifikat_halal || '').toLowerCase().includes('ada') ||
-                  (d.sertifikat_halal || '').toLowerCase().includes('halal') ||
-                  (d.sertifikat_halal || '').toLowerCase().includes('id33')
-              ).length
-            }
-          </p>
-        </div>
-      </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <Link href="/kesmavet" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                  Kesmavet
+                </Link>
+                <span className="text-slate-300">/</span>
+                <span className="text-xs font-bold text-azure">RPH & TPU</span>
+              </div>
+              <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
+                Database Rumah Potong & Tempat Pemotongan Hewan
+              </h1>
+            </div>
+          </div>
 
-      {/* SEARCH BAR & TABEL DATA */}
-      <div className="bg-white p-4 md:p-6 rounded-3xl shadow-xl flex flex-col flex-grow relative">
-        <div className="mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <h2 className="text-xl md:text-2xl font-bold text-purple-900 w-full md:w-auto text-center md:text-left">
-            Daftar RPH, TPH, TPU
-          </h2>
-          <input
-            type="text"
-            placeholder="🔍 Cari nama RPU, pemilik, atau lokasi..."
-            className="w-full md:max-w-md p-3 border-2 border-purple-100 rounded-xl bg-purple-50 focus:outline-none focus:border-purple-500"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleExportExcel}
+              className="min-h-touch h-10 px-3.5 sm:px-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-sm"
+            >
+              <Download size={15} />
+              <span className="hidden sm:inline">Export Excel</span>
+            </button>
+            <button
+              onClick={openAddModal}
+              className="min-h-touch h-10 px-4 rounded-xl bg-azure text-white text-xs font-bold flex items-center gap-1.5 hover:bg-azure/90 transition-all shadow-sm"
+            >
+              <Plus size={15} />
+              <span>Tambah Unit</span>
+            </button>
+          </div>
+
+        </div>
+      </header>
+
+      {/* ── MAIN WORKSPACE ── */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        
+        {/* KPI Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+              Total Unit Terdata
+            </p>
+            <p className="font-mono text-2xl sm:text-3xl font-bold text-slate-900">
+              {dataRph.length} <span className="text-xs font-normal text-slate-500">Unit</span>
+            </p>
+          </div>
+
+          <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+              Unit RPU & TPU
+            </p>
+            <p className="font-mono text-2xl sm:text-3xl font-bold text-azure">
+              {countRPU + countTPU} <span className="text-xs font-normal text-slate-500">Unggas/Hewan</span>
+            </p>
+          </div>
+
+          <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+              Sertifikasi Halal
+            </p>
+            <p className="font-mono text-2xl sm:text-3xl font-bold text-vitality">
+              {countHalal} <span className="text-xs font-normal text-slate-500">Tersertifikasi</span>
+            </p>
+          </div>
+
+          <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+              Memiliki NKV
+            </p>
+            <p className="font-mono text-2xl sm:text-3xl font-bold text-lime">
+              {countNKV} <span className="text-xs font-normal text-slate-500">Unit</span>
+            </p>
+          </div>
         </div>
 
-        {/* --- PERBAIKAN SCROLLBAR DI SINI --- */}
-        {/* Tambahkan max-h-[500px] (atau sesuai selera) dan overflow-y-auto agar tabelnya bisa di-scroll secara mandiri */}
-        <div className="overflow-x-auto overflow-y-auto max-h-[500px] rounded-xl border border-gray-200">
-          <table className="w-full text-sm text-left whitespace-nowrap">
-            {/* Supaya headernya tetap kelihatan saat di-scroll bawah, tambahkan sticky top-0 */}
-            <thead className="bg-purple-100 text-purple-900 font-bold border-b-2 border-purple-200 sticky top-0 z-10 shadow-sm">
-              <tr>
-                <th className="p-3 w-12 text-center">No</th>
-                <th className="p-3">Nama Unit Usaha</th>
-                <th className="p-3">Jenis</th>
-                <th className="p-3">Pemilik</th>
-                <th className="p-3">Kontak / Telp</th>
-                <th className="p-3">Lokasi (Alamat)</th>
-                <th className="p-3 text-center">Kapasitas (Ekor/hr)</th>
-                <th className="p-3 text-center">Status Halal</th>
-                <th className="p-3 text-center">Status NKV</th>
-                <th className="p-3 text-center sticky right-0 bg-purple-100">
-                  Aksi
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-purple-100">
-              {filteredData.length > 0 ? (
-                filteredData.map((item) => (
-                  <tr
-                    key={item.no}
-                    className="border-b hover:bg-purple-50 transition-colors"
-                  >
-                    <td className="p-3 text-center font-bold text-gray-500">
-                      {item.no}
-                    </td>
-                    <td className="p-3 font-bold text-purple-800">
-                      {item.nama_tph_r_u || '-'}
-                    </td>
-                    <td className="p-3">
-                      <span className="bg-gray-200 px-2 py-1 rounded text-xs font-bold">
-                        {item.jenis_unit_usaha || '-'}
-                      </span>
-                    </td>
-                    <td className="p-3">{item.pemilik || '-'}</td>
-                    <td className="p-3">{item.no_telp || '-'}</td>
-                    <td
-                      className="p-3 max-w-xs truncate"
-                      title={
-                        item.lokasi_rpu ||
-                        item.lokasi_desa_kecamatan_alamat_pemilik
-                      }
-                    >
-                      {item.lokasi_rpu ||
-                        item.lokasi_desa_kecamatan_alamat_pemilik ||
-                        '-'}
-                    </td>
-                    <td className="p-3 text-center font-bold text-blue-700">
-                      {item.pemotongan_per_hari_ekor || '-'}
-                    </td>
-                    <td className="p-3 text-center">
-                      {(item.sertifikat_halal || '')
-                        .toLowerCase()
-                        .includes('sudah') ||
-                      (item.sertifikat_halal || '')
-                        .toLowerCase()
-                        .includes('ada') ||
-                      (item.sertifikat_halal || '')
-                        .toLowerCase()
-                        .includes('halal') ||
-                      (item.sertifikat_halal || '')
-                        .toLowerCase()
-                        .includes('id33') ? (
-                        <span className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">
-                          ✓ Bersertifikat
-                        </span>
-                      ) : (
-                        <span className="text-gray-400 text-xs">Belum / -</span>
-                      )}
-                    </td>
-                    <td className="p-3 text-center">
-                      {(item.sertifikat_nkv || '')
-                        .toLowerCase()
-                        .includes('tingkat') ||
-                      (item.sertifikat_nkv || '')
-                        .toLowerCase()
-                        .includes('rph') ? (
-                        <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-bold">
-                          {item.sertifikat_nkv}
-                        </span>
-                      ) : (item.sertifikat_nkv || '')
-                          .toLowerCase()
-                          .includes('proses') ? (
-                        <span className="bg-amber-100 text-amber-700 px-2 py-1 rounded text-xs font-bold">
-                          Proses
-                        </span>
-                      ) : (
-                        <span className="text-gray-400 text-xs">Belum</span>
-                      )}
-                    </td>
-                    <td className="p-3 text-center sticky right-0 bg-white shadow-[-10px_0_15px_-10px_rgba(0,0,0,0.1)]">
-                      <div className="flex gap-2 justify-center">
-                        <button
-                          onClick={() => openEditModal(item)}
-                          className="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors"
-                        >
-                          ✏️ Edit
-                        </button>
-                        {confirmDeleteNo === item.no ? (
-                          <div className="flex gap-1 items-center">
+        {/* Filter Toolbar */}
+        <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+            {['Semua', 'RPU', 'TPU', 'TPH', 'RPH'].map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedKategori(cat)}
+                className={`min-h-touch h-9 px-3.5 rounded-xl text-xs font-bold transition-all border ${
+                  selectedKategori === cat
+                    ? 'bg-azure text-white border-azure shadow-sm'
+                    : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          <div className="relative w-full sm:w-80">
+            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Cari nama usaha, pemilik, lokasi..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full min-h-touch h-10 pl-9 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-900 focus:outline-none focus:border-azure focus:bg-white"
+            />
+          </div>
+        </div>
+
+        {/* Main Table */}
+        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+          <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
+            <table className="w-full text-xs text-left whitespace-nowrap">
+              <thead className="bg-slate-50 text-slate-600 font-semibold uppercase tracking-wider border-b border-slate-200 sticky top-0 z-20 shadow-sm">
+                <tr>
+                  <th className="p-3.5 w-12 text-center">NO</th>
+                  <th className="p-3.5">NAMA UNIT USAHA</th>
+                  <th className="p-3.5">JENIS</th>
+                  <th className="p-3.5">PEMILIK</th>
+                  <th className="p-3.5">KONTAK</th>
+                  <th className="p-3.5">LOKASI USAHA</th>
+                  <th className="p-3.5 text-center font-mono">KAPASITAS (EKOR/HR)</th>
+                  <th className="p-3.5 text-center">STATUS HALAL</th>
+                  <th className="p-3.5 text-center">STATUS NKV</th>
+                  <th className="p-3.5 text-center w-24 sticky right-0 bg-slate-50">AKSI</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-slate-800">
+                {filteredData.length > 0 ? (
+                  filteredData.map((item) => {
+                    const isHalal =
+                      (item.sertifikat_halal || '').toLowerCase().includes('sudah') ||
+                      (item.sertifikat_halal || '').toLowerCase().includes('ada') ||
+                      (item.sertifikat_halal || '').toLowerCase().includes('halal') ||
+                      (item.sertifikat_halal || '').toLowerCase().includes('id33');
+
+                    const isNKV =
+                      (item.sertifikat_nkv || '').toLowerCase().includes('tingkat') ||
+                      (item.sertifikat_nkv || '').toLowerCase().includes('rph');
+
+                    return (
+                      <tr key={item.no} className="hover:bg-slate-50/80 transition-colors">
+                        <td className="p-3.5 text-center font-mono text-slate-400">{item.no}</td>
+                        <td className="p-3.5 font-bold text-slate-900">{item.nama_tph_r_u || '-'}</td>
+                        <td className="p-3.5">
+                          <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                            {item.jenis_unit_usaha || '-'}
+                          </span>
+                        </td>
+                        <td className="p-3.5 text-slate-700">{item.pemilik || '-'}</td>
+                        <td className="p-3.5 font-mono text-slate-600">{item.no_telp || '-'}</td>
+                        <td className="p-3.5 text-slate-600 max-w-xs truncate" title={item.lokasi_rpu || item.lokasi_desa_kecamatan_alamat_pemilik}>
+                          {item.lokasi_rpu || item.lokasi_desa_kecamatan_alamat_pemilik || '-'}
+                        </td>
+                        <td className="p-3.5 text-center font-mono font-bold text-azure">
+                          {item.pemotongan_per_hari_ekor || '-'}
+                        </td>
+                        <td className="p-3.5 text-center">
+                          {isHalal ? (
+                            <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                              ✓ Halal
+                            </span>
+                          ) : (
+                            <span className="text-slate-400 text-[11px]">Belum</span>
+                          )}
+                        </td>
+                        <td className="p-3.5 text-center">
+                          {isNKV ? (
+                            <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                              {item.sertifikat_nkv}
+                            </span>
+                          ) : (
+                            <span className="text-slate-400 text-[11px]">Belum</span>
+                          )}
+                        </td>
+                        <td className="p-3.5 text-center sticky right-0 bg-white shadow-[-5px_0_10px_rgba(0,0,0,0.03)]">
+                          <div className="flex items-center justify-center gap-1">
                             <button
-                              onClick={() => handleDelete(item.no)}
-                              className="bg-red-600 hover:bg-red-700 text-white px-2 py-1.5 rounded-lg text-xs font-bold"
+                              onClick={() => openEditModal(item)}
+                              className="min-h-touch h-7 w-7 rounded-lg border border-slate-200 bg-slate-50 text-slate-600 flex items-center justify-center"
                             >
-                              Yakin?
+                              <Edit2 size={12} />
                             </button>
-                            <button
-                              onClick={() => setConfirmDeleteNo(null)}
-                              className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-1.5 rounded-lg text-xs font-bold"
-                            >
-                              Batal
-                            </button>
+                            {confirmDeleteNo === item.no ? (
+                              <div className="flex items-center gap-1">
+                                <button
+                                  onClick={() => handleDelete(item.no)}
+                                  className="h-7 px-2 rounded-lg bg-red-600 text-white font-bold text-[10px]"
+                                >
+                                  Ya
+                                </button>
+                                <button
+                                  onClick={() => setConfirmDeleteNo(null)}
+                                  className="h-7 px-2 rounded-lg bg-slate-200 text-slate-700 font-bold text-[10px]"
+                                >
+                                  Batal
+                                </button>
+                              </div>
+                            ) : (
+                              <button
+                                onClick={() => setConfirmDeleteNo(item.no)}
+                                className="min-h-touch h-7 w-7 rounded-lg border border-red-200 bg-red-50 text-red-600 flex items-center justify-center"
+                              >
+                                <Trash2 size={12} />
+                              </button>
+                            )}
                           </div>
-                        ) : (
-                          <button
-                            onClick={() => setConfirmDeleteNo(item.no)}
-                            className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors"
-                          >
-                            🗑️ Hapus
-                          </button>
-                        )}
-                      </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td colSpan={10} className="p-12 text-center text-slate-400 font-medium">
+                      Pencarian &quot;{searchTerm}&quot; tidak ditemukan.
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan={10}
-                    className="p-8 text-center text-gray-500 font-bold"
-                  >
-                    Pencarian &quot;{searchTerm}&quot; tidak ditemukan.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
 
-      {/* MODAL TAMBAH / EDIT DATA */}
+      </main>
+
+      {/* ── MODAL TAMBAH / EDIT ── */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="p-5 border-b flex items-center justify-between sticky top-0 bg-white rounded-t-2xl z-10">
-              <h3 className="text-xl font-black text-purple-900">
-                {editingNo !== null
-                  ? 'Edit Data Unit Usaha'
-                  : 'Tambah Data Unit Usaha Baru'}
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-2xl w-full shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+              <h3 className="font-bold text-base text-slate-900">
+                {editingNo !== null ? 'Edit Unit Usaha Pemotongan' : 'Tambah Unit Usaha Pemotongan Baru'}
               </h3>
-              <button
-                onClick={closeModal}
-                className="text-gray-400 hover:text-gray-700 text-2xl leading-none"
-              >
-                &times;
+              <button onClick={closeModal}>
+                <X size={18} />
               </button>
             </div>
 
-            <form
-              onSubmit={handleSubmit}
-              className="p-5 grid grid-cols-1 md:grid-cols-2 gap-4"
-            >
-              {Object.keys(FIELD_LABELS).map((key) => (
-                <div
-                  key={key}
-                  className={
-                    key === 'lokasi_desa_kecamatan_alamat_pemilik' ||
-                    key === 'lokasi_rpu'
-                      ? 'md:col-span-2'
-                      : ''
-                  }
-                >
-                  <label className="block text-xs font-bold text-gray-600 mb-1">
-                    {FIELD_LABELS[key]}
-                  </label>
-                  <input
-                    type="text"
-                    name={key}
-                    value={(formValues as any)[key] ?? ''}
-                    onChange={handleFieldChange}
-                    className="w-full p-2.5 border-2 border-purple-100 rounded-lg bg-purple-50 focus:outline-none focus:border-purple-500 text-sm"
-                  />
-                </div>
-              ))}
+            <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {Object.keys(FIELD_LABELS).map((key) => (
+                  <div
+                    key={key}
+                    className={
+                      key === 'lokasi_desa_kecamatan_alamat_pemilik' || key === 'lokasi_rpu'
+                        ? 'sm:col-span-2'
+                        : ''
+                    }
+                  >
+                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                      {FIELD_LABELS[key]}
+                    </label>
+                    <input
+                      type="text"
+                      name={key}
+                      value={(formValues as any)[key] ?? ''}
+                      onChange={handleFieldChange}
+                      className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure focus:bg-white outline-none"
+                    />
+                  </div>
+                ))}
+              </div>
 
-              <div className="md:col-span-2 flex justify-end gap-3 pt-2">
+              <div className="pt-3 border-t flex justify-end gap-2">
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="px-5 py-2.5 rounded-lg font-bold text-gray-600 bg-gray-100 hover:bg-gray-200"
+                  className="min-h-touch h-10 px-4 rounded-xl border border-slate-200 bg-slate-100 text-xs font-bold text-slate-700"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-lg font-bold text-white bg-purple-700 hover:bg-purple-800 shadow"
+                  className="min-h-touch h-10 px-6 rounded-xl bg-azure text-white text-xs font-bold shadow-sm hover:bg-azure/90"
                 >
                   {editingNo !== null ? 'Simpan Perubahan' : 'Tambah Data'}
                 </button>
@@ -1917,6 +1919,8 @@ export default function RphTphTpuPage() {
           </div>
         </div>
       )}
+
     </div>
   );
 }
+

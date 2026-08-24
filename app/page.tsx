@@ -3,86 +3,29 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import {
+  ArrowRight,
+  Menu,
+  X,
+  Eye,
+  EyeOff,
+  ShieldCheck,
+  ChevronRight,
+  BarChart3,
+  Building2,
+  Users,
+  FileCheck2,
+  Stethoscope,
+  Syringe,
+  AlertCircle,
+  CheckCircle2,
+  Layers,
+  Sparkles,
+  Lock,
+} from 'lucide-react';
 
 /* ─────────────────────────────────────────────
-   THEME TOKENS, TYPE, TEXTURE
-   (Ditambahkan Anti-Jitter & Font Smoothing)
-───────────────────────────────────────────── */
-const BG_STYLES = `
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap');
-
-/* ANTI-GETAR (Kunci Scrollbar & Font Smoothing) */
-body {
-  overflow-y: scroll !important; 
-}
-* {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.font-jakarta, .simantap-theme, .simantap-theme * { font-family: 'Plus Jakarta Sans', sans-serif; }
-.font-display { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; letter-spacing: -0.02em; }
-.font-data { font-family: 'IBM Plex Mono', monospace; }
-
-/* DARK MODE (DEFAULT) */
-.simantap-theme {
-  --canvas: #000000;
-  --paper: #0C0C10;
-  --paper-soft: rgba(255,255,255,0.035);
-  --ink: #FFFFFF;
-  --ink-soft: #9CA3AF;
-  --ink-faint: #6B7280;
-  --line: rgba(255,255,255,0.09);
-  --line-strong: rgba(255,255,255,0.16);
-
-  --green: #8B5CF6;
-  --green-deep: #C4B5FD;
-  --green-soft: rgba(139,92,246,0.14);
-  --gold: #E4B15C;
-  --gold-soft: rgba(228,177,92,0.14);
-  --blue: #7DB4E8;
-  --blue-soft: rgba(125,180,232,0.14);
-  --plum: #F186B4;
-  --plum-soft: rgba(241,134,180,0.14);
-}
-
-/* LIGHT MODE */
-.simantap-theme.light-mode {
-  --canvas: #F8FAFC;
-  --paper: #FFFFFF;
-  --paper-soft: #F1F5F9;
-  --ink: #0F172A;
-  --ink-soft: #475569;
-  --ink-faint: #94A3B8;
-  --line: #E2E8F0;
-  --line-strong: #CBD5E1;
-
-  --green: #7C3AED;
-  --green-deep: #5B21B6;
-  --green-soft: #EDE9FE;
-  --gold: #D97706;
-  --gold-soft: #FEF3C7;
-  --blue: #2563EB;
-  --blue-soft: #DBEAFE;
-  --plum: #DB2777;
-  --plum-soft: #FCE7F3;
-}
-
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes tabSettle { 0% { opacity: 0; transform: translateY(6px); } 100% { opacity: 1; transform: translateY(0px); } }
-@keyframes barGrow { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }
-@keyframes modalFadeIn { from { opacity: 0; backdrop-filter: blur(0px); } to { opacity: 1; backdrop-filter: blur(12px); } }
-@keyframes modalSlideUp { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-
-.custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
-.custom-scrollbar::-webkit-scrollbar-track { background: transparent; border-radius: 10px; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 10px; }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--ink-faint); }
-`;
-
-/* ─────────────────────────────────────────────
-   DATA SOURCE DATA LENGKAP KEBUMEN (2025)
+   DATA STATISTIK RESMI KEBUMEN (2025)
 ───────────────────────────────────────────── */
 const REKAP_POPULASI_2025 = [
   { komoditas: 'Sapi Potong', total: 64996, icon: '🐄' },
@@ -138,315 +81,101 @@ const TOTAL_TELUR = dataTelur.reduce((sum, d) => sum + d.total, 0);
 const TOTAL_FARM = REKAP_SEBARAN_FARM.reduce((sum, d) => sum + d.jumlah_farm, 0);
 
 const METRIC_CONFIGS = {
-  populasi: { label: 'Populasi Ternak', unit: 'Ekor', data: TOP_KOMODITAS, max: TOP_KOMODITAS[0]?.total ?? 1, getIcon: (r: any) => r.icon, getName: (r: any) => r.komoditas },
-  daging: { label: 'Produksi Daging', unit: 'Kg', data: TOP_DAGING, max: TOP_DAGING[0]?.total ?? 1, getIcon: () => '🥩', getName: (r: any) => r.jenis },
-  telur: { label: 'Produksi Telur', unit: 'Kg', data: TOP_TELUR, max: TOP_TELUR[0]?.total ?? 1, getIcon: () => '🥚', getName: (r: any) => r.jenis },
+  populasi: {
+    label: 'Populasi Ternak',
+    unit: 'Ekor',
+    data: TOP_KOMODITAS,
+    max: TOP_KOMODITAS[0]?.total ?? 1,
+    getIcon: (r: any) => r.icon,
+    getName: (r: any) => r.komoditas,
+    barColor: '#38E54D',
+  },
+  daging: {
+    label: 'Produksi Daging',
+    unit: 'Kg',
+    data: TOP_DAGING,
+    max: TOP_DAGING[0]?.total ?? 1,
+    getIcon: () => '🥩',
+    getName: (r: any) => r.jenis,
+    barColor: '#2192FF',
+  },
+  telur: {
+    label: 'Produksi Telur',
+    unit: 'Kg',
+    data: TOP_TELUR,
+    max: TOP_TELUR[0]?.total ?? 1,
+    getIcon: () => '🥚',
+    getName: (r: any) => r.jenis,
+    barColor: '#EAB308',
+  },
 } as const;
 
 const MODULES = [
-  { key: 'bitpro', label: 'Bitpro', caption: 'Perbibitan & Produksi', icon: '/card-bitpro.png', fallback: '🐄', accent: 'var(--green)', accentSoft: 'var(--green-soft)' },
-  { key: 'keswan', label: 'Keswan', caption: 'Kesehatan Hewan', icon: '/card-keswan.png', fallback: '🩺', accent: 'var(--blue)', accentSoft: 'var(--blue-soft)' },
-  { key: 'kesmavet', label: 'Kesmavet', caption: 'Kesehatan Masyarakat Veteriner', icon: '/card-kesmavet.png', fallback: '🔬', accent: 'var(--plum)', accentSoft: 'var(--plum-soft)' },
+  {
+    key: 'bitpro',
+    label: 'Bitpro',
+    caption: 'Perbibitan & Produksi Ternak',
+    icon: '🐄',
+    accent: '#38E54D',
+    badge: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+  },
+  {
+    key: 'keswan',
+    label: 'Keswan',
+    caption: 'Kesehatan Hewan & Puskeswan',
+    icon: '🩺',
+    accent: '#2192FF',
+    badge: 'bg-blue-50 text-blue-800 border-blue-200',
+  },
+  {
+    key: 'kesmavet',
+    label: 'Kesmavet',
+    caption: 'Kesehatan Masyarakat Veteriner',
+    icon: '🔬',
+    accent: '#84CC16',
+    badge: 'bg-lime-50 text-lime-900 border-lime-200',
+  },
 ] as const;
 
-/* ─────────────────────────────────────────────
-   ICONS
-───────────────────────────────────────────── */
-const ArrowRight = ({ className = '', size = 16 }: { className?: string; size?: number }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
-);
-const MenuIcon = ({ className = '', size = 22 }: { className?: string; size?: number }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="4" x2="20" y1="12" y2="12" /><line x1="4" x2="20" y1="6" y2="6" /><line x1="4" x2="20" y1="18" y2="18" /></svg>
-);
-const XIcon = ({ className = '', size = 22 }: { className?: string; size?: number }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
-);
-const EyeIcon = ({ open }: { open: boolean }) =>
-  open ? (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" /><circle cx="12" cy="12" r="3" /></svg>
-  ) : (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 7 11 7a13.6 13.6 0 0 1-2.94 3.68M6.1 6.1C3.4 7.9 1 12 1 12s4 7 11 7a9.4 9.4 0 0 0 4.24-1M14.12 14.12a3 3 0 1 1-4.24-4.24" /><path d="M1 1l22 22" /></svg>
-  );
-
-/* ─────────────────────────────────────────────
-   NAVIGATION — Diubah menerima prop onLoginClick + THEME
-───────────────────────────────────────────── */
-const Navigation = ({ onLoginClick, theme, toggleTheme }: { onLoginClick: () => void, theme: string, toggleTheme: () => void }) => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const links = [
-    { href: '#ringkasan', label: 'Ringkasan' },
-    { href: '#modul', label: 'Modul Data' },
-    { href: '#bantuan', label: 'Bantuan' },
-  ];
-
-  return (
-    <header className="fixed top-0 w-full z-40 border-b backdrop-blur-md" style={{ borderColor: 'var(--line)', background: 'var(--paper-soft)' }}>
-      <nav className="max-w-6xl mx-auto px-5 md:px-6 py-4">
-        <div className="flex items-center justify-between">
-          
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 md:w-10 md:h-10 bg-white rounded-xl flex items-center justify-center p-1 shadow-[0_0_15px_rgba(139,92,246,0.3)] overflow-hidden">
-              <img 
-                src="/logo-simantap.png" 
-                alt="Logo SiMantap" 
-                className="w-full h-full object-contain"
-                onError={(e: any) => { 
-                  e.currentTarget.style.display = 'none'; 
-                  e.currentTarget.nextSibling.style.display = 'flex'; 
-                }} 
-              />
-              <span className="hidden items-center justify-center text-sm">🔏</span>
-            </div>
-            <span className="text-lg md:text-xl font-bold tracking-wide" style={{ color: 'var(--ink)' }}>
-              SiMantap
-            </span>
-          </div>
-
-          <div className="hidden md:flex items-center justify-center gap-8 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-            {links.map((l) => (
-              <a key={l.href} href={l.href} className="text-sm transition-colors hover:opacity-100" style={{ color: 'var(--ink-soft)' }}>{l.label}</a>
-            ))}
-          </div>
-
-          <div className="hidden md:flex items-center gap-3">
-            <a href="#bantuan" className="inline-flex items-center justify-center h-10 px-4 rounded-md text-sm font-medium transition-colors hover:bg-black/5" style={{ color: 'var(--ink)' }}>
-              Bantuan Akses
-            </a>
-            
-            {/* TOMBOL GANTI TEMA TERANG / GELAP */}
-            <button 
-              onClick={toggleTheme} 
-              className="w-10 h-10 flex items-center justify-center rounded-lg border transition-colors hover:bg-black/5 text-lg" 
-              style={{ borderColor: 'var(--line)', color: 'var(--ink)' }}
-            >
-              {theme === 'dark' ? '☀️' : '🌙'}
-            </button>
-
-            {/* active:scale-[0.98] agar kliknya lebih lembut dan tidak bergetar berlebihan */}
-            <button
-              onClick={onLoginClick}
-              className="inline-flex items-center justify-center h-10 px-5 rounded-md text-sm font-semibold transition-transform duration-200 active:scale-[0.98] hover:brightness-110"
-              style={{ background: 'var(--green)', color: '#fff' }}
-            >
-              Masuk
-            </button>
-          </div>
-
-          <button type="button" className="md:hidden" style={{ color: 'var(--ink)' }} onClick={() => setMobileMenuOpen((v) => !v)} aria-label="Buka menu">
-            {mobileMenuOpen ? <XIcon /> : <MenuIcon />}
-          </button>
-        </div>
-      </nav>
-
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t backdrop-blur-md" style={{ borderColor: 'var(--line)', background: 'var(--paper)', animation: 'slideDown 0.3s ease-out' }}>
-          <div className="px-6 py-4 flex flex-col gap-4">
-            {links.map((l) => (
-              <a key={l.href} href={l.href} className="text-sm py-1 transition-colors hover:opacity-100" style={{ color: 'var(--ink-soft)' }} onClick={() => setMobileMenuOpen(false)}>{l.label}</a>
-            ))}
-            
-            <button onClick={toggleTheme} className="text-left text-sm py-1 font-semibold flex items-center gap-2" style={{ color: 'var(--ink)' }}>
-              {theme === 'dark' ? '☀️ Mode Terang' : '🌙 Mode Gelap'}
-            </button>
-
-            <div className="flex flex-col gap-2 pt-4 border-t" style={{ borderColor: 'var(--line)' }}>
-              <button
-                onClick={() => { setMobileMenuOpen(false); onLoginClick(); }}
-                className="text-center py-2.5 rounded-md text-sm font-semibold w-full"
-                style={{ background: 'var(--green)', color: '#fff' }}
-              >
-                Masuk Sekarang
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </header>
-  );
-};
-
-/* ─────────────────────────────────────────────
-   FOLDER-TAB & KPI WIDGETS
-───────────────────────────────────────────── */
-const ModuleTab = ({ mod, active, onClick, index }: any) => (
-  // Dibuang hover:-translate-y-0.5 untuk mencegah subpixel jitter
-  <button onClick={onClick} style={{ animation: `tabSettle 0.4s ease ${index * 0.06}s both` }} className={`group relative flex-1 min-w-0 text-left rounded-t-2xl transition-all duration-200 ${active ? 'z-10' : 'hover:brightness-110'}`}>
-    <div className="h-1.5 w-full rounded-t-full transition-opacity" style={{ background: mod.accent, opacity: active ? 1 : 0.25 }} />
-    <div className={`flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-start text-center sm:text-left gap-1.5 sm:gap-4 px-2 py-3 sm:px-5 sm:py-5 border border-b-0 rounded-t-2xl transition-colors ${active ? 'shadow-[0_-6px_16px_-10px_rgba(0,0,0,0.5)]' : ''}`} style={{ background: active ? 'var(--paper)' : 'var(--paper-soft)', borderColor: active ? 'var(--line-strong)' : 'var(--line)' }}>
-      <div className="w-9 h-9 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl overflow-hidden shrink-0 flex items-center justify-center text-base sm:text-2xl border" style={{ background: mod.accentSoft, borderColor: mod.accent + '33' }}>
-        <img src={mod.icon} alt={mod.label} draggable={false} className="w-full h-full object-cover select-none pointer-events-none" onError={(e: any) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }} />
-        <span className="hidden">{mod.fallback}</span>
-      </div>
-      <div className="min-w-0 w-full">
-        <p className="font-display font-semibold text-[11px] leading-tight sm:text-lg truncate" style={{ color: active ? 'var(--ink)' : 'var(--ink-soft)' }}>{mod.label}</p>
-        <p className="hidden sm:block text-xs font-medium truncate" style={{ color: 'var(--ink-faint)' }}>{mod.caption}</p>
-      </div>
-    </div>
-  </button>
-);
-
-const StatWidget = ({ icon, title, value, accent, accentSoft, onClick }: any) => {
-  const isPlaceholder = value === 'Coming soon';
-  return (
-    // Dibuang hover:-translate-y-0.5 untuk mencegah jitter
-    <button onClick={onClick} className="w-full text-left p-4 rounded-xl border flex items-center gap-3.5 transition-all hover:shadow-md hover:brightness-110 active:scale-[0.99] cursor-pointer" style={{ background: 'var(--paper-soft)', borderColor: 'var(--line)', borderLeftWidth: '3px', borderLeftColor: accent }}>
-      <div className="w-10 h-10 rounded-lg flex items-center justify-center text-lg shrink-0" style={{ background: accentSoft }}>{icon}</div>
-      <div className="flex-1 min-w-0">
-        <p className="text-[10px] font-bold uppercase tracking-widest mb-0.5 leading-snug" style={{ color: 'var(--ink-faint)' }}>{title}</p>
-        <p className={`font-data font-bold leading-tight ${isPlaceholder ? 'italic text-xs opacity-60' : 'text-base truncate'}`} style={{ color: isPlaceholder ? 'var(--ink-soft)' : 'var(--ink)' }}>{value}</p>
-      </div>
-      <svg className="shrink-0" viewBox="0 0 24 24" width="16" height="16" stroke="var(--ink-faint)" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-    </button>
-  );
-};
-
-const RingkasanQuickStats = () => {
-  const stats = [
-    { label: 'Total Ternak', value: TOTAL_POPULASI.toLocaleString('id-ID'), unit: 'Ekor', icon: '🐾', accent: 'var(--green)', soft: 'var(--green-soft)' },
-    { label: 'Produksi Daging', value: Math.round(TOTAL_DAGING).toLocaleString('id-ID'), unit: 'Kg', icon: '🥩', accent: 'var(--gold)', soft: 'var(--gold-soft)' },
-    { label: 'Produksi Telur', value: Math.round(TOTAL_TELUR).toLocaleString('id-ID'), unit: 'Kg', icon: '🥚', accent: 'var(--blue)', soft: 'var(--blue-soft)' },
-    { label: 'Sebaran Farm', value: TOTAL_FARM.toLocaleString('id-ID'), unit: 'Unit', icon: '🏡', accent: 'var(--plum)', soft: 'var(--plum-soft)' },
-  ];
-  return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-4">
-      {stats.map((s) => (
-        <div key={s.label} className="rounded-xl border p-3" style={{ background: 'var(--paper-soft)', borderColor: 'var(--line)' }}>
-          <div className="w-7 h-7 rounded-md flex items-center justify-center text-sm mb-2" style={{ background: s.soft }}>{s.icon}</div>
-          <p className="text-[9px] font-bold uppercase tracking-widest mb-0.5 truncate" style={{ color: 'var(--ink-faint)' }}>{s.label}</p>
-          <p className="font-data font-bold text-sm truncate" style={{ color: s.accent }}>{s.value} <span className="text-[10px] font-semibold" style={{ color: 'var(--ink-faint)' }}>{s.unit}</span></p>
-        </div>
-      ))}
-    </div>
-  );
-};
-
-const RankedBarWidget = () => {
-  const [metric, setMetric] = useState<keyof typeof METRIC_CONFIGS>('populasi');
-  const cfg = METRIC_CONFIGS[metric];
-
-  return (
-    <div className="rounded-xl border p-4 md:p-5 mb-4" style={{ background: 'var(--paper-soft)', borderColor: 'var(--line)' }}>
-      <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-        <p className="font-display font-semibold text-sm" style={{ color: 'var(--ink)' }}>Peringkat {cfg.label} Tertinggi</p>
-        <span className="text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded-full border" style={{ color: 'var(--ink-faint)', borderColor: 'var(--line-strong)' }}>Data 2025</span>
-      </div>
-
-      <div className="flex gap-1.5 mb-4">
-        {(Object.keys(METRIC_CONFIGS) as (keyof typeof METRIC_CONFIGS)[]).map((key) => (
-          <button
-            key={key}
-            onClick={() => setMetric(key)}
-            className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide border transition-colors"
-            style={
-              metric === key
-                ? { background: 'var(--green-soft)', color: 'var(--green-deep)', borderColor: 'var(--green)' }
-                : { background: 'transparent', color: 'var(--ink-faint)', borderColor: 'var(--line-strong)' }
-            }
-          >
-            {METRIC_CONFIGS[key].label}
-          </button>
-        ))}
-      </div>
-
-      <div className="space-y-2.5">
-        {cfg.data.map((row: any, i: number) => (
-          <div key={cfg.getName(row)} className="flex items-center gap-3">
-            <span
-              className="w-5 h-5 shrink-0 rounded-md flex items-center justify-center text-[9px] font-data font-bold"
-              style={i === 0 ? { background: 'var(--green-soft)', color: 'var(--green-deep)' } : { background: 'var(--line)', color: 'var(--ink-faint)' }}
-            >
-              {i + 1}
-            </span>
-            <span className="text-xs w-24 md:w-28 shrink-0 font-semibold truncate" style={{ color: 'var(--ink-soft)' }}>
-              {cfg.getIcon(row)} {cfg.getName(row)}
-            </span>
-            <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'var(--green-soft)' }}>
-              <div
-                className="h-full rounded-full origin-left transform-gpu"
-                style={{
-                  width: `${(row.total / cfg.max) * 100}%`,
-                  background: i === 0 ? 'var(--green)' : 'var(--gold)',
-                  animation: `barGrow 0.7s ease ${i * 0.08}s both`,
-                }}
-              />
-            </div>
-            <span className="font-data text-[11px] font-bold w-24 text-right shrink-0" style={{ color: 'var(--ink)' }}>
-              {Math.round(row.total).toLocaleString('id-ID')} {cfg.unit}
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-/* ─────────────────────────────────────────────
-   INTERFACES LOGIN CONTROLLER
-───────────────────────────────────────────── */
-export default function LoginWithDashboard() {
+export default function LandingPage() {
   const router = useRouter();
 
-  // STATE THEME & MODAL
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  // State Auth Modal & Navigation
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Dashboard state
   const [activeModule, setActiveModule] = useState<'bitpro' | 'keswan' | 'kesmavet'>('bitpro');
   const [detailView, setDetailView] = useState<string | null>(null);
-  const [selectedYear, setSelectedYear] = useState<'2025' | '2026'>('2025');
   const [subTabProd, setSubTabProd] = useState<'populasi' | 'daging' | 'telur'>('populasi');
+  const [rankedMetric, setRankedMetric] = useState<keyof typeof METRIC_CONFIGS>('populasi');
 
+  // Form login
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const [statsKesmavet, setStatsKesmavet] = useState({
-    total: 0,
-    rpu: 0,
-    tpu: 0,
-    halal: 0,
-  });
-
   useEffect(() => {
-    const cekSesi = async () => {
+    const checkSession = async () => {
       const {
         data: { session },
       } = await supabase.auth.getSession();
       if (session) router.push('/beranda');
     };
-    cekSesi();
-
-    const savedRph = localStorage.getItem('data_rph_tph_tpu_v1');
-    if (savedRph) {
-      const parsedRph = JSON.parse(savedRph);
-      setStatsKesmavet({
-        total: parsedRph.length,
-        rpu: parsedRph.filter((d: any) => (d.jenis_unit_usaha || '').includes('RPU')).length,
-        tpu: parsedRph.filter(
-          (d: any) => (d.jenis_unit_usaha || '').includes('TPU') || (d.jenis_unit_usaha || '').includes('TPH')
-        ).length,
-        halal: parsedRph.filter(
-          (d: any) =>
-            (d.sertifikat_halal || '').toLowerCase().includes('sudah') ||
-            (d.sertifikat_halal || '').toLowerCase().includes('ada') ||
-            (d.sertifikat_halal || '').toLowerCase().includes('halal')
-        ).length,
-      });
-    }
+    checkSession();
   }, [router]);
-
-  const toggleTheme = () => setTheme(prev => prev === 'dark' ? 'light' : 'dark');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
 
-    const { data, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
 
     if (signInError) {
-      setError('Akses ditolak. ID Petugas atau kata sandi tidak sesuai.');
+      setError('Akses ditolak. Periksa kembali ID Petugas atau kata sandi Anda.');
       setIsLoading(false);
     } else {
       router.push('/beranda');
@@ -454,520 +183,846 @@ export default function LoginWithDashboard() {
   };
 
   const activeMod = MODULES.find((m) => m.key === activeModule)!;
+  const cfg = METRIC_CONFIGS[rankedMetric];
 
-  /* --- MODAL LOGIN POP-UP --- */
-  const renderLoginModal = () => (
-    <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60"
-      style={{ animation: 'modalFadeIn 0.3s ease-out forwards' }}
-    >
-      <div
-        className="w-full max-w-md mx-auto p-6 md:p-8 rounded-2xl border relative shadow-2xl transform-gpu"
-        style={{ 
-          background: 'var(--paper)', 
-          borderColor: 'var(--line-strong)', 
-          animation: 'modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards' 
-        }}
-      >
-        <button
-          onClick={() => setShowLoginModal(false)}
-          className="absolute top-4 right-4 p-2 rounded-full transition-colors hover:bg-white/10"
-          style={{ color: 'var(--ink-soft)' }}
-          aria-label="Tutup popup"
-        >
-          <XIcon size={20} />
-        </button>
-
-        <div className="mb-6 text-center flex flex-col items-center w-full">
-          <div className="w-14 h-14 rounded-xl flex items-center justify-center overflow-hidden mb-3 border bg-white shadow-lg shadow-purple-900/20">
-            <img src="/logo-simantap.png" alt="Logo SiMantap" className="w-full h-full object-contain p-1" onError={(e: any) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }} />
-            <span className="hidden items-center justify-center w-full h-full text-xl">🔏</span>
-          </div>
-          <h2 className="font-display text-2xl font-bold" style={{ color: 'var(--ink)' }}>Masuk Sistem</h2>
-          <p className="text-xs font-medium mt-1" style={{ color: 'var(--ink-soft)' }}>Gunakan Kredensial Dinas Anda</p>
-        </div>
-
-        {error && (
-          <div className="mb-4 p-3 rounded-xl text-xs font-bold text-center w-full border" style={{ background: 'rgba(248,113,113,0.08)', borderColor: 'rgba(248,113,113,0.3)', color: '#FCA5A5' }}>
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleLogin} className="space-y-4 w-full">
-          <div>
-            <label className="block text-xs font-bold mb-1.5 ml-1 text-left" style={{ color: 'var(--ink-soft)' }}>ID Petugas (Email)</label>
-            <input
-              type="email"
-              className="w-full p-3 rounded-xl border focus:outline-none focus:ring-2 transition-all font-data text-sm"
-              style={{ background: 'var(--paper-soft)', borderColor: 'var(--line-strong)', color: 'var(--ink)' }}
-              placeholder="admin@pkh.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-bold mb-1.5 ml-1 text-left" style={{ color: 'var(--ink-soft)' }}>Kata Sandi</label>
-            <div className="relative">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                className="w-full p-3 pr-10 rounded-xl border focus:outline-none focus:ring-2 transition-all font-data text-sm"
-                style={{ background: 'var(--paper-soft)', borderColor: 'var(--line-strong)', color: 'var(--ink)' }}
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white">
+      
+      {/* ─────────────────────────────────────────────
+          1. TOP NAVIGATION (Clean SaaS Header)
+      ───────────────────────────────────────────── */}
+      <header className="fixed top-0 inset-x-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur-md shadow-xs">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 sm:h-20 flex items-center justify-between">
+          
+          {/* Logo Brand */}
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-slate-50 border border-slate-200 p-1 flex items-center justify-center shadow-xs shrink-0">
+              <img
+                src="/logo-simantap.png"
+                alt="Logo SiMantap"
+                className="w-full h-full object-contain"
+                onError={(e: any) => {
+                  e.currentTarget.style.display = 'none';
+                  e.currentTarget.nextSibling.style.display = 'block';
+                }}
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword((v) => !v)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 z-10 transition-colors"
-                style={{ color: 'var(--ink-faint)' }}
-              >
-                <EyeIcon open={showPassword} />
-              </button>
+              <span className="hidden text-lg">🏛️</span>
             </div>
-            <div className="flex justify-end mt-1.5">
-              <button type="button" className="text-xs font-bold hover:underline" style={{ color: 'var(--green-deep)' }}>Lupa kata sandi?</button>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-editorial text-xl sm:text-2xl font-bold tracking-tight text-azure">
+                  SiMantap
+                </span>
+                <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-800 uppercase tracking-wider">
+                  Kebumen
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 hidden sm:block leading-none mt-0.5">
+                Sistem Informasi Manajemen Peternakan Terpadu
+              </p>
             </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full py-3 font-bold text-sm rounded-xl transition-all active:scale-[0.98] hover:brightness-110"
-            style={{ background: 'var(--green)', color: '#fff', boxShadow: '0 10px 24px -8px rgba(139,92,246,0.5)' }}
-          >
-            {isLoading ? 'Memverifikasi…' : 'Masuk Sekarang →'}
-          </button>
-        </form>
+          {/* Desktop Nav Links */}
+          <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+            <a href="#ringkasan" className="hover:text-azure transition-colors">
+              Ringkasan Wilayah
+            </a>
+            <a href="#modul" className="hover:text-azure transition-colors">
+              Modul Data
+            </a>
+            <a href="#bantuan" className="hover:text-azure transition-colors">
+              Bantuan Akses
+            </a>
+          </div>
 
-        <div className="w-full mt-6 grid grid-cols-3 gap-2">
-          {[
-            { icon: '🔒', label: 'Aman & Terenkripsi' },
-            { icon: '🔄', label: 'Data Real-time' },
-            { icon: '🧩', label: '3 Modul Terpadu' },
-          ].map((f) => (
-            <div key={f.label} className="flex flex-col items-center text-center gap-1 rounded-lg border p-2" style={{ borderColor: 'var(--line)', background: 'var(--paper-soft)' }}>
-              <span className="text-sm">{f.icon}</span>
-              <span className="text-[8px] font-bold leading-tight" style={{ color: 'var(--ink-soft)' }}>
-                {f.label}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-
-  /* --- RENDER TABEL DETAIL AWAM (READ ONLY) --- */
-  const renderDetailView = () => {
-    return (
-      <div className="flex flex-col h-full animate-in fade-in slide-in-from-right-4 duration-300 transform-gpu">
-        <div className="sticky top-0 backdrop-blur-sm z-20 pb-4 mb-4 border-b" style={{ borderColor: 'var(--line)', backgroundColor: 'var(--paper)' }}>
-          <div className="flex flex-row items-center justify-between gap-3 mb-4 w-full">
-            <h5 className="font-display font-bold text-sm md:text-lg flex items-center gap-2" style={{ color: 'var(--ink)' }}>
-              <span className="w-1.5 h-5 rounded-full" style={{ background: activeMod.accent }}></span>
-              {detailView === 'populasi' && 'Populasi & Produksi Ternak'}
-              {detailView === 'farm' && 'Sebaran Data Farm Per Komoditas'}
-              {detailView === 'ktt' && 'Database Kelompok Tani Ternak (KTT)'}
-              {detailView === 'sklb' && 'Penerbitan Sertifikat SKLB'}
-              {detailView === 'keswan_empty' && 'Informasi Publik Keswan'}
-              {detailView === 'kesmavet_empty' && 'Informasi Publik Kesmavet'}
-            </h5>
+          {/* Desktop Actions */}
+          <div className="hidden md:flex items-center gap-3">
             <button
-              onClick={() => setDetailView(null)}
-              className="px-3 md:px-4 py-1 md:py-1.5 rounded-full text-[10px] md:text-xs font-bold transition-all border shrink-0 flex items-center justify-center hover:bg-black/5"
-              style={{ borderColor: 'var(--line-strong)', color: 'var(--ink-soft)', background: 'var(--paper-soft)' }}
+              onClick={() => setShowLoginModal(true)}
+              className="min-h-touch h-11 px-5 rounded-xl bg-azure text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-xs hover:bg-azure/90 active:scale-[0.98] transition-all"
             >
-              ← Kembali
+              <span>Masuk Petugas</span>
+              <ArrowRight size={16} />
             </button>
           </div>
 
-          {detailView === 'populasi' && (
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-[10px] font-bold uppercase tracking-widest mr-2" style={{ color: 'var(--ink-faint)' }}>
-                Pilih Tahun:
-              </span>
-              {(['2025', '2026'] as const).map((y) => (
-                <button
-                  key={y}
-                  onClick={() => setSelectedYear(y)}
-                  className="px-4 py-1.5 rounded-lg text-[10px] md:text-xs font-bold transition-colors border"
-                  style={
-                    selectedYear === y
-                      ? { background: 'var(--green)', color: '#fff', borderColor: 'var(--green)' }
-                      : { background: 'transparent', color: 'var(--ink-faint)', borderColor: 'var(--line-strong)' }
-                  }
-                >
-                  {y}
-                </button>
-              ))}
-            </div>
-          )}
+          {/* Mobile Menu Trigger */}
+          <div className="flex items-center gap-2 md:hidden">
+            <button
+              onClick={() => setShowLoginModal(true)}
+              className="min-h-touch h-10 px-3.5 rounded-xl bg-azure text-white font-bold text-xs flex items-center gap-1.5 shadow-xs"
+            >
+              <span>Masuk</span>
+              <ArrowRight size={14} />
+            </button>
 
-          {detailView === 'populasi' && selectedYear === '2025' && (
-            <div className="flex gap-2 overflow-x-auto custom-scrollbar pb-2 pt-3 transform-gpu">
-              {(
-                [
-                  ['populasi', 'Data Populasi', 'var(--green)', 'var(--green-soft)'],
-                  ['daging', 'Produksi Daging', 'var(--gold)', 'var(--gold-soft)'],
-                  ['telur', 'Produksi Telur', 'var(--blue)', 'var(--blue-soft)'],
-                ] as const
-              ).map(([key, lbl, accent, soft]) => (
-                <button
-                  key={key}
-                  onClick={() => setSubTabProd(key)}
-                  className="px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest border shrink-0 transition-colors"
-                  style={
-                    subTabProd === key
-                      ? { background: soft, color: accent, borderColor: accent }
-                      : { background: 'transparent', borderColor: 'var(--line)', color: 'var(--ink-faint)' }
-                  }
-                >
-                  {lbl}
-                </button>
-              ))}
-            </div>
-          )}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Buka Menu"
+              className="min-h-touch min-w-touch w-10 h-10 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 flex items-center justify-center"
+            >
+              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+        </nav>
+
+        {/* Mobile Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-b border-slate-200 bg-white px-6 py-5 space-y-3 animate-in slide-in-from-top-2 duration-200">
+            <a
+              href="#ringkasan"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block py-2 text-sm font-bold text-slate-800 hover:text-azure"
+            >
+              📊 Ringkasan Wilayah
+            </a>
+            <a
+              href="#modul"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block py-2 text-sm font-bold text-slate-800 hover:text-azure"
+            >
+              🗂️ Modul Data
+            </a>
+            <a
+              href="#bantuan"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block py-2 text-sm font-bold text-slate-800 hover:text-azure"
+            >
+              ℹ️ Bantuan Akses
+            </a>
+          </div>
+        )}
+      </header>
+
+      {/* ─────────────────────────────────────────────
+          2. HERO SECTION (Editorial & Clean)
+      ───────────────────────────────────────────── */}
+      <section id="ringkasan" className="pt-28 pb-12 sm:pt-36 sm:pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        
+        {/* Kicker Badge */}
+        <div className="flex justify-center mb-5">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-700 shadow-xs">
+            <span className="w-2 h-2 rounded-full bg-vitality animate-pulse shrink-0" />
+            <span>Portal Resmi Bidang Peternakan & Kesehatan Hewan Kebumen</span>
+          </div>
         </div>
 
-        <div className="overflow-y-auto overflow-x-hidden custom-scrollbar flex-1 max-h-[280px] pr-2 transform-gpu">
-          {selectedYear === '2026' && detailView === 'populasi' ? (
-            <div className="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed rounded-2xl h-full" style={{ borderColor: 'var(--line-strong)' }}>
-              <span className="text-3xl mb-2 opacity-40">📂</span>
-              <p className="font-bold text-sm" style={{ color: 'var(--ink-faint)' }}>
-                Data Sensus/Rekap Tahun 2026 Belum Diinput
-              </p>
+        {/* Editorial Headline */}
+        <div className="text-center max-w-4xl mx-auto mb-8">
+          <h1 className="font-editorial text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 leading-[1.18] mb-5">
+            Satu Ekosistem untuk Data <br className="hidden sm:inline" />
+            <span className="text-azure">Peternakan Kebumen</span>
+          </h1>
+
+          <p className="text-sm sm:text-base lg:text-lg leading-relaxed max-w-3xl mx-auto font-normal text-slate-600">
+            Sistem Informasi Manajemen Terpadu yang mengintegrasikan data Perbibitan & Produksi (Bitpro), Kesehatan Hewan (Keswan), dan Kesehatan Masyarakat Veteriner (Kesmavet) secara akurat, transparan, dan terbuka.
+          </p>
+        </div>
+
+        {/* Primary Call to Actions */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-12">
+          <button
+            onClick={() => setShowLoginModal(true)}
+            className="w-full sm:w-auto min-h-touch h-12 px-7 rounded-xl bg-azure text-white font-bold text-sm flex items-center justify-center gap-2 shadow-xs hover:bg-azure/90 active:scale-[0.98] transition-all"
+          >
+            <span>Masuk ke Dashboard Dinas</span>
+            <ArrowRight size={16} />
+          </button>
+          
+          <a
+            href="#modul"
+            className="w-full sm:w-auto min-h-touch h-12 px-6 rounded-xl border border-slate-200 bg-white text-slate-700 font-bold text-sm flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors shadow-xs"
+          >
+            <span>Eksplorasi Data Publik</span>
+            <ChevronRight size={16} />
+          </a>
+        </div>
+
+        {/* ─────────────────────────────────────────────
+            3. ASYMMETRIC BENTO KPI CARDS
+        ───────────────────────────────────────────── */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12">
+          
+          {/* Stat 1: Total Ternak */}
+          <div className="p-5 sm:p-6 rounded-2xl border border-slate-200 bg-white shadow-xs">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-2xl">🐾</span>
+              <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-md border border-emerald-200 bg-emerald-50 text-emerald-800">
+                TAHUN 2025
+              </span>
             </div>
-          ) : (
-            <div className="rounded-xl border overflow-hidden w-full" style={{ borderColor: 'var(--line)' }}>
-              {detailView === 'populasi' && subTabProd === 'populasi' && (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs md:text-sm whitespace-nowrap">
-                    <thead style={{ background: 'var(--green-soft)', color: 'var(--ink)' }} className="border-b">
+            <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-500 mb-1">
+              Total Populasi Ternak
+            </p>
+            <p className="font-mono text-2xl sm:text-3xl font-bold text-vitality tracking-tight">
+              {TOTAL_POPULASI.toLocaleString('id-ID')}
+            </p>
+            <p className="text-xs text-slate-500 mt-1 font-mono">Ekor di seluruh Kebumen</p>
+          </div>
+
+          {/* Stat 2: Produksi Daging */}
+          <div className="p-5 sm:p-6 rounded-2xl border border-slate-200 bg-white shadow-xs">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-2xl">🥩</span>
+              <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-md border border-blue-200 bg-blue-50 text-blue-800">
+                PRODUKSI
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-500 mb-1">
+              Produksi Daging
+            </p>
+            <p className="font-mono text-2xl sm:text-3xl font-bold text-azure tracking-tight">
+              {Math.round(TOTAL_DAGING).toLocaleString('id-ID')}
+            </p>
+            <p className="text-xs text-slate-500 mt-1 font-mono">Kilogram / tahun</p>
+          </div>
+
+          {/* Stat 3: Produksi Telur */}
+          <div className="p-5 sm:p-6 rounded-2xl border border-slate-200 bg-white shadow-xs">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-2xl">🥚</span>
+              <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-md border border-amber-200 bg-amber-50 text-amber-900">
+                UNGGAS
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-500 mb-1">
+              Produksi Telur
+            </p>
+            <p className="font-mono text-2xl sm:text-3xl font-bold text-amber-600 tracking-tight">
+              {Math.round(TOTAL_TELUR).toLocaleString('id-ID')}
+            </p>
+            <p className="text-xs text-slate-500 mt-1 font-mono">Kilogram / tahun</p>
+          </div>
+
+          {/* Stat 4: Sebaran Farm */}
+          <div className="p-5 sm:p-6 rounded-2xl border border-slate-200 bg-white shadow-xs">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-2xl">🏡</span>
+              <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-md border border-lime-200 bg-lime-50 text-lime-900">
+                TERVERIFIKASI
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-500 mb-1">
+              Sebaran Data Farm
+            </p>
+            <p className="font-mono text-2xl sm:text-3xl font-bold text-lime tracking-tight">
+              {TOTAL_FARM} Unit
+            </p>
+            <p className="text-xs text-slate-500 mt-1 font-mono">Peternakan terdata</p>
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* ─────────────────────────────────────────────
+          4. MODUL EXPLORER PANEL
+      ───────────────────────────────────────────── */}
+      <section id="modul" className="pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-24">
+        
+        {/* Section Title */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6">
+          <div>
+            <span className="text-xs font-mono font-bold uppercase tracking-widest text-azure mb-1 block">
+              Eksplorasi Data Terpadu
+            </span>
+            <h2 className="font-editorial text-2xl sm:text-3xl font-bold text-slate-900">
+              Modul Pelayanan & Laporan
+            </h2>
+          </div>
+          <p className="text-xs sm:text-sm text-slate-500 max-w-md">
+            Pilih modul untuk melihat rekapitulasi data publik atau klik kartu di bawah untuk rincian data.
+          </p>
+        </div>
+
+        {/* Tab Buttons (Touch Target >= 48px) */}
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6">
+          {MODULES.map((mod) => {
+            const isActive = activeModule === mod.key;
+            return (
+              <button
+                key={mod.key}
+                onClick={() => {
+                  setActiveModule(mod.key as any);
+                  setDetailView(null);
+                }}
+                className={`min-h-touch-lg h-14 sm:h-16 px-3 sm:px-6 rounded-2xl border text-left flex items-center gap-3 transition-all ${
+                  isActive
+                    ? 'bg-white border-azure text-slate-900 shadow-sm ring-2 ring-azure/20'
+                    : 'bg-slate-100/80 border-slate-200 text-slate-600 hover:bg-white hover:text-slate-900'
+                }`}
+              >
+                <span className="text-2xl sm:text-3xl shrink-0">{mod.icon}</span>
+                <div className="min-w-0 flex-1 hidden sm:block">
+                  <p className="font-bold text-sm leading-tight truncate">{mod.label}</p>
+                  <p className="text-xs truncate text-slate-500">{mod.caption}</p>
+                </div>
+                <div className="sm:hidden text-center w-full">
+                  <p className="font-bold text-xs truncate">{mod.label}</p>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Main Panel Box */}
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 lg:p-10 shadow-sm">
+          
+          {/* Header Bar */}
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-5 mb-6 border-b border-slate-200">
+            <div className="flex items-center gap-3">
+              <span className="w-3 h-3 rounded-full" style={{ backgroundColor: activeMod.accent }} />
+              <h3 className="font-editorial text-lg sm:text-xl font-bold text-slate-900">
+                {activeMod.label} — {activeMod.caption}
+              </h3>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono uppercase px-3 py-1 rounded-full border border-slate-200 bg-slate-50 text-slate-700 font-semibold">
+                Pratinjau Publik
+              </span>
+            </div>
+          </div>
+
+          {/* Conditional Content: Detail View vs Dashboard Summary */}
+          {detailView ? (
+            /* DETAIL TABLE VIEW */
+            <div className="space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h4 className="text-base sm:text-lg font-bold text-slate-900">
+                    {detailView === 'populasi' && '📊 Data Lengkap Sensus Populasi & Produksi Ternak'}
+                    {detailView === 'farm' && '🏡 Sebaran Data Farm Peternakan Kebumen'}
+                    {detailView === 'ktt' && '👥 Database Kelompok Tani Ternak (KTT)'}
+                    {detailView === 'sklb' && '📄 Surat Keterangan Layak Bibit (SKLB)'}
+                    {detailView === 'keswan_info' && '🩺 Informasi Puskeswan & Vaksinasi'}
+                    {detailView === 'kesmavet_info' && '🔬 Data Usaha & Sertifikasi Halal'}
+                  </h4>
+                  <p className="text-xs text-slate-500">
+                    Tersinkronisasi dengan basis data Dinas Pertanian dan Pangan Kebumen
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setDetailView(null)}
+                  className="min-h-touch h-10 px-4 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 hover:bg-slate-100 flex items-center justify-center gap-2 self-start sm:self-auto transition-colors"
+                >
+                  ← Kembali ke Ringkasan
+                </button>
+              </div>
+
+              {/* Subtabs for Populasi */}
+              {detailView === 'populasi' && (
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {[
+                    { key: 'populasi', label: 'Populasi Ternak' },
+                    { key: 'daging', label: 'Produksi Daging' },
+                    { key: 'telur', label: 'Produksi Telur' },
+                  ].map((tab) => (
+                    <button
+                      key={tab.key}
+                      onClick={() => setSubTabProd(tab.key as any)}
+                      className={`min-h-touch h-9 px-3.5 rounded-lg text-xs font-mono font-bold uppercase tracking-wider border transition-all ${
+                        subTabProd === tab.key
+                          ? 'bg-azure text-white border-azure shadow-xs'
+                          : 'border-slate-200 bg-slate-50 text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Table Container */}
+              <div className="overflow-x-auto rounded-2xl border border-slate-200">
+                {detailView === 'populasi' && subTabProd === 'populasi' && (
+                  <table className="w-full text-left text-xs sm:text-sm whitespace-nowrap">
+                    <thead className="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200">
                       <tr>
-                        <th className="p-3 w-12 text-center">NO</th>
-                        <th className="p-3">KOMODITAS TERNAK</th>
-                        <th className="p-3 text-right">TOTAL POPULASI KABUPATEN</th>
+                        <th className="p-3.5 w-14 text-center">NO</th>
+                        <th className="p-3.5">KOMODITAS TERNAK</th>
+                        <th className="p-3.5 text-right font-mono">TOTAL POPULASI (2025)</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y font-medium" style={{ borderColor: 'var(--line)' }}>
-                      {REKAP_POPULASI_2025.map((row, i) => (
-                        <tr key={i} style={{ background: 'var(--paper)' }}>
-                          <td className="p-3 text-center" style={{ color: 'var(--ink-faint)' }}>{i + 1}</td>
-                          <td className="p-3 font-bold" style={{ color: 'var(--green)' }}>
-                            {row.icon} {row.komoditas}
+                    <tbody className="divide-y divide-slate-100 text-slate-800">
+                      {REKAP_POPULASI_2025.map((row, idx) => (
+                        <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
+                          <td className="p-3.5 text-center font-mono text-slate-400">{idx + 1}</td>
+                          <td className="p-3.5 font-bold flex items-center gap-2">
+                            <span>{row.icon}</span>
+                            <span>{row.komoditas}</span>
                           </td>
-                          <td className="p-3 text-right font-data font-bold" style={{ color: 'var(--ink)' }}>
+                          <td className="p-3.5 text-right font-mono font-bold text-vitality">
                             {row.total.toLocaleString('id-ID')} Ekor
                           </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
-                </div>
-              )}
+                )}
 
-              {detailView === 'populasi' && subTabProd === 'daging' && (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs md:text-sm whitespace-nowrap">
-                    <thead style={{ background: 'var(--gold-soft)', color: 'var(--ink)' }}>
+                {detailView === 'populasi' && subTabProd === 'daging' && (
+                  <table className="w-full text-left text-xs sm:text-sm whitespace-nowrap">
+                    <thead className="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200">
                       <tr>
-                        <th className="p-3">KOMODITAS TERNAK</th>
-                        <th className="p-3 text-right">TOTAL REKAP PRODUKSI DAGING (2025)</th>
+                        <th className="p-3.5 w-14 text-center">NO</th>
+                        <th className="p-3.5">JENIS TERNAK POTONG</th>
+                        <th className="p-3.5 text-right font-mono">TOTAL PRODUKSI DAGING (2025)</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y font-medium" style={{ borderColor: 'var(--line)' }}>
-                      {dataDaging.map((row, i) => (
-                        <tr key={i} style={{ background: 'var(--paper)' }}>
-                          <td className="p-3 font-bold" style={{ color: 'var(--gold)' }}>🥩 {row.jenis}</td>
-                          <td className="p-3 text-right font-data font-bold" style={{ color: 'var(--ink)' }}>
-                            {row.total.toLocaleString('id-ID')} KG
+                    <tbody className="divide-y divide-slate-100 text-slate-800">
+                      {dataDaging.map((row, idx) => (
+                        <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
+                          <td className="p-3.5 text-center font-mono text-slate-400">{idx + 1}</td>
+                          <td className="p-3.5 font-bold">🥩 {row.jenis}</td>
+                          <td className="p-3.5 text-right font-mono font-bold text-azure">
+                            {row.total.toLocaleString('id-ID')} Kg
                           </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
-                </div>
-              )}
+                )}
 
-              {detailView === 'populasi' && subTabProd === 'telur' && (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs md:text-sm whitespace-nowrap">
-                    <thead style={{ background: 'var(--blue-soft)', color: 'var(--ink)' }}>
+                {detailView === 'populasi' && subTabProd === 'telur' && (
+                  <table className="w-full text-left text-xs sm:text-sm whitespace-nowrap">
+                    <thead className="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200">
                       <tr>
-                        <th className="p-3">JENIS UNGGAS PRODUKTIF</th>
-                        <th className="p-3 text-right">TOTAL REKAP PRODUKSI TELUR (2025)</th>
+                        <th className="p-3.5 w-14 text-center">NO</th>
+                        <th className="p-3.5">KOMODITAS UNGGAS PETELUR</th>
+                        <th className="p-3.5 text-right font-mono">TOTAL PRODUKSI TELUR (2025)</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y font-medium" style={{ borderColor: 'var(--line)' }}>
-                      {dataTelur.map((row, i) => (
-                        <tr key={i} style={{ background: 'var(--paper)' }}>
-                          <td className="p-3 font-bold" style={{ color: 'var(--blue)' }}>🥚 {row.jenis}</td>
-                          <td className="p-3 text-right font-data font-bold" style={{ color: 'var(--ink)' }}>
-                            {row.total.toLocaleString('id-ID')} KG
+                    <tbody className="divide-y divide-slate-100 text-slate-800">
+                      {dataTelur.map((row, idx) => (
+                        <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
+                          <td className="p-3.5 text-center font-mono text-slate-400">{idx + 1}</td>
+                          <td className="p-3.5 font-bold">🥚 {row.jenis}</td>
+                          <td className="p-3.5 text-right font-mono font-bold text-amber-600">
+                            {row.total.toLocaleString('id-ID')} Kg
                           </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
-                </div>
-              )}
+                )}
 
-              {detailView === 'farm' && (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs md:text-sm whitespace-nowrap">
-                    <thead style={{ background: 'var(--gold-soft)', color: 'var(--ink)' }}>
+                {detailView === 'farm' && (
+                  <table className="w-full text-left text-xs sm:text-sm whitespace-nowrap">
+                    <thead className="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200">
                       <tr>
-                        <th className="p-3 w-12 text-center">NO</th>
-                        <th className="p-3">KOMODITAS FARM</th>
-                        <th className="p-3 text-center">JUMLAH FARM</th>
-                        <th className="p-3 text-right">TOTAL KANDUNGAN / POPULASI</th>
+                        <th className="p-3.5 w-14 text-center">NO</th>
+                        <th className="p-3.5">KOMODITAS FARM</th>
+                        <th className="p-3.5 text-center font-mono">JUMLAH FARM</th>
+                        <th className="p-3.5 text-right font-mono">TOTAL KAPASITAS</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y font-medium" style={{ borderColor: 'var(--line)' }}>
-                      {REKAP_SEBARAN_FARM.map((row, i) => (
-                        <tr key={i} style={{ background: 'var(--paper)' }}>
-                          <td className="p-3 text-center" style={{ color: 'var(--ink-faint)' }}>{i + 1}</td>
-                          <td className="p-3 font-bold" style={{ color: 'var(--gold)' }}>{row.komoditas}</td>
-                          <td className="p-3 text-center font-data font-bold" style={{ color: 'var(--ink)' }}>
-                            {row.jumlah_farm} Unit
-                          </td>
-                          <td className="p-3 text-right font-data font-bold" style={{ color: 'var(--green)' }}>
+                    <tbody className="divide-y divide-slate-100 text-slate-800">
+                      {REKAP_SEBARAN_FARM.map((row, idx) => (
+                        <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
+                          <td className="p-3.5 text-center font-mono text-slate-400">{idx + 1}</td>
+                          <td className="p-3.5 font-bold">{row.komoditas}</td>
+                          <td className="p-3.5 text-center font-mono font-bold text-slate-900">{row.jumlah_farm} Unit</td>
+                          <td className="p-3.5 text-right font-mono font-bold text-lime">
                             {row.total_populasi}
                           </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
-                </div>
-              )}
+                )}
 
-              {detailView === 'ktt' && (
-                <div className="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed rounded-2xl h-full" style={{ borderColor: 'var(--line-strong)' }}>
-                  <span className="text-4xl mb-3 opacity-40">📂</span>
-                  <p className="font-bold text-sm" style={{ color: 'var(--ink-faint)' }}>
-                    Data Kelompok Tani Ternak (KTT) belum diinput.
-                    <br />
-                    Silakan hubungi tim Bitpro.
-                  </p>
-                </div>
-              )}
-
-              {detailView === 'sklb' && (
-                <div className="p-12 text-center italic text-sm border-2 border-dashed rounded-2xl" style={{ color: 'var(--ink-faint)', borderColor: 'var(--line-strong)' }}>
-                  <span className="text-4xl block mb-3 opacity-50">🔒</span>
-                  Basis data registrasi Surat Keterangan Layak Bibit (SKLB) sedang sinkronisasi internal.
-                </div>
-              )}
-
-              {detailView === 'keswan_empty' && (
-                <div className="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed rounded-2xl h-full" style={{ borderColor: 'var(--line-strong)' }}>
-                  <span className="text-4xl mb-3 opacity-40">🩺</span>
-                  <p className="font-bold text-sm" style={{ color: 'var(--ink-faint)' }}>
-                    Data Kesehatan Hewan belum diinput secara lengkap.
-                    <br />
-                    Silakan hubungi tim Keswan.
-                  </p>
-                </div>
-              )}
-
-              {detailView === 'kesmavet_empty' && (
-                <div className="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed rounded-2xl h-full" style={{ borderColor: 'var(--line-strong)' }}>
-                  <span className="text-4xl mb-3 opacity-40">🔬</span>
-                  <p className="font-bold text-sm" style={{ color: 'var(--ink-faint)' }}>
-                    Data Kesehatan Masyarakat Veteriner belum diinput secara lengkap.
-                    <br />
-                    Silakan hubungi tim Kesmavet.
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  return (
-    <>
-      <style dangerouslySetInnerHTML={{ __html: BG_STYLES }} />
-
-      {/* WRAPPER UTAMA (Theme Terang/Gelap) */}
-      <main className={`simantap-theme min-h-screen transition-colors duration-300 ${theme === 'light' ? 'light-mode' : ''}`} style={{ background: 'var(--canvas)', color: 'var(--ink)' }}>
-        
-        <Navigation onLoginClick={() => setShowLoginModal(true)} theme={theme} toggleTheme={toggleTheme} />
-
-        {/* ============================================================
-            HERO — badge, headline gradient, CTA
-        ============================================================ */}
-        <section
-          id="ringkasan"
-          className="relative flex flex-col items-center justify-start px-6 pt-32 pb-16 md:pt-40 md:pb-20 scroll-mt-16"
-          style={{ animation: 'fadeIn 0.6s ease-out' }}
-        >
-          <aside
-            className="mb-8 inline-flex flex-wrap items-center justify-center gap-2 px-4 py-2 rounded-full border backdrop-blur-sm max-w-full"
-            style={{ borderColor: 'var(--line-strong)', background: 'var(--paper-soft)' }}
-          >
-            <span className="text-xs text-center whitespace-nowrap" style={{ color: 'var(--ink-soft)' }}>
-              Portal Resmi Bidang Peternakan dan Kesehatan Hewan, Dinas Pertanian dan Pangan
-            </span>
-            <a
-              href="#modul"
-              className="flex items-center gap-1 text-xs transition-all active:scale-95 whitespace-nowrap"
-              style={{ color: 'var(--ink-soft)' }}
-              aria-label="Lihat modul data"
-            >
-              Lihat modul
-              <ArrowRight size={12} />
-            </a>
-          </aside>
-
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-center max-w-3xl px-6 leading-tight mb-6 tracking-tight" style={{ color: 'var(--ink)' }}>
-            Satu Sistem untuk <br /> Data Peternakan Kebumen
-          </h1>
-
-          <p className="text-sm md:text-base font-medium text-center max-w-2xl px-6 mb-3" style={{ color: 'var(--ink-soft)' }}>
-            Sistem Informasi Manajemen Peternakan Terpadu merangkum Perbibitan dan Produksi Peternakan, Kesehatan Hewan, dan Kesehatan Masyarakat Veteriner. <br className="hidden md:block" />
-          </p>
-
-          <div className="flex items-center gap-4 relative z-10 mb-16 mt-7">
-            <button
-              onClick={() => setShowLoginModal(true)}
-              className="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-lg text-base font-bold transition-transform duration-200 active:scale-[0.98]"
-              style={{ background: 'var(--green)', color: '#ffffff' }}
-              aria-label="Masuk ke sistem"
-            >
-              Masuk Sekarang
-            </button>
-          </div>
-
-          {/* ==========================================================
-              DASHBOARD MELAYANG
-          ========================================================== */}
-          <div id="modul" className="w-full max-w-5xl relative pb-8 scroll-mt-24">
-            <div
-              className="absolute left-1/2 w-[90%] pointer-events-none z-0"
-              style={{ top: '-14%', transform: 'translateX(-50%)' }}
-              aria-hidden="true"
-            >
-              <div
-                className="w-full h-[26rem] rounded-full"
-                style={{
-                  background: 'radial-gradient(ellipse, var(--green-soft) 0%, var(--gold-soft) 45%, transparent 72%)',
-                  filter: 'blur(60px)',
-                }}
-              />
-            </div>
-
-            <div className="relative z-10">
-              <div className="flex w-full gap-1 sm:gap-1.5 mb-0">
-                {MODULES.map((mod, i) => (
-                  <ModuleTab
-                    key={mod.key}
-                    mod={mod}
-                    index={i}
-                    active={activeModule === mod.key}
-                    onClick={() => {
-                      setActiveModule(mod.key);
-                      setDetailView(null);
-                    }}
-                  />
-                ))}
-              </div>
-
-              <div
-                className="border p-5 md:p-8 rounded-b-2xl rounded-tr-2xl min-h-[380px] w-full relative shadow-2xl transform-gpu"
-                style={{ borderColor: 'var(--line-strong)', background: 'var(--paper)' }}
-              >
-                {/* Bar mockup browser tipis */}
-                <div className="flex items-center gap-1.5 mb-5 pb-4 border-b" style={{ borderColor: 'var(--line)' }} aria-hidden="true">
-                  <span className="w-2.5 h-2.5 rounded-full" style={{ background: 'var(--line-strong)' }} />
-                  <span className="w-2.5 h-2.5 rounded-full" style={{ background: 'var(--line-strong)' }} />
-                  <span className="w-2.5 h-2.5 rounded-full" style={{ background: 'var(--line-strong)' }} />
-                  <span className="ml-3 text-[9px] font-bold uppercase tracking-widest" style={{ color: 'var(--ink-faint)' }}>
-                    Live Preview · {activeMod.label}
-                  </span>
-                  <span
-                    className="ml-auto text-[9px] font-bold px-2 py-1 rounded-full border uppercase tracking-widest"
-                    style={{ color: 'var(--ink-faint)', borderColor: 'var(--line-strong)' }}
-                  >
-                    Read Only
-                  </span>
-                </div>
-
-                {detailView ? (
-                  renderDetailView()
-                ) : (
-                  <>
-                    {activeModule === 'bitpro' && (
-                      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 h-full flex flex-col transform-gpu">
-                        <h5 className="font-display font-bold text-base md:text-lg flex items-center gap-2 mb-5" style={{ color: 'var(--ink)' }}>
-                          <span className="w-1.5 h-5 rounded-full" style={{ background: 'var(--green)' }}></span>
-                          Ringkasan Data Publik — Bitpro
-                        </h5>
-
-                        <RingkasanQuickStats />
-                        <RankedBarWidget />
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                          <StatWidget onClick={() => setDetailView('populasi')} icon="📊" title="Populasi & Produksi" value="Data Laporan" accent="var(--green)" accentSoft="var(--green-soft)" />
-                          <StatWidget onClick={() => setDetailView('farm')} icon="🏡" title="Sebaran Data Farm" value="242 Unit" accent="var(--gold)" accentSoft="var(--gold-soft)" />
-                          <StatWidget onClick={() => setDetailView('ktt')} icon="👥" title="Database KTT" value="Belum Diinput" accent="var(--plum)" accentSoft="var(--plum-soft)" />
-                          <StatWidget onClick={() => setDetailView('sklb')} icon="📄" title="Sertifikat SKLB" value="Berkas" accent="var(--blue)" accentSoft="var(--blue-soft)" />
-                        </div>
-                      </div>
-                    )}
-
-                    {activeModule === 'keswan' && (
-                      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 transform-gpu">
-                        <h5 className="font-display font-bold text-base md:text-lg flex items-center gap-2 mb-5" style={{ color: 'var(--ink)' }}>
-                          <span className="w-1.5 h-5 rounded-full" style={{ background: 'var(--blue)' }}></span>
-                          Ringkasan Data Publik — Keswan
-                        </h5>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
-                          <StatWidget onClick={() => setDetailView('keswan_empty')} icon="🩺" title="Puskeswan" value="Coming soon" accent="var(--blue)" accentSoft="var(--blue-soft)" />
-                          <StatWidget onClick={() => setDetailView('keswan_empty')} icon="💉" title="Log Vaksinasi" value="Coming soon" accent="var(--green)" accentSoft="var(--green-soft)" />
-                          <StatWidget onClick={() => setDetailView('keswan_empty')} icon="🚑" title="Kasus Medis" value="Coming soon" accent="var(--plum)" accentSoft="var(--plum-soft)" />
-                        </div>
-                      </div>
-                    )}
-
-                    {activeModule === 'kesmavet' && (
-                      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 transform-gpu">
-                        <h5 className="font-display font-bold text-base md:text-lg flex items-center gap-2 mb-5" style={{ color: 'var(--ink)' }}>
-                          <span className="w-1.5 h-5 rounded-full" style={{ background: 'var(--plum)' }}></span>
-                          Ringkasan Data Publik — Kesmavet
-                        </h5>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
-                          <StatWidget onClick={() => setDetailView('kesmavet_empty')} icon="🏢" title="Total Unit Usaha" value="Coming soon" accent="var(--plum)" accentSoft="var(--plum-soft)" />
-                          <StatWidget onClick={() => setDetailView('kesmavet_empty')} icon="🏭" title="Rumah Potong RPU" value="Coming soon" accent="var(--gold)" accentSoft="var(--gold-soft)" />
-                          <StatWidget onClick={() => setDetailView('kesmavet_empty')} icon="✅" title="Sertifikasi Halal" value="Coming soon" accent="var(--green)" accentSoft="var(--green-soft)" />
-                        </div>
-                      </div>
-                    )}
-                  </>
+                {(detailView === 'ktt' || detailView === 'sklb' || detailView === 'keswan_info' || detailView === 'kesmavet_info') && (
+                  <div className="py-12 px-6 text-center space-y-3">
+                    <div className="w-12 h-12 rounded-2xl bg-azure/10 border border-azure/30 text-azure flex items-center justify-center mx-auto text-xl">
+                      🔒
+                    </div>
+                    <h5 className="font-bold text-base text-slate-900">
+                      Akses Khusus Petugas Terdaftar
+                    </h5>
+                    <p className="text-xs text-slate-500 max-w-md mx-auto">
+                      Detail mutasi ternak, rekonsiliasi bantuan, dan data internal dinas dapat diakses melalui portal internal.
+                    </p>
+                    <div className="pt-2">
+                      <button
+                        onClick={() => setShowLoginModal(true)}
+                        className="min-h-touch h-10 px-5 rounded-xl bg-azure text-white font-bold text-xs inline-flex items-center gap-2 shadow-xs"
+                      >
+                        Masuk untuk Akses Lengkap
+                        <ArrowRight size={14} />
+                      </button>
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
+          ) : (
+            /* DEFAULT DASHBOARD PREVIEW */
+            <div className="space-y-8">
+              
+              {/* Bitpro View */}
+              {activeModule === 'bitpro' && (
+                <>
+                  {/* Ranked Bar Widget */}
+                  <div className="p-5 sm:p-6 rounded-2xl border border-slate-200 bg-slate-50/50">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+                      <div>
+                        <h4 className="font-editorial text-lg sm:text-xl font-bold text-slate-900">
+                          Peringkat 5 Tertinggi — {cfg.label}
+                        </h4>
+                        <p className="text-xs text-slate-500">
+                          Rekapitulasi resmi tingkat Kabupaten Kebumen (2025)
+                        </p>
+                      </div>
+
+                      {/* Metric Toggle */}
+                      <div className="flex gap-1 p-1 rounded-xl bg-slate-200/70 border border-slate-200">
+                        {(Object.keys(METRIC_CONFIGS) as (keyof typeof METRIC_CONFIGS)[]).map((key) => (
+                          <button
+                            key={key}
+                            onClick={() => setRankedMetric(key)}
+                            className={`min-h-touch h-8 px-3 rounded-lg text-xs font-mono font-bold uppercase transition-colors ${
+                              rankedMetric === key
+                                ? 'bg-white text-slate-900 shadow-xs'
+                                : 'text-slate-600 hover:text-slate-900'
+                            }`}
+                          >
+                            {METRIC_CONFIGS[key].label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Progress Bars */}
+                    <div className="space-y-3.5">
+                      {cfg.data.map((row: any, i: number) => {
+                        const name = cfg.getName(row);
+                        const icon = cfg.getIcon(row);
+                        const percent = Math.round((row.total / cfg.max) * 100);
+
+                        return (
+                          <div key={name} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                            <div className="flex items-center gap-2 w-48 shrink-0">
+                              <span className={`w-5 h-5 rounded-md font-mono text-xs font-bold flex items-center justify-center ${i === 0 ? 'bg-azure text-white' : 'bg-slate-200 text-slate-700'}`}>
+                                {i + 1}
+                              </span>
+                              <span className="text-xs sm:text-sm font-bold truncate text-slate-900">
+                                {icon} {name}
+                              </span>
+                            </div>
+
+                            <div className="flex-1 h-3 rounded-full bg-slate-200/80 overflow-hidden">
+                              <div
+                                className="h-full rounded-full transition-all duration-700"
+                                style={{
+                                  width: `${percent}%`,
+                                  backgroundColor: cfg.barColor,
+                                }}
+                              />
+                            </div>
+
+                            <span className="font-mono text-xs sm:text-sm font-bold text-right w-36 shrink-0 text-slate-900">
+                              {Math.round(row.total).toLocaleString('id-ID')} {cfg.unit}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Asymmetric Clickable Cards */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    
+                    <button
+                      onClick={() => setDetailView('populasi')}
+                      className="p-5 rounded-2xl border border-slate-200 bg-white text-left flex flex-col justify-between min-h-[130px] transition-all hover:border-azure hover:shadow-sm active:scale-[0.99]"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-2xl">📊</span>
+                        <ChevronRight size={18} className="text-azure" />
+                      </div>
+                      <div>
+                        <p className="font-bold text-sm text-slate-900 mb-0.5">Populasi & Produksi</p>
+                        <p className="text-xs text-slate-500">
+                          Tabel sensus 16 komoditas ternak
+                        </p>
+                      </div>
+                    </button>
+
+                    <button
+                      onClick={() => setDetailView('farm')}
+                      className="p-5 rounded-2xl border border-slate-200 bg-white text-left flex flex-col justify-between min-h-[130px] transition-all hover:border-vitality hover:shadow-sm active:scale-[0.99]"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-2xl">🏡</span>
+                        <ChevronRight size={18} className="text-vitality" />
+                      </div>
+                      <div>
+                        <p className="font-bold text-sm text-slate-900 mb-0.5">Sebaran Data Farm</p>
+                        <p className="text-xs text-slate-500">
+                          242 unit kandang unggas & ruminansia
+                        </p>
+                      </div>
+                    </button>
+
+                    <button
+                      onClick={() => setDetailView('ktt')}
+                      className="p-5 rounded-2xl border border-slate-200 bg-white text-left flex flex-col justify-between min-h-[130px] transition-all hover:border-lime hover:shadow-sm active:scale-[0.99]"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-2xl">👥</span>
+                        <ChevronRight size={18} className="text-lime" />
+                      </div>
+                      <div>
+                        <p className="font-bold text-sm text-slate-900 mb-0.5">Database KTT</p>
+                        <p className="text-xs text-slate-500">
+                          Kelompok Tani Ternak binaan
+                        </p>
+                      </div>
+                    </button>
+
+                    <button
+                      onClick={() => setDetailView('sklb')}
+                      className="p-5 rounded-2xl border border-slate-200 bg-white text-left flex flex-col justify-between min-h-[130px] transition-all hover:border-amber-400 hover:shadow-sm active:scale-[0.99]"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-2xl">📄</span>
+                        <ChevronRight size={18} className="text-amber-500" />
+                      </div>
+                      <div>
+                        <p className="font-bold text-sm text-slate-900 mb-0.5">Sertifikat SKLB</p>
+                        <p className="text-xs text-slate-500">
+                          Surat Kelayakan Bibit Ternak
+                        </p>
+                      </div>
+                    </button>
+
+                  </div>
+                </>
+              )}
+
+              {/* Keswan View */}
+              {activeModule === 'keswan' && (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                  <div className="p-6 rounded-2xl border border-slate-200 bg-slate-50/50">
+                    <span className="text-3xl mb-3 block">🩺</span>
+                    <h4 className="font-bold text-base text-slate-900 mb-1">Puskeswan Aktif</h4>
+                    <p className="text-xs text-slate-600 mb-4">
+                      Pelayanan rawat, pasif, pusling, dan konsultasi kesehatan ternak di seluruh kecamatan.
+                    </p>
+                    <button
+                      onClick={() => setDetailView('keswan_info')}
+                      className="text-xs font-mono font-bold text-azure hover:underline flex items-center gap-1"
+                    >
+                      LIHAT LAYANAN →
+                    </button>
+                  </div>
+
+                  <div className="p-6 rounded-2xl border border-slate-200 bg-slate-50/50">
+                    <span className="text-3xl mb-3 block">💉</span>
+                    <h4 className="font-bold text-base text-slate-900 mb-1">Vaksinasi PMK & LSD</h4>
+                    <p className="text-xs text-slate-600 mb-4">
+                      Monitoring capaian vaksinasi berkala dan penanganan penyakit menular ternak.
+                    </p>
+                    <button
+                      onClick={() => setDetailView('keswan_info')}
+                      className="text-xs font-mono font-bold text-azure hover:underline flex items-center gap-1"
+                    >
+                      LIHAT CAPAIAN →
+                    </button>
+                  </div>
+
+                  <div className="p-6 rounded-2xl border border-slate-200 bg-slate-50/50">
+                    <span className="text-3xl mb-3 block">🚑</span>
+                    <h4 className="font-bold text-base text-slate-900 mb-1">Tanggap Darurat Medis</h4>
+                    <p className="text-xs text-slate-600 mb-4">
+                      Sistem respon cepat laporan wabah dan pengobatan hewan ternak masyarakat.
+                    </p>
+                    <button
+                      onClick={() => setDetailView('keswan_info')}
+                      className="text-xs font-mono font-bold text-azure hover:underline flex items-center gap-1"
+                    >
+                      KONTAK PETUGAS →
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Kesmavet View */}
+              {activeModule === 'kesmavet' && (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                  <div className="p-6 rounded-2xl border border-slate-200 bg-slate-50/50">
+                    <span className="text-3xl mb-3 block">🥩</span>
+                    <h4 className="font-bold text-base text-slate-900 mb-1">RPH & TPH Terbina</h4>
+                    <p className="text-xs text-slate-600 mb-4">
+                      Rumah Potong Hewan dan Tempat Pemotongan Hewan resmi berstandar sanitasi.
+                    </p>
+                    <button
+                      onClick={() => setDetailView('kesmavet_info')}
+                      className="text-xs font-mono font-bold text-lime hover:underline flex items-center gap-1"
+                    >
+                      LIHAT DATA UNIT →
+                    </button>
+                  </div>
+
+                  <div className="p-6 rounded-2xl border border-slate-200 bg-slate-50/50">
+                    <span className="text-3xl mb-3 block">✅</span>
+                    <h4 className="font-bold text-base text-slate-900 mb-1">Sertifikasi Halal & NKV</h4>
+                    <p className="text-xs text-slate-600 mb-4">
+                      Verifikasi Nomor Kontrol Veteriner dan jaminan kehalalan produk asal hewan.
+                    </p>
+                    <button
+                      onClick={() => setDetailView('kesmavet_info')}
+                      className="text-xs font-mono font-bold text-lime hover:underline flex items-center gap-1"
+                    >
+                      STATUS SERTIFIKAT →
+                    </button>
+                  </div>
+
+                  <div className="p-6 rounded-2xl border border-slate-200 bg-slate-50/50">
+                    <span className="text-3xl mb-3 block">🔬</span>
+                    <h4 className="font-bold text-base text-slate-900 mb-1">Pengujian Lab Higiene</h4>
+                    <p className="text-xs text-slate-600 mb-4">
+                      Pemeriksaan laboratorium mutu produk asal hewan yang aman, sehat, utuh, dan halal (ASUH).
+                    </p>
+                    <button
+                      onClick={() => setDetailView('kesmavet_info')}
+                      className="text-xs font-mono font-bold text-lime hover:underline flex items-center gap-1"
+                    >
+                      INFO UJI LAB →
+                    </button>
+                  </div>
+                </div>
+              )}
+
+            </div>
+          )}
+
+        </div>
+
+      </section>
+
+      {/* ─────────────────────────────────────────────
+          5. MODAL LOGIN PETUGAS (48px Inputs)
+      ───────────────────────────────────────────── */}
+      {showLoginModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 relative shadow-2xl animate-in zoom-in-95 duration-200 text-slate-900">
+            
+            {/* Close Button */}
+            <button
+              onClick={() => setShowLoginModal(false)}
+              aria-label="Tutup jendela login"
+              className="min-h-touch min-w-touch w-10 h-10 rounded-xl border border-slate-200 bg-slate-50 text-slate-500 hover:text-slate-900 absolute top-5 right-5 flex items-center justify-center transition-colors"
+            >
+              <X size={18} />
+            </button>
+
+            {/* Header */}
+            <div className="mb-6 text-left">
+              <div className="w-12 h-12 rounded-2xl bg-azure/10 border border-azure/30 flex items-center justify-center text-azure mb-3">
+                <ShieldCheck size={24} />
+              </div>
+              <h3 className="font-editorial text-2xl font-bold tracking-tight text-slate-900">
+                Masuk Sistem SiMantap
+              </h3>
+              <p className="text-xs text-slate-500 mt-1">
+                Gunakan ID Petugas resmi Dinas Pertanian dan Pangan
+              </p>
+            </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="mb-4 p-3 rounded-xl border border-red-200 bg-red-50 text-red-700 text-xs font-semibold flex items-center gap-2">
+                <AlertCircle size={16} className="shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
+
+            {/* Form */}
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                  ID Petugas (Email Dinas)
+                </label>
+                <input
+                  type="email"
+                  required
+                  placeholder="petugas@pkh.kebumenkab.go.id"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full min-h-touch h-11 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm font-sans outline-none focus:border-azure focus:bg-white transition-colors"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Kata Sandi
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    placeholder="••••••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full min-h-touch h-11 pl-3.5 pr-11 rounded-xl border border-slate-200 bg-slate-50 text-sm font-sans outline-none focus:border-azure focus:bg-white transition-colors"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? 'Sembunyikan sandi' : 'Tampilkan sandi'}
+                    className="min-h-touch min-w-touch w-10 h-10 absolute right-0.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-400 hover:text-slate-700"
+                  >
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full min-h-touch h-12 rounded-xl bg-azure text-white font-bold text-sm flex items-center justify-center gap-2 mt-5 shadow-xs hover:bg-azure/90 active:scale-[0.98] disabled:opacity-50 transition-all"
+              >
+                {isLoading ? (
+                  <span>Memverifikasi Akun...</span>
+                ) : (
+                  <>
+                    <span>Masuk ke Dashboard Petugas</span>
+                    <ArrowRight size={16} />
+                  </>
+                )}
+              </button>
+            </form>
+
+            <div className="mt-5 pt-4 border-t border-slate-200 text-center text-[11px] text-slate-500">
+              Butuh bantuan atau lupa kredensial? Hubungi Administrator Teknis Bidang PKH.
+            </div>
           </div>
-        </section>
+        </div>
+      )}
 
-        {showLoginModal && renderLoginModal()}
+      {/* ─────────────────────────────────────────────
+          6. FOOTER (Clean & Crisp)
+      ───────────────────────────────────────────── */}
+      <footer id="bantuan" className="border-t border-slate-200 py-10 px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-600 bg-white">
+        <div className="max-w-4xl mx-auto space-y-3">
+          <div className="flex items-center justify-center gap-2">
+            <span className="font-editorial text-lg font-bold text-azure">SiMantap</span>
+            <span>—</span>
+            <span>Dinas Pertanian dan Pangan Kabupaten Kebumen</span>
+          </div>
+          <p className="text-xs text-slate-500 max-w-xl mx-auto">
+            Bidang Peternakan dan Kesehatan Hewan · Jl. Tentara Pelajar No. 25, Kebumen, Jawa Tengah.
+          </p>
+          <p className="text-xs font-mono text-slate-400 pt-1">
+            &copy; {new Date().getFullYear()} Pemerintah Kabupaten Kebumen. Seluruh Hak Cipta Dilindungi.
+          </p>
+        </div>
+      </footer>
 
-        <footer id="bantuan" className="border-t px-6 py-10 text-center scroll-mt-16" style={{ borderColor: 'var(--line)', background: 'var(--paper-soft)' }}>
-          <p className="text-xs font-bold mb-1" style={{ color: 'var(--ink-soft)' }}>
-            Butuh bantuan akses? Hubungi admin bidang PKH
-          </p>
-          <p className="text-[10px] font-medium leading-relaxed max-w-[280px] mx-auto mt-2" style={{ color: 'var(--ink-faint)' }}>
-            &copy; {new Date().getFullYear()} Bidang Peternakan dan Kesehatan Hewan,
-            <br />
-            Dinas Pertanian dan Pangan Kabupaten Kebumen
-          </p>
-        </footer>
-      </main>
-    </>
+    </div>
   );
 }

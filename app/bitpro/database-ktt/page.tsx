@@ -2,6 +2,22 @@
 
 import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
+import {
+  ArrowLeft,
+  Search,
+  Plus,
+  Edit2,
+  Trash2,
+  X,
+  Building2,
+  Users,
+  MapPin,
+  ChevronLeft,
+  ChevronRight,
+  Filter,
+  CheckCircle2,
+  AlertTriangle,
+} from "lucide-react";
 
 /* =========================================================
    1. TIPE DATA & KONSTANTA
@@ -23,9 +39,16 @@ export interface KelompokTani {
 type KelompokTaniFormValues = Omit<KelompokTani, 'id'>;
 
 const emptyFormValues: KelompokTaniFormValues = {
-  kecamatan: "", desa: "", namaKelompok: "",
-  nomorRegister: "", jenisKelompok: "", kelasKelompok: "",
-  luasLahanHa: 0, anggotaLaki: 0, anggotaPerempuan: 0, namaKetuaKelompok: ""
+  kecamatan: "",
+  desa: "",
+  namaKelompok: "",
+  nomorRegister: "",
+  jenisKelompok: "Kelompok Tani Ternak (KTT)",
+  kelasKelompok: "Pemula",
+  luasLahanHa: 0,
+  anggotaLaki: 0,
+  anggotaPerempuan: 0,
+  namaKetuaKelompok: "",
 };
 
 const KECAMATAN_OPTIONS = [
@@ -36,54 +59,29 @@ const KECAMATAN_OPTIONS = [
   "Karangsambung"
 ];
 
-const JENIS_KELOMPOK_OPTIONS = ["Poktan/Tanaman Pangan", "Kelompok Tani Ternak (KTT)", "Kelompok Lainnya"];
-
+const JENIS_KELOMPOK_OPTIONS = ["Kelompok Tani Ternak (KTT)", "Poktan/Tanaman Pangan", "Kelompok Lainnya"];
 const KELAS_ORDER = ["Pemula", "Lanjut", "Madya", "Utama"];
-
 const PAGE_SIZE = 10;
 
-/* =========================================================
-   2. KOMPONEN KECIL — STEMPEL KELAS KELOMPOK
-   ========================================================= */
-function KelasStamp({ kelas }: { kelas: string }) {
+function KelasBadge({ kelas }: { kelas: string }) {
   if (!kelas) {
-    return <span className="text-[11px] text-[#A39B7C] italic font-medium">Belum diklasifikasi</span>;
+    return <span className="text-xs text-slate-400 italic">Belum diklasifikasi</span>;
   }
-  const tier = KELAS_ORDER.indexOf(kelas); // -1..3
+  const isHigh = kelas === 'Madya' || kelas === 'Utama';
   return (
     <span
-      className="stamp-mark inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide"
-      style={{
-        borderColor: tier >= 2 ? '#A67C2E' : '#8B8168',
-        color: tier >= 2 ? '#8A611F' : '#6B6650',
-        transform: `rotate(${tier % 2 === 0 ? '-1.5deg' : '1deg'})`,
-      }}
+      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold font-mono border ${
+        isHigh
+          ? 'bg-amber-50 text-amber-700 border-amber-200'
+          : 'bg-slate-100 text-slate-700 border-slate-200'
+      }`}
     >
-      <span className="h-1.5 w-1.5 rounded-full" style={{ background: tier >= 2 ? '#A67C2E' : '#8B8168' }} />
+      <span className={`w-1.5 h-1.5 rounded-full ${isHigh ? 'bg-amber-500' : 'bg-slate-400'}`} />
       {kelas}
     </span>
   );
 }
 
-/* =========================================================
-   3. IKON SEDERHANA
-   ========================================================= */
-const IconSearch = () => (
-  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8">
-    <circle cx="11" cy="11" r="6.5" />
-    <path d="M20 20l-4.3-4.3" />
-  </svg>
-);
-const IconAlert = () => (
-  <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.8">
-    <path d="M12 4l9 16H3z" />
-    <path d="M12 10v4" /><circle cx="12" cy="17.3" r="0.6" fill="currentColor" />
-  </svg>
-);
-
-/* =========================================================
-   4. HALAMAN UTAMA DATABASE KTT
-   ========================================================= */
 export default function DatabaseKTTPage() {
   const [data, setData] = useState<KelompokTani[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -99,33 +97,24 @@ export default function DatabaseKTTPage() {
   const [formMode, setFormMode] = useState<"tambah" | "edit">("tambah");
   const [editingId, setEditingId] = useState<number | null>(null);
   const [formValues, setFormValues] = useState<KelompokTaniFormValues>(emptyFormValues);
-
   const [deleteTarget, setDeleteTarget] = useState<KelompokTani | null>(null);
 
-  // ─── FUNGSI LOAD DATA ANTI-ERROR ───
   const loadData = async () => {
     setIsLoading(true);
     try {
       const res = await fetch('/api/ktt');
       const jsonData = await res.json();
-      
       let validData: KelompokTani[] = [];
-      
-      // Deteksi Cerdas: Cari array-nya dimana pun dia berada
       if (Array.isArray(jsonData)) {
         validData = jsonData;
       } else if (jsonData && typeof jsonData === 'object') {
-        // Coba cari properti yang isinya array (misal jsonData.data, jsonData.kttData, dll)
         const foundArray = Object.values(jsonData).find(val => Array.isArray(val));
-        if (foundArray) {
-          validData = foundArray as KelompokTani[];
-        }
+        if (foundArray) validData = foundArray as KelompokTani[];
       }
-      
       setData(validData);
     } catch (error) {
-      console.error('Gagal meload data:', error);
-      setData([]); // Pastikan state diisi array kosong jika gagal
+      console.error('Gagal meload data KTT:', error);
+      setData([]);
     } finally {
       setIsLoading(false);
     }
@@ -144,7 +133,6 @@ export default function DatabaseKTTPage() {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return data.filter((row) => {
-      // Pencegahan error jika data string kosong / undefined
       const namaKel = row.namaKelompok ? row.namaKelompok.toLowerCase() : "";
       const namaKet = row.namaKetuaKelompok ? row.namaKetuaKelompok.toLowerCase() : "";
       const nmrReg = row.nomorRegister ? row.nomorRegister.toLowerCase() : "";
@@ -154,7 +142,6 @@ export default function DatabaseKTTPage() {
       const matchKecamatan = !filterKecamatan || row.kecamatan === filterKecamatan;
       const matchDesa = !filterDesa || row.desa === filterDesa;
       const matchJenis = !filterJenis || row.jenisKelompok === filterJenis;
-      
       return matchSearch && matchKecamatan && matchDesa && matchJenis;
     });
   }, [data, search, filterKecamatan, filterDesa, filterJenis]);
@@ -165,34 +152,25 @@ export default function DatabaseKTTPage() {
 
   const kecamatanIndex = useMemo(() => {
     const base = data.filter((row) => !filterJenis || row.jenisKelompok === filterJenis);
-    const map = new Map<string, { jumlah: number; ktt: number; poktan: number; lainnya: number }>();
+    const map = new Map<string, number>();
     for (const row of base) {
-      const cur = map.get(row.kecamatan) || { jumlah: 0, ktt: 0, poktan: 0, lainnya: 0 };
-      cur.jumlah += 1;
-      if (row.jenisKelompok === "Kelompok Tani Ternak (KTT)") cur.ktt += 1;
-      else if (row.jenisKelompok === "Poktan/Tanaman Pangan") cur.poktan += 1;
-      else cur.lainnya += 1;
-      map.set(row.kecamatan, cur);
+      map.set(row.kecamatan, (map.get(row.kecamatan) || 0) + 1);
     }
     return KECAMATAN_OPTIONS.map((k) => ({
       kecamatan: k,
-      ...(map.get(k) || { jumlah: 0, ktt: 0, poktan: 0, lainnya: 0 }),
+      jumlah: map.get(k) || 0,
     }));
   }, [data, filterJenis]);
-
-  const showFrontPage = !filterKecamatan && !search.trim();
-
-  function resetToPageOne() { setPage(1); }
 
   function pilihKecamatan(kec: string) {
     if (filterKecamatan !== kec) {
       setFilterKecamatan(kec);
-      setFilterDesa(""); 
+      setFilterDesa("");
     } else {
       setFilterKecamatan("");
       setFilterDesa("");
     }
-    resetToPageOne();
+    setPage(1);
   }
 
   function openAddModal() {
@@ -222,7 +200,7 @@ export default function DatabaseKTTPage() {
       await loadData();
       setFormOpen(false);
     } catch (error) {
-      alert('Gagal menyimpan data!');
+      alert('Gagal menyimpan data KTT!');
     } finally {
       setIsSaving(false);
     }
@@ -235,408 +213,474 @@ export default function DatabaseKTTPage() {
       await loadData();
       setDeleteTarget(null);
     } catch (error) {
-      alert('Gagal menghapus data!');
+      alert('Gagal menghapus data KTT!');
     }
   }
 
   if (isLoading) {
     return (
-      <div className="ktt-scope min-h-screen flex items-center justify-center" style={{ background: '#1F3626' }}>
-        <style jsx global>{fontImports}</style>
-        <span className="font-display text-lg text-[#EFEAD9]/80 tracking-wide">Memuat Buku Register Kelompok Tani…</span>
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center font-sans">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-azure/20 border border-azure/40 flex items-center justify-center animate-spin">
+            <span className="w-3.5 h-3.5 rounded-full bg-azure" />
+          </div>
+          <p className="font-mono text-xs uppercase tracking-widest text-slate-500">
+            Memuat Buku Register Kelompok Tani...
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="ktt-scope min-h-screen" style={{ background: '#EDE8DA' }}>
-      <style jsx global>{fontImports}</style>
-
-      {/* PLAT JUDUL */}
-      <header style={{ background: '#1F3626' }} className="border-b-4 border-[#A67C2E]/70 relative">
-        <div className="mx-auto max-w-7xl px-4 sm:px-8 py-4 sm:py-5 flex items-center justify-between sm:justify-center">
-          <Link
-            href="/bitpro"
-            className="sm:absolute left-4 sm:left-8 flex items-center gap-2 px-3 py-1.5 rounded-lg text-[#EFEAD9] border border-[#EFEAD9]/30 hover:bg-white/10 transition-colors shrink-0 text-sm font-medium"
-          >
-            <span>←</span> <span className="hidden sm:inline">Modul Bitpro</span>
-          </Link>
-
-          <div className="text-center flex-1 sm:flex-none">
-            <h1 className="font-display text-xl sm:text-2xl font-semibold tracking-tight text-[#F6F2E4]">
-              Database KTT
-            </h1>
-            <p className="text-[11px] sm:text-xs font-medium text-[#C9C2A8] tracking-wide uppercase mt-1">
-              Register Kelompok Tani &middot; Kabupaten Kebumen
-            </p>
-          </div>
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white pb-20">
+      
+      {/* ── TOP HEADER ── */}
+      <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
           
-          <div className="w-[88px] sm:hidden"></div>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-7xl px-4 sm:px-8 py-6 grid grid-cols-1 lg:grid-cols-[230px_1fr] gap-5">
-
-        {/* RAIL INDEKS KECAMATAN */}
-        <aside className="rounded-xl border border-[#D8D0B8] bg-[#F6F3E9] overflow-hidden h-fit lg:sticky lg:top-6 shadow-sm">
-          <div className="px-4 py-3 border-b border-[#D8D0B8] flex items-center justify-between">
-            <span className="font-display text-sm font-semibold text-[#1F3626]">Indeks Kecamatan</span>
-            <span className="text-[11px] font-mono text-[#8B8168]">{kecamatanIndex.filter(k => k.jumlah > 0).length}/26</span>
-          </div>
-          <div className="max-h-[560px] overflow-y-auto">
-            {kecamatanIndex.map(({ kecamatan, jumlah }) => {
-              const active = filterKecamatan === kecamatan;
-              return (
-                <button
-                  key={kecamatan}
-                  onClick={() => pilihKecamatan(kecamatan)}
-                  className={`w-full flex items-center justify-between px-4 py-2 text-left text-sm border-l-[3px] transition-colors ${
-                    active
-                      ? 'border-l-[#A67C2E] bg-[#EFE7CE] font-semibold text-[#1F3626]'
-                      : 'border-l-transparent text-[#4A4636] hover:bg-[#EFEBDC]'
-                  }`}
-                >
-                  <span>{kecamatan}</span>
-                  <span className="font-mono text-xs tabular-nums text-[#8B8168]">{jumlah}</span>
-                </button>
-              );
-            })}
-          </div>
-        </aside>
-
-        {/* KONTEN UTAMA */}
-        <div className="min-w-0">
-          {/* BILAH PENCARIAN & FILTER */}
-          <div className="rounded-xl border border-[#D8D0B8] bg-[#F6F3E9] p-3 mb-5 flex flex-col md:flex-row gap-2.5 items-center shadow-sm">
-            <div className="flex-1 w-full relative">
-              <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-[#8B8168]"><IconSearch /></span>
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => { setSearch(e.target.value); resetToPageOne(); }}
-                placeholder="Cari kelompok, ketua, reg…"
-                className="w-full rounded-lg border border-[#D8D0B8] bg-white py-2 pl-9 pr-3 text-sm text-[#20241D] focus:outline-none focus:ring-2 focus:ring-[#A67C2E]/40 focus:border-[#A67C2E] transition"
-              />
-            </div>
-
-            {filterKecamatan && (
-              <select
-                value={filterDesa}
-                onChange={(e) => { setFilterDesa(e.target.value); resetToPageOne(); }}
-                className="w-full md:w-auto rounded-lg border border-[#D8D0B8] bg-white py-2 px-3 text-sm text-[#20241D] focus:outline-none focus:ring-2 focus:ring-[#A67C2E]/40 cursor-pointer"
-              >
-                <option value="">Semua Desa</option>
-                {desaList.map((d) => <option key={d} value={d}>{d}</option>)}
-              </select>
-            )}
-
-            <select
-              value={filterJenis}
-              onChange={(e) => { setFilterJenis(e.target.value); resetToPageOne(); }}
-              className="w-full md:w-auto rounded-lg border border-[#D8D0B8] bg-white py-2 px-3 text-sm text-[#20241D] focus:outline-none focus:ring-2 focus:ring-[#A67C2E]/40 cursor-pointer"
+          <div className="flex items-center gap-3">
+            <Link
+              href="/bitpro"
+              className="min-h-touch min-w-touch w-10 h-10 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors"
+              aria-label="Kembali ke Bitpro"
             >
-              <option value="">Semua Jenis</option>
-              {JENIS_KELOMPOK_OPTIONS.map((j) => <option key={j} value={j}>{j}</option>)}
-            </select>
+              <ArrowLeft size={18} />
+            </Link>
 
+            <div>
+              <div className="flex items-center gap-2">
+                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                  Bitpro
+                </Link>
+                <span className="text-slate-300">/</span>
+                <span className="text-xs font-bold text-azure">Database KTT</span>
+              </div>
+              <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
+                Master Kelompok Tani Ternak
+              </h1>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
             <button
               onClick={openAddModal}
-              className="w-full md:w-auto shrink-0 rounded-lg bg-[#2F4D38] px-4 py-2 text-sm font-bold text-white shadow-sm border border-[#1F3626] hover:bg-[#1F3626] transition whitespace-nowrap"
+              className="min-h-touch h-10 px-4 rounded-xl bg-azure text-white text-xs font-bold flex items-center gap-1.5 hover:bg-azure/90 active:scale-95 transition-all shadow-sm"
             >
-              + Tambah Kelompok
+              <Plus size={16} />
+              <span>Tambah KTT</span>
             </button>
           </div>
 
-          {filterKecamatan && (
-            <div className="mb-4">
-              <button 
-                onClick={() => { setFilterKecamatan(""); setFilterDesa(""); resetToPageOne(); }}
-                className="inline-flex items-center gap-2 text-sm font-semibold text-[#1F3626] hover:text-[#A67C2E] transition-colors bg-[#F6F3E9] px-4 py-2 rounded-lg border border-[#D8D0B8] shadow-sm"
-              >
-                ← Kembali ke Semua Kecamatan
-              </button>
+        </div>
+      </header>
+
+      {/* ── MAIN WORKSPACE ── */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-6 items-start">
+          
+          {/* ── LEFT SIDEBAR: INDEKS KECAMATAN ── */}
+          <aside className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:sticky lg:top-24 space-y-3">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h3 className="font-bold text-xs uppercase tracking-wider text-slate-700 font-mono">
+                Wilayah Kecamatan
+              </h3>
+              <span className="text-[11px] font-mono text-slate-400">
+                {kecamatanIndex.filter((k) => k.jumlah > 0).length}/26 Aktif
+              </span>
             </div>
-          )}
 
-          {/* HALAMAN DEPAN -- indeks semua kecamatan */}
-          {showFrontPage ? (
-            <div className="rounded-xl border border-[#D8D0B8] bg-[#FBFAF3] p-5 sm:p-6 shadow-sm">
-              <div className="mb-5 flex items-center justify-between">
-                <div>
-                  <h2 className="font-display text-lg font-semibold text-[#1F3626]">Indeks Seluruh Kecamatan</h2>
-                  <p className="text-xs text-[#8B8168] mt-0.5">Pilih kecamatan untuk membuka daftar kelompok tani secara rinci.</p>
-                </div>
-                <span className="font-mono text-xs text-[#8B8168] tabular-nums shrink-0">
-                  {data.length} kelompok &middot; 26 kecamatan
-                </span>
-              </div>
+            <div className="max-h-[520px] overflow-y-auto space-y-1 pr-1">
+              <button
+                onClick={() => pilihKecamatan("")}
+                className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+                  !filterKecamatan
+                    ? "bg-azure text-white font-bold"
+                    : "text-slate-600 hover:bg-slate-100"
+                }`}
+              >
+                <span>Semua Wilayah</span>
+                <span className="font-mono text-xs">{data.length}</span>
+              </button>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {kecamatanIndex.map(({ kecamatan, jumlah, ktt, poktan }) => (
+              {kecamatanIndex.map(({ kecamatan, jumlah }) => {
+                const active = filterKecamatan === kecamatan;
+                return (
                   <button
                     key={kecamatan}
                     onClick={() => pilihKecamatan(kecamatan)}
-                    className="text-left rounded-lg border border-[#D8D0B8] bg-white px-4 py-3 hover:border-[#A67C2E]/60 hover:bg-[#FBF7EA] transition-colors shadow-sm"
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs transition-colors ${
+                      active
+                        ? "bg-azure text-white font-bold shadow-sm"
+                        : "text-slate-600 hover:bg-slate-100"
+                    }`}
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-display font-bold text-[#1F3626]">{kecamatan}</span>
-                      <span className="font-mono text-sm font-bold tabular-nums text-[#8A611F] bg-[#F6F3E9] px-2 py-0.5 rounded">{jumlah}</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-[11px] text-[#7A7458] font-medium">
-                      <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-[#1F3626]" />KTT {ktt}</span>
-                      <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-[#2F4D38]" />Poktan {poktan}</span>
-                    </div>
+                    <span>{kecamatan}</span>
+                    <span className={`font-mono text-xs ${active ? "text-white" : "text-slate-400"}`}>
+                      {jumlah}
+                    </span>
                   </button>
-                ))}
+                );
+              })}
+            </div>
+          </aside>
+
+          {/* ── RIGHT MAIN: TABEL MASTER DATA ── */}
+          <div className="space-y-4">
+            
+            {/* Filter & Search Bar */}
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="relative flex-1">
+                <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Cari kelompok, ketua, desa, nomor register..."
+                  value={search}
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                    setPage(1);
+                  }}
+                  className="w-full min-h-touch h-10 pl-9 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-900 focus:outline-none focus:border-azure focus:bg-white transition-colors"
+                />
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                {filterKecamatan && desaList.length > 0 && (
+                  <select
+                    value={filterDesa}
+                    onChange={(e) => {
+                      setFilterDesa(e.target.value);
+                      setPage(1);
+                    }}
+                    className="min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-700 focus:border-azure outline-none"
+                  >
+                    <option value="">Semua Desa ({filterKecamatan})</option>
+                    {desaList.map((d) => (
+                      <option key={d} value={d}>{d}</option>
+                    ))}
+                  </select>
+                )}
+
+                <select
+                  value={filterJenis}
+                  onChange={(e) => {
+                    setFilterJenis(e.target.value);
+                    setPage(1);
+                  }}
+                  className="min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-700 focus:border-azure outline-none"
+                >
+                  <option value="">Semua Jenis</option>
+                  {JENIS_KELOMPOK_OPTIONS.map((j) => (
+                    <option key={j} value={j}>{j}</option>
+                  ))}
+                </select>
               </div>
             </div>
-          ) : (
-          /* TABEL LEDGER UPDATE KETIGA (Dibuat lebih ringkas) */
-          <div className="rounded-xl border border-[#D8D0B8] bg-[#FBFAF3] overflow-hidden shadow-sm">
-            <div className="px-5 py-3 border-b border-[#D8D0B8] flex items-center justify-between bg-white">
-              <p className="text-sm text-[#5A5644]">
-                <span className="font-mono font-bold text-[#1F3626]">{filtered.length}</span> kelompok tercatat di <span className="font-bold text-[#1F3626]">{filterKecamatan}</span>
-                {filterDesa && <span>, Desa <span className="font-bold text-[#1F3626]">{filterDesa}</span></span>}
-              </p>
-            </div>
 
-            {/* Overflow x tetap ada untuk jaga-jaga kalau layarnya sangat kecil (mobile) */}
-            <div className="overflow-x-auto">
-              <table className="min-w-full text-sm">
-                <thead>
-                  <tr className="text-left text-[10px] sm:text-[11px] font-bold text-[#5A5644] uppercase tracking-wider border-b border-[#D8D0B8] bg-[#F6F3E9]">
-                    <th className="px-4 py-3 w-10">NO.</th>
-                    <th className="px-2 py-3">NAMA &amp; WILAYAH</th>
-                    <th className="px-2 py-3">NO. REGISTER</th>
-                    <th className="px-2 py-3">KETUA</th>
-                    <th className="px-2 py-3">KATEGORI</th>
-                    <th className="px-2 py-3 text-center">ANGGOTA</th>
-                    <th className="px-4 py-3 text-right">AKSI</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white">
-                  {paginated.length === 0 ? (
+            {/* Table */}
+            <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm whitespace-nowrap">
+                  <thead className="bg-slate-50 text-slate-600 text-xs font-semibold uppercase tracking-wider border-b border-slate-200">
                     <tr>
-                      <td colSpan={7} className="px-6 py-16 text-center">
-                        <p className="font-display text-base font-bold text-[#4A4636]">Belum ada catatan yang cocok</p>
-                        <p className="text-sm text-[#8B8168] mt-1 font-medium">Coba ubah kata kunci atau hapus filter.</p>
-                      </td>
+                      <th className="p-4 w-12 text-center">NO</th>
+                      <th className="p-4">NAMA KELOMPOK & REG</th>
+                      <th className="p-4">LOKASI DESA / KEC</th>
+                      <th className="p-4">KETUA KELOMPOK</th>
+                      <th className="p-4 text-center">KELAS</th>
+                      <th className="p-4 text-right">ANGGOTA</th>
+                      <th className="p-4 text-center w-24">AKSI</th>
                     </tr>
-                  ) : (
-                    paginated.map((row, i) => (
-                      <tr key={row.id} className="border-b border-[#EAE5D4] last:border-b-0 hover:bg-[#F3EFDF]/60 transition-colors">
-                        
-                        {/* NO */}
-                        <td className="px-4 py-3 align-top font-mono text-[11px] font-semibold text-[#8B8168] tabular-nums">
-                          {String((currentPage - 1) * PAGE_SIZE + i + 1).padStart(3, '0')}
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 text-slate-800">
+                    {paginated.length > 0 ? (
+                      paginated.map((row, idx) => (
+                        <tr key={row.id} className="hover:bg-slate-50/80 transition-colors">
+                          <td className="p-4 text-center font-mono text-slate-400 text-xs">
+                            {(currentPage - 1) * PAGE_SIZE + idx + 1}
+                          </td>
+                          <td className="p-4">
+                            <span className="font-bold text-slate-900 block text-sm">
+                              {row.namaKelompok || '-'}
+                            </span>
+                            <span className="text-xs font-mono text-slate-500 block">
+                              Reg: {row.nomorRegister || '-'}
+                            </span>
+                          </td>
+                          <td className="p-4">
+                            <span className="text-slate-800 font-medium block text-xs">
+                              {row.desa || '-'}
+                            </span>
+                            <span className="text-xs text-slate-500 font-mono">
+                              Kec. {row.kecamatan || '-'}
+                            </span>
+                          </td>
+                          <td className="p-4 text-slate-700 text-xs font-medium">
+                            👤 {row.namaKetuaKelompok || '-'}
+                          </td>
+                          <td className="p-4 text-center">
+                            <KelasBadge kelas={row.kelasKelompok} />
+                          </td>
+                          <td className="p-4 text-right font-mono text-xs">
+                            <span className="font-bold text-slate-900">
+                              {(row.anggotaLaki || 0) + (row.anggotaPerempuan || 0)}
+                            </span>
+                            <span className="text-slate-400 text-[11px] block">
+                              {row.anggotaLaki || 0}L · {row.anggotaPerempuan || 0}P
+                            </span>
+                          </td>
+                          <td className="p-4 text-center">
+                            <div className="flex items-center justify-center gap-1.5">
+                              <button
+                                onClick={() => openEditModal(row)}
+                                className="min-h-touch h-8 w-8 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600 flex items-center justify-center transition-colors"
+                                aria-label="Edit"
+                              >
+                                <Edit2 size={13} />
+                              </button>
+                              <button
+                                onClick={() => setDeleteTarget(row)}
+                                className="min-h-touch h-8 w-8 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-red-600 flex items-center justify-center transition-colors"
+                                aria-label="Hapus"
+                              >
+                                <Trash2 size={13} />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={7} className="p-12 text-center text-slate-400 font-medium text-sm">
+                          Tidak ada kelompok tani yang sesuai filter.
                         </td>
-                        
-                        {/* NAMA & WILAYAH */}
-                        <td className="px-2 py-3 align-top">
-                          <p className="font-display font-semibold text-[#1F3626] text-[14px] leading-snug">{row.namaKelompok}</p>
-                          <p className="text-[10px] text-[#7A7458] mt-1 uppercase tracking-wide font-medium">{row.desa}, KEC. {row.kecamatan}</p>
-                        </td>
-
-                        {/* NO REGISTER */}
-                        <td className="px-2 py-3 align-top">
-                          <p className="text-[11px] text-[#8B8168] font-mono tracking-tight leading-snug">
-                            {row.nomorRegister || <span className="italic text-[#A39B7C]">Belum ada</span>}
-                          </p>
-                        </td>
-
-                        {/* KETUA */}
-                        <td className="px-2 py-3 align-top">
-                          <p className="text-[12px] font-medium text-[#4A4636] leading-snug">{row.namaKetuaKelompok}</p>
-                        </td>
-
-                        {/* KATEGORI */}
-                        <td className="px-2 py-3 align-top">
-                          <div className="flex flex-col items-start gap-1">
-                            <span className="text-[11px] font-medium text-[#4A4636] leading-tight">{row.jenisKelompok}</span>
-                            <KelasStamp kelas={row.kelasKelompok} />
-                          </div>
-                        </td>
-
-                        {/* ANGGOTA */}
-                        <td className="px-2 py-3 align-top text-center whitespace-nowrap">
-                          <span className="font-mono text-[12px] font-semibold tabular-nums text-[#4A4636]">{row.anggotaLaki}L</span>
-                          <span className="text-[#C9C2A8] mx-0.5 font-bold">/</span>
-                          <span className="font-mono text-[12px] font-semibold tabular-nums text-[#4A4636]">{row.anggotaPerempuan}P</span>
-                        </td>
-
-                        {/* AKSI */}
-                        <td className="px-4 py-3 align-top text-right whitespace-nowrap">
-                          <div className="flex items-center justify-end gap-1.5">
-                            <button onClick={() => openEditModal(row)} className="rounded border border-[#D8D0B8] bg-white px-2 py-1 text-[11px] font-medium text-[#4A4636] shadow-sm hover:bg-[#F3EFDF] transition-colors">
-                              Ubah
-                            </button>
-                            <button onClick={() => setDeleteTarget(row)} className="rounded border border-red-200 bg-white px-2 py-1 text-[11px] font-medium text-red-700 shadow-sm hover:bg-red-50 transition-colors">
-                              Hapus
-                            </button>
-                          </div>
-                        </td>
-                        
                       </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Pagination Bar */}
+              <div className="p-4 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-600">
+                <span className="font-mono">
+                  Menampilkan {paginated.length} dari {filtered.length} kelompok terdaftar
+                </span>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    disabled={currentPage <= 1}
+                    className="min-h-touch h-8 px-3 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed font-semibold flex items-center gap-1"
+                  >
+                    <ChevronLeft size={14} />
+                    <span>Sebelumnya</span>
+                  </button>
+
+                  <span className="font-mono px-2">
+                    {currentPage} / {totalPages}
+                  </span>
+
+                  <button
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={currentPage >= totalPages}
+                    className="min-h-touch h-8 px-3 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed font-semibold flex items-center gap-1"
+                  >
+                    <span>Selanjutnya</span>
+                    <ChevronRight size={14} />
+                  </button>
+                </div>
+              </div>
             </div>
 
-            {totalPages > 1 && (
-              <div className="border-t border-[#D8D0B8] px-5 py-3.5 flex items-center justify-between bg-[#F6F3E9]">
-                <button disabled={currentPage === 1} onClick={() => setPage((p) => Math.max(1, p - 1))} className="rounded-lg border border-[#D8D0B8] bg-white px-3 py-1.5 text-xs sm:text-sm font-medium text-[#4A4636] hover:bg-[#EFEAD9] disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm">
-                  ← Sebelumnya
-                </button>
-                <span className="text-xs font-mono font-medium text-[#8B8168]">Hal. {currentPage} / {totalPages}</span>
-                <button disabled={currentPage === totalPages} onClick={() => setPage((p) => Math.min(totalPages, p + 1))} className="rounded-lg border border-[#D8D0B8] bg-white px-3 py-1.5 text-xs sm:text-sm font-medium text-[#4A4636] hover:bg-[#EFEAD9] disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm">
-                  Berikutnya →
-                </button>
-              </div>
-            )}
           </div>
-          )}
+
         </div>
       </main>
 
-      {/* FORM MODAL */}
+      {/* ── MODAL FORM TAMBAH/EDIT ── */}
       {formOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="fixed inset-0 bg-[#1F3626]/50 backdrop-blur-sm" onClick={() => setFormOpen(false)} />
-          <div className="relative w-full max-w-2xl rounded-2xl bg-[#FBFAF3] shadow-2xl border border-[#D8D0B8]">
-            <div className="border-b border-[#D8D0B8] px-6 py-4 flex items-center justify-between">
-              <h3 className="font-display text-lg font-bold text-[#1F3626]">
-                {formMode === 'tambah' ? 'Catat Kelompok Baru' : 'Ubah Catatan Kelompok'}
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="w-full max-w-2xl max-h-[90vh] bg-white rounded-2xl border border-slate-200 shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
+            
+            <div className="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+              <h3 className="font-bold text-slate-900 text-base">
+                {formMode === "tambah" ? "Tambah Kelompok Tani Baru" : "Edit Data Kelompok Tani"}
               </h3>
-              <button onClick={() => setFormOpen(false)} className="text-[#8B8168] hover:text-[#20241D] text-xl font-bold leading-none">&times;</button>
+              <button
+                onClick={() => setFormOpen(false)}
+                className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 flex items-center justify-center"
+              >
+                <X size={18} />
+              </button>
             </div>
-            <form onSubmit={handleFormSubmit}>
-              <div className="px-6 py-6 max-h-[60vh] overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-4">
-                <Field label="Kecamatan">
-                  <select value={formValues.kecamatan} onChange={e => setFormValues({...formValues, kecamatan: e.target.value})} className="ktt-input font-medium" required>
-                    <option value="">Pilih kecamatan…</option>
-                    {KECAMATAN_OPTIONS.map(k => <option key={k} value={k}>{k}</option>)}
-                  </select>
-                </Field>
-                <Field label="Desa / Kelurahan">
-                  <input type="text" value={formValues.desa} onChange={e => setFormValues({...formValues, desa: e.target.value})} className="ktt-input font-medium" required />
-                </Field>
-                <div className="sm:col-span-2">
-                  <Field label="Nama Kelompok Tani">
-                    <input type="text" value={formValues.namaKelompok} onChange={e => setFormValues({...formValues, namaKelompok: e.target.value})} className="ktt-input font-bold" required />
-                  </Field>
+
+            <form onSubmit={handleFormSubmit} className="p-6 overflow-y-auto space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                    Nama Kelompok Tani
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Contoh: KTT Lembu Agung"
+                    value={formValues.namaKelompok}
+                    onChange={(e) => setFormValues({ ...formValues, namaKelompok: e.target.value })}
+                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure focus:bg-white outline-none"
+                  />
                 </div>
-                <Field label="Nomor Register">
-                  <input type="text" value={formValues.nomorRegister} onChange={e => setFormValues({...formValues, nomorRegister: e.target.value})} className="ktt-input font-mono font-bold uppercase" />
-                </Field>
-                <Field label="Nama Ketua Kelompok">
-                  <input type="text" value={formValues.namaKetuaKelompok} onChange={e => setFormValues({...formValues, namaKetuaKelompok: e.target.value})} className="ktt-input font-medium" required />
-                </Field>
-                <Field label="Jenis Kelompok">
-                  <select value={formValues.jenisKelompok} onChange={e => setFormValues({...formValues, jenisKelompok: e.target.value})} className="ktt-input font-medium" required>
-                    <option value="">Pilih kategori…</option>
-                    {JENIS_KELOMPOK_OPTIONS.map(j => <option key={j} value={j}>{j}</option>)}
+
+                <div>
+                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                    Nomor Register / SK
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Contoh: 524/12/2024"
+                    value={formValues.nomorRegister}
+                    onChange={(e) => setFormValues({ ...formValues, nomorRegister: e.target.value })}
+                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure focus:bg-white outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                    Kecamatan
+                  </label>
+                  <select
+                    required
+                    value={formValues.kecamatan}
+                    onChange={(e) => setFormValues({ ...formValues, kecamatan: e.target.value })}
+                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure focus:bg-white outline-none"
+                  >
+                    <option value="">Pilih Kecamatan</option>
+                    {KECAMATAN_OPTIONS.map((k) => (
+                      <option key={k} value={k}>{k}</option>
+                    ))}
                   </select>
-                </Field>
-                <Field label="Kelas Kelompok">
-                  <select value={formValues.kelasKelompok} onChange={e => setFormValues({...formValues, kelasKelompok: e.target.value})} className="ktt-input font-medium">
-                    <option value="">Belum diklasifikasi</option>
-                    {KELAS_ORDER.map(k => <option key={k} value={k}>{k}</option>)}
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                    Desa / Kelurahan
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Nama desa"
+                    value={formValues.desa}
+                    onChange={(e) => setFormValues({ ...formValues, desa: e.target.value })}
+                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure focus:bg-white outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                    Nama Ketua Kelompok
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Nama ketua"
+                    value={formValues.namaKetuaKelompok}
+                    onChange={(e) => setFormValues({ ...formValues, namaKetuaKelompok: e.target.value })}
+                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure focus:bg-white outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                    Kelas Kelompok
+                  </label>
+                  <select
+                    value={formValues.kelasKelompok}
+                    onChange={(e) => setFormValues({ ...formValues, kelasKelompok: e.target.value })}
+                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure focus:bg-white outline-none"
+                  >
+                    {KELAS_ORDER.map((k) => (
+                      <option key={k} value={k}>{k}</option>
+                    ))}
                   </select>
-                </Field>
-                <Field label="Luas Lahan (Ha)">
-                  <input type="number" step="0.01" value={formValues.luasLahanHa || ''} onChange={e => setFormValues({...formValues, luasLahanHa: parseFloat(e.target.value) || 0})} className="ktt-input font-mono font-medium" />
-                </Field>
-                <div className="grid grid-cols-2 gap-4">
-                  <Field label="Anggota Laki-laki">
-                    <input type="number" value={formValues.anggotaLaki || ''} onChange={e => setFormValues({...formValues, anggotaLaki: parseInt(e.target.value) || 0})} className="ktt-input font-mono font-medium" />
-                  </Field>
-                  <Field label="Anggota Perempuan">
-                    <input type="number" value={formValues.anggotaPerempuan || ''} onChange={e => setFormValues({...formValues, anggotaPerempuan: parseInt(e.target.value) || 0})} className="ktt-input font-mono font-medium" />
-                  </Field>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                    Anggota Laki-laki
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={formValues.anggotaLaki}
+                    onChange={(e) => setFormValues({ ...formValues, anggotaLaki: parseInt(e.target.value) || 0 })}
+                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure focus:bg-white outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                    Anggota Perempuan
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={formValues.anggotaPerempuan}
+                    onChange={(e) => setFormValues({ ...formValues, anggotaPerempuan: parseInt(e.target.value) || 0 })}
+                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure focus:bg-white outline-none"
+                  />
                 </div>
               </div>
-              <div className="bg-[#EFEAD9] px-6 py-4 flex items-center justify-end gap-3 rounded-b-2xl border-t border-[#D8D0B8]">
-                <button type="button" onClick={() => setFormOpen(false)} className="rounded-lg bg-white px-4 py-2 text-sm font-bold text-[#4A4636] border border-[#D8D0B8] hover:bg-[#F6F3E9] transition-colors">
+
+              <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setFormOpen(false)}
+                  className="min-h-touch h-10 px-4 rounded-xl border border-slate-200 bg-slate-100 text-xs font-bold text-slate-700"
+                >
                   Batal
                 </button>
-                <button disabled={isSaving} type="submit" className="rounded-lg bg-[#2F4D38] px-6 py-2 text-sm font-bold text-white hover:bg-[#1F3626] disabled:opacity-50 transition-colors shadow-sm">
-                  {isSaving ? 'Menyimpan…' : 'Simpan Catatan'}
+                <button
+                  type="submit"
+                  disabled={isSaving}
+                  className="min-h-touch h-10 px-5 rounded-xl bg-azure text-white text-xs font-bold shadow-sm hover:bg-azure/90 disabled:opacity-50"
+                >
+                  {isSaving ? "Menyimpan..." : "Simpan Kelompok"}
                 </button>
               </div>
             </form>
+
           </div>
         </div>
       )}
 
-      {/* KONFIRMASI HAPUS */}
+      {/* ── MODAL KONFIRMASI HAPUS ── */}
       {deleteTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="fixed inset-0 bg-[#1F3626]/50 backdrop-blur-sm" onClick={() => setDeleteTarget(null)} />
-          <div className="relative w-full max-w-md rounded-2xl bg-[#FBFAF3] p-6 text-center shadow-2xl border border-[#D8D0B8]">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#F6ECE8] text-[#8B4A3A] mb-4">
-              <IconAlert />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="w-full max-w-md bg-white rounded-2xl border border-slate-200 shadow-2xl p-6 space-y-4">
+            <div className="flex items-center gap-3 text-red-600">
+              <AlertTriangle size={24} />
+              <h3 className="font-bold text-base text-slate-900">Konfirmasi Hapus Data</h3>
             </div>
-            <h3 className="font-display text-lg font-bold text-[#1F3626] mb-2">Hapus Catatan Kelompok</h3>
-            <p className="text-sm text-[#5A5644] font-medium mb-6">
-              Data <span className="font-bold text-[#20241D]">{deleteTarget.namaKelompok}</span> akan dihapus permanen dari register. Tindakan ini tidak bisa dibatalkan.
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Apakah Anda yakin ingin menghapus data kelompok <span className="font-bold text-slate-900">{deleteTarget.namaKelompok}</span> di Desa {deleteTarget.desa}? Tindakan ini tidak dapat dibatalkan.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button onClick={() => setDeleteTarget(null)} className="w-full rounded-lg bg-white px-4 py-2.5 text-sm font-bold text-[#4A4636] border border-[#D8D0B8] hover:bg-[#F6F3E9] transition-colors shadow-sm">
+            <div className="pt-2 flex items-center justify-end gap-2">
+              <button
+                onClick={() => setDeleteTarget(null)}
+                className="min-h-touch h-10 px-4 rounded-xl border border-slate-200 bg-slate-100 text-xs font-bold text-slate-700"
+              >
                 Batal
               </button>
-              <button onClick={handleDeleteConfirm} className="w-full rounded-lg bg-[#8B4A3A] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#9C5643] transition-colors shadow-sm">
-                Ya, Hapus
+              <button
+                onClick={handleDeleteConfirm}
+                className="min-h-touch h-10 px-5 rounded-xl bg-red-600 text-white text-xs font-bold hover:bg-red-700 shadow-sm"
+              >
+                Ya, Hapus Data
               </button>
             </div>
           </div>
         </div>
       )}
+
     </div>
   );
 }
-
-/* =========================================================
-   5. HELPER KOMPONEN FIELD FORM
-   ========================================================= */
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <label className="block text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1.5">{label}</label>
-      {children}
-    </div>
-  );
-}
-
-/* =========================================================
-   6. FONT & STYLE GLOBAL UNTUK SCOPE HALAMAN INI
-   ========================================================= */
-const fontImports = `
-  @import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
-
-  .ktt-scope { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
-  .ktt-scope .font-display { font-family: 'Zilla Slab', ui-serif, Georgia, serif; }
-  .ktt-scope .font-mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
-  .ktt-scope .tabular-nums { font-variant-numeric: tabular-nums; }
-
-  .ktt-scope .ktt-input {
-    display: block;
-    width: 100%;
-    border-radius: 0.5rem;
-    border: 1px solid #D8D0B8;
-    background: #FFFFFF;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.875rem;
-    color: #20241D;
-    transition: box-shadow 0.15s, border-color 0.15s;
-  }
-  .ktt-scope .ktt-input:focus {
-    outline: none;
-    border-color: #2F4D38;
-    box-shadow: 0 0 0 3px rgba(47, 77, 56, 0.18);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .ktt-scope * { transition: none !important; animation: none !important; }
-  }
-`;

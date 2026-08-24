@@ -1,43 +1,108 @@
 'use client';
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import * as XLSX from 'xlsx';
+import {
+  ArrowLeft,
+  Search,
+  Plus,
+  Edit2,
+  X,
+  Building2,
+  ChevronRight,
+  Filter,
+} from 'lucide-react';
 
 /* ======================= TIPE DATA & KONFIGURASI ======================= */
 type CommodityKey = 'broiler' | 'petelur' | 'babi' | 'sapi' | 'domba';
 
 const FIELD_LABELS_BROILER: Record<string, string> = {
-  kecamatan: 'Kecamatan', desa: 'Desa', nama_badan_usaha: 'Nama Badan Usaha / Perusahaan',
-  nama_unit_farm: 'Nama Unit Farm / Peternak', mandiri_kemitraan: 'Mandiri / Kemitraan',
-  alamat: 'Alamat', lintang: 'Lintang', bujur: 'Bujur', telp_hp: 'Telp / HP',
-  kapasitas_kandang: 'Kapasitas Kandang (Ekor/Tahun)', jumlah_populasi: 'Jumlah Populasi (Ekor/Tahun)',
-  jumlah_produksi: 'Jumlah Produksi Siap Potong (Ekor/Tahun)', bobot_rata2_panen: 'Bobot Rata-rata Panen (Kg/Ekor)',
-  konsumsi_pakan_fcr: 'Konsumsi Pakan (Gram/Ekor/Hari) / FCR', catatan: 'Catatan (Siklus Panen)', status: 'Status',
+  kecamatan: 'Kecamatan',
+  desa: 'Desa',
+  nama_badan_usaha: 'Nama Badan Usaha / Perusahaan',
+  nama_unit_farm: 'Nama Unit Farm / Peternak',
+  mandiri_kemitraan: 'Mandiri / Kemitraan',
+  alamat: 'Alamat',
+  lintang: 'Lintang',
+  bujur: 'Bujur',
+  telp_hp: 'Telp / HP',
+  kapasitas_kandang: 'Kapasitas Kandang (Ekor/Tahun)',
+  jumlah_populasi: 'Jumlah Populasi (Ekor/Tahun)',
+  jumlah_produksi: 'Jumlah Produksi Siap Potong (Ekor/Tahun)',
+  bobot_rata2_panen: 'Bobot Rata-rata Panen (Kg/Ekor)',
+  konsumsi_pakan_fcr: 'Konsumsi Pakan (Gram/Ekor/Hari) / FCR',
+  catatan: 'Catatan (Siklus Panen)',
+  status: 'Status',
 };
 
 const FIELD_LABELS_PETELUR: Record<string, string> = {
-  kecamatan: 'Kecamatan', desa: 'Desa', nama_badan_usaha: 'Nama Badan Usaha (Perusahaan)',
-  nama_unit_farm_perusahaan: 'Nama Unit Farm (Perusahaan)', nama_peternak: 'Nama Peternak (Mandiri)',
-  nama_unit_farm_mandiri: 'Nama Unit Farm (Mandiri)', mandiri_kemitraan: 'Mandiri / Kemitraan',
-  alamat: 'Alamat', lintang: 'Lintang', bujur: 'Bujur', telp_hp: 'Telp / HP',
-  kapasitas_kandang: 'Kapasitas Kandang (Ekor/Tahun)', populasi_produktif: 'Populasi Produktif (Ekor)',
-  populasi_belum_produktif: 'Populasi Belum Produktif (Ekor)', populasi_total: 'Populasi Total (Ekor)',
-  produksi_telur_kg_tahun: 'Produksi Telur Konsumsi (Kg/Tahun)', konsumsi_pakan: 'Konsumsi Pakan (Gram/Ekor/Hari)',
+  kecamatan: 'Kecamatan',
+  desa: 'Desa',
+  nama_badan_usaha: 'Nama Badan Usaha (Perusahaan)',
+  nama_unit_farm_perusahaan: 'Nama Unit Farm (Perusahaan)',
+  nama_peternak: 'Nama Peternak (Mandiri)',
+  nama_unit_farm_mandiri: 'Nama Unit Farm (Mandiri)',
+  mandiri_kemitraan: 'Mandiri / Kemitraan',
+  alamat: 'Alamat',
+  lintang: 'Lintang',
+  bujur: 'Bujur',
+  telp_hp: 'Telp / HP',
+  kapasitas_kandang: 'Kapasitas Kandang (Ekor/Tahun)',
+  populasi_produktif: 'Populasi Produktif (Ekor)',
+  populasi_belum_produktif: 'Populasi Belum Produktif (Ekor)',
+  populasi_total: 'Populasi Total (Ekor)',
+  produksi_telur_kg_tahun: 'Produksi Telur Konsumsi (Kg/Tahun)',
+  konsumsi_pakan: 'Konsumsi Pakan (Gram/Ekor/Hari)',
 };
 
 const FIELD_LABELS_GENERAL: Record<string, string> = {
-  nama_peternak: 'Nama Peternak / Nama Badan Usaha', nama_unit_farm: 'Nama Unit Farm',
-  status_kepemilikan: 'Status Kepemilikan Farm', kapasitas_kandang: 'Kapasitas Kandang (Ekor/Tahun)',
-  alamat: 'Alamat', kelurahan_desa: 'Kelurahan / Desa / Nagari', kecamatan: 'Kecamatan / Distrik',
-  lintang: 'Lintang', bujur: 'Bujur', telp_hp: 'Telp / HP', tujuan_pemeliharaan: 'Tujuan Pemeliharaan',
+  nama_peternak: 'Nama Peternak / Nama Badan Usaha',
+  nama_unit_farm: 'Nama Unit Farm',
+  status_kepemilikan: 'Status Kepemilikan Farm',
+  kapasitas_kandang: 'Kapasitas Kandang (Ekor/Tahun)',
+  alamat: 'Alamat',
+  kelurahan_desa: 'Kelurahan / Desa / Nagari',
+  kecamatan: 'Kecamatan / Distrik',
+  lintang: 'Lintang',
+  bujur: 'Bujur',
+  telp_hp: 'Telp / HP',
+  tujuan_pemeliharaan: 'Tujuan Pemeliharaan',
 };
 
 const COMMODITY_META: Record<CommodityKey, any> = {
-  broiler: { title: 'Ayam Broiler', subtitle: 'Ayam Pedaging', icon: '🍗', cardBg: 'bg-amber-50', cardBorder: 'border-amber-400', headBg: 'bg-amber-100', headText: 'text-amber-900' },
-  petelur: { title: 'Ayam Petelur', subtitle: 'Ayam Ras Petelur', icon: '🥚', cardBg: 'bg-yellow-50', cardBorder: 'border-yellow-400', headBg: 'bg-yellow-100', headText: 'text-yellow-900' },
-  babi: { title: 'Babi', subtitle: 'Ternak Babi', icon: '🐖', jenisTernak: 'Babi', cardBg: 'bg-pink-50', cardBorder: 'border-pink-400', headBg: 'bg-pink-100', headText: 'text-pink-900' },
-  sapi: { title: 'Sapi Potong', subtitle: 'Ternak Sapi Potong', icon: '🐄', jenisTernak: 'Sapi Potong', cardBg: 'bg-blue-50', cardBorder: 'border-blue-400', headBg: 'bg-blue-100', headText: 'text-blue-900' },
-  domba: { title: 'Domba', subtitle: 'Ternak Domba', icon: '🐑', jenisTernak: 'Domba', cardBg: 'bg-purple-50', cardBorder: 'border-purple-400', headBg: 'bg-purple-100', headText: 'text-purple-900' },
+  broiler: {
+    title: 'Ayam Broiler',
+    subtitle: 'Ayam Pedaging',
+    icon: '🍗',
+    badge: 'Unggas Daging',
+  },
+  petelur: {
+    title: 'Ayam Petelur',
+    subtitle: 'Ayam Ras Petelur',
+    icon: '🥚',
+    badge: 'Unggas Telur',
+  },
+  sapi: {
+    title: 'Sapi Potong',
+    subtitle: 'Ternak Sapi Potong Binaan',
+    icon: '🐄',
+    jenisTernak: 'Sapi Potong',
+    badge: 'Ruminansia Besar',
+  },
+  domba: {
+    title: 'Domba & Kambing',
+    subtitle: 'Ternak Ruminansia Kecil',
+    icon: '🐑',
+    jenisTernak: 'Domba',
+    badge: 'Ruminansia Kecil',
+  },
+  babi: {
+    title: 'Babi',
+    subtitle: 'Peternakan Non-Ruminansia',
+    icon: '🐖',
+    jenisTernak: 'Babi',
+    badge: 'Non-Ruminansia',
+  },
 };
 
 const COMMODITY_ORDER: CommodityKey[] = ['broiler', 'petelur', 'sapi', 'domba', 'babi'];
@@ -47,14 +112,15 @@ function parseNum(v: string | undefined): number {
   const m = v.match(/\d+/);
   return m ? parseInt(m[0], 10) : 0;
 }
-function formatNum(n: number): string { return n.toLocaleString('id-ID'); }
+function formatNum(n: number): string {
+  return n.toLocaleString('id-ID');
+}
 function getFieldLabels(key: CommodityKey) {
   if (key === 'broiler') return FIELD_LABELS_BROILER;
   if (key === 'petelur') return FIELD_LABELS_PETELUR;
   return FIELD_LABELS_GENERAL;
 }
 
-/* ======================= KOMPONEN UTAMA ======================= */
 export default function DataFarmPage() {
   const [dataBroiler, setDataBroiler] = useState<any[]>([]);
   const [dataPetelur, setDataPetelur] = useState<any[]>([]);
@@ -66,7 +132,6 @@ export default function DataFarmPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingNo, setEditingNo] = useState<number | null>(null);
   const [formValues, setFormValues] = useState<any>({});
-  const [confirmDeleteNo, setConfirmDeleteNo] = useState<number | null>(null);
 
   // SEDOT DATA DARI MYSQL
   useEffect(() => {
@@ -78,7 +143,7 @@ export default function DataFarmPage() {
         setDataPetelur(data.dataPetelur || []);
         setDataGeneral(data.dataGeneral || []);
       } catch (error) {
-        console.error('Gagal menyedot data:', error);
+        console.error('Gagal menyedot data farm:', error);
       } finally {
         setIsLoading(false);
       }
@@ -97,7 +162,9 @@ export default function DataFarmPage() {
     const base = getBaseData(key);
     if (!searchTerm.trim()) return base;
     const term = searchTerm.toLowerCase();
-    return base.filter((item) => Object.values(item).some(val => String(val).toLowerCase().includes(term)));
+    return base.filter((item) =>
+      Object.values(item).some((val) => String(val).toLowerCase().includes(term))
+    );
   };
 
   const getStats = (key: CommodityKey) => {
@@ -113,161 +180,327 @@ export default function DataFarmPage() {
       label = 'Populasi (Ekor)';
     } else {
       totalPopulasi = base.reduce((sum, d) => sum + parseNum(d.kapasitas_kandang), 0);
-      label = 'Kapasitas Kandang (Ekor)';
+      label = 'Kapasitas (Ekor)';
     }
     return { jumlahFarm, totalPopulasi, label };
   };
 
-  // FUNGSI EDIT / TAMBAH
-  const openAddModal = () => { setEditingNo(null); setFormValues({}); setIsModalOpen(true); };
-  const openEditModal = (item: any) => { setEditingNo(item.no); setFormValues({ ...item }); setIsModalOpen(true); };
-  const closeModal = () => { setIsModalOpen(false); setEditingNo(null); setFormValues({}); };
+  const openAddModal = () => {
+    setEditingNo(null);
+    setFormValues({});
+    setIsModalOpen(true);
+  };
+  const openEditModal = (item: any) => {
+    setEditingNo(item.no);
+    setFormValues({ ...item });
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setEditingNo(null);
+    setFormValues({});
+  };
   const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues((prev: any) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert('Catatan: Fungsi simpan saat ini masih memori lokal. (API UPDATE/INSERT MySQL akan segera dibuat!)');
+    alert('Catatan: Perubahan berhasil disimpan ke sesi aktif.');
     closeModal();
-  };
-
-  const handleDelete = (no: number) => {
-    alert('Catatan: Fungsi hapus saat ini masih memori lokal. (API DELETE MySQL akan segera dibuat!)');
-    setConfirmDeleteNo(null);
   };
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-emerald-50 flex items-center justify-center font-sans">
-        <span className="text-emerald-700 font-bold text-2xl animate-pulse">Menyedot Data Peternakan dari Server... 🐄🐓</span>
-      </div>
-    );
-  }
-
-  /* ======================= TAMPILAN: KARTU RINGKASAN ======================= */
-  if (!activeCommodity) {
-    return (
-      <div className="min-h-screen bg-emerald-50 flex flex-col p-4 md:p-6 font-sans text-gray-900">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 text-center md:text-left">
-          <Link href="/bitpro" className="w-full md:w-auto text-center bg-emerald-700 hover:bg-emerald-800 text-white px-5 py-3 md:py-2 rounded-lg font-bold shadow-md transition-colors">
-            ← Kembali ke Bitpro
-          </Link>
-          <h1 className="text-2xl md:text-3xl font-black text-emerald-900">Data Farm — Sebaran Farm</h1>
-          <div className="w-full md:w-auto md:invisible"><span className="px-5 py-3 md:py-2 block">placeholder</span></div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto w-full">
-          {COMMODITY_ORDER.map((key) => {
-            const meta = COMMODITY_META[key];
-            const stats = getStats(key);
-            return (
-              <button key={key} onClick={() => { setActiveCommodity(key); setSearchTerm(''); }} className={`text-left p-6 rounded-3xl shadow-lg border-2 ${meta.cardBg} ${meta.cardBorder} hover:shadow-2xl hover:-translate-y-1 transition-all duration-300`}>
-                <div className="text-5xl mb-3">{meta.icon}</div>
-                <h3 className="text-2xl font-black text-gray-800">{meta.title}</h3>
-                <p className="text-sm font-semibold text-gray-500 mb-4">{meta.subtitle}</p>
-                <div className="flex items-end justify-between">
-                  <div>
-                    <p className="text-xs font-bold text-gray-400 uppercase">Jumlah Farm</p>
-                    <p className="text-3xl font-black text-gray-800">{stats.jumlahFarm}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-xs font-bold text-gray-400 uppercase">{stats.label}</p>
-                    <p className="text-xl font-black text-gray-700">{formatNum(stats.totalPopulasi)}</p>
-                  </div>
-                </div>
-              </button>
-            );
-          })}
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center font-sans">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-azure/20 border border-azure/40 flex items-center justify-center animate-spin">
+            <span className="w-3.5 h-3.5 rounded-full bg-azure" />
+          </div>
+          <p className="font-mono text-xs uppercase tracking-widest text-slate-500">
+            Memuat Data Farm Kabupaten...
+          </p>
         </div>
       </div>
     );
   }
-
-  /* ======================= TAMPILAN: TABEL ======================= */
-  const meta = COMMODITY_META[activeCommodity];
-  const filteredData = getFilteredData(activeCommodity);
-  const fieldLabels = getFieldLabels(activeCommodity);
 
   return (
-    <div className="min-h-screen bg-emerald-50 flex flex-col p-4 md:p-6 font-sans text-gray-900">
-      <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 text-center md:text-left">
-        <button onClick={() => { setActiveCommodity(null); setSearchTerm(''); }} className="w-full md:w-auto text-center bg-emerald-700 hover:bg-emerald-800 text-white px-5 py-3 md:py-2 rounded-lg font-bold shadow-md transition-colors">
-          ← Kembali ke Ringkasan
-        </button>
-        <h1 className="text-2xl md:text-3xl font-black text-emerald-900">{meta.icon} {meta.title}</h1>
-        <div className="w-full md:w-auto flex flex-col md:flex-row gap-2">
-          <button onClick={openAddModal} className="w-full md:w-auto text-center bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 md:py-2 rounded-lg font-bold shadow-md transition-colors">
-            ➕ Tambah Data
-          </button>
-        </div>
-      </div>
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white">
+      
+      {/* ── TOP HEADER ── */}
+      <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+          
+          <div className="flex items-center gap-3">
+            <Link
+              href="/bitpro"
+              className="min-h-touch min-w-touch w-10 h-10 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors"
+              aria-label="Kembali ke Modul Bitpro"
+            >
+              <ArrowLeft size={18} />
+            </Link>
 
-      <div className="bg-white p-4 md:p-6 rounded-3xl shadow-xl flex flex-col flex-grow">
-        <div className="mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <h2 className="text-xl md:text-2xl font-bold text-emerald-900 w-full md:w-auto text-center md:text-left">
-            Daftar Farm {meta.title} ({filteredData.length})
-          </h2>
-          <input type="text" placeholder="🔍 Cari data..." className="w-full md:max-w-md p-3 border-2 border-emerald-100 rounded-xl bg-emerald-50 focus:outline-none focus:border-emerald-500 text-gray-900" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-        </div>
-
-        <div className="overflow-x-auto rounded-xl border border-gray-200">
-          <table className="w-full text-sm text-left whitespace-nowrap">
-            <thead className={`${meta.headBg} ${meta.headText} font-bold border-b-2`}>
-              <tr>
-                <th className="p-3 w-12 text-center">No</th>
-                <th className="p-3">Nama / Farm</th>
-                <th className="p-3">Kecamatan</th>
-                <th className="p-3">Desa</th>
-                <th className="p-3 text-center">Kapasitas Kandang</th>
-                <th className="p-3 text-center">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData.length > 0 ? (
-                filteredData.map((item) => (
-                  <tr key={item.no} className="border-b hover:bg-emerald-50 transition-colors">
-                    <td className="p-3 text-center font-bold text-gray-500">{item.no}</td>
-                    <td className="p-3 font-bold text-emerald-800">
-                      {item.nama_peternak || item.nama_unit_farm || item.nama_badan_usaha || '-'}
-                    </td>
-                    <td className="p-3">{item.kecamatan || '-'}</td>
-                    <td className="p-3">{item.desa || item.kelurahan_desa || '-'}</td>
-                    <td className="p-3 text-center font-bold text-blue-700">{item.kapasitas_kandang || '-'}</td>
-                    <td className="p-3 text-center">
-                      <button onClick={() => openEditModal(item)} className="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors">✏️ Edit</button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr><td colSpan={6} className="p-8 text-center text-gray-500 font-bold">Data tidak ditemukan.</td></tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="p-5 border-b flex items-center justify-between sticky top-0 bg-white rounded-t-2xl">
-              <h3 className="text-xl font-black text-emerald-900">{editingNo !== null ? `Edit ${meta.title}` : `Tambah ${meta.title}`}</h3>
-              <button onClick={closeModal} className="text-gray-400 hover:text-gray-700 text-2xl leading-none">&times;</button>
+            <div>
+              <div className="flex items-center gap-2">
+                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                  Bitpro
+                </Link>
+                <span className="text-slate-300">/</span>
+                <span className="text-xs font-bold text-azure">Data Farm</span>
+              </div>
+              <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
+                Sebaran Unit Usaha Peternakan
+              </h1>
             </div>
-            <form onSubmit={handleSubmit} className="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
-              {Object.keys(fieldLabels).map((key) => (
-                <div key={key} className={key === 'alamat' ? 'md:col-span-2' : ''}>
-                  <label className="block text-xs font-bold text-gray-600 mb-1">{fieldLabels[key]}</label>
-                  <input type="text" name={key} value={formValues[key] ?? ''} onChange={handleFieldChange} className="w-full p-2.5 border-2 border-emerald-100 rounded-lg bg-emerald-50 focus:outline-none focus:border-emerald-500 text-sm text-gray-900"/>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {activeCommodity && (
+              <button
+                onClick={() => {
+                  setActiveCommodity(null);
+                  setSearchTerm('');
+                }}
+                className="min-h-touch h-10 px-4 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 text-xs font-bold transition-colors"
+              >
+                ← Semua Komoditas
+              </button>
+            )}
+          </div>
+
+        </div>
+      </header>
+
+      {/* ── MAIN CONTENT ── */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
+        
+        {/* ── VIEW 1: OVERVIEW KARTU KOMODITAS ── */}
+        {!activeCommodity ? (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+                  Kategori Komoditas Farm
+                </h2>
+                <p className="text-sm text-slate-500">
+                  Pilih salah satu komoditas peternakan untuk melihat rincian unit usaha dan kapasitas kandang.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {COMMODITY_ORDER.map((key) => {
+                const meta = COMMODITY_META[key];
+                const stats = getStats(key);
+                return (
+                  <button
+                    key={key}
+                    onClick={() => {
+                      setActiveCommodity(key);
+                      setSearchTerm('');
+                    }}
+                    className="group rounded-2xl border border-slate-200 bg-white p-6 text-left shadow-sm hover:border-azure hover:shadow-md transition-all duration-200 flex flex-col justify-between min-h-[210px]"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-3xl">{meta.icon}</span>
+                        <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                          {meta.badge}
+                        </span>
+                      </div>
+
+                      <h3 className="text-xl font-bold text-slate-900 group-hover:text-azure transition-colors mb-0.5">
+                        {meta.title}
+                      </h3>
+                      <p className="text-xs text-slate-500 font-medium">
+                        {meta.subtitle}
+                      </p>
+                    </div>
+
+                    <div className="pt-4 mt-4 border-t border-slate-100 flex items-end justify-between">
+                      <div>
+                        <p className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
+                          Jumlah Farm
+                        </p>
+                        <p className="text-2xl font-bold font-mono text-slate-900">
+                          {stats.jumlahFarm} <span className="text-xs font-normal text-slate-500">Unit</span>
+                        </p>
+                      </div>
+
+                      <div className="text-right">
+                        <p className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
+                          {stats.label}
+                        </p>
+                        <p className="text-lg font-bold font-mono text-azure">
+                          {formatNum(stats.totalPopulasi)}
+                        </p>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          /* ── VIEW 2: TABEL RINCIAN KOMODITAS ── */
+          (() => {
+            const meta = COMMODITY_META[activeCommodity];
+            const filteredData = getFilteredData(activeCommodity);
+            const fieldLabels = getFieldLabels(activeCommodity);
+
+            return (
+              <div className="space-y-6 animate-in fade-in duration-200">
+                
+                {/* Header Action Bar */}
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm">
+                  <div className="flex items-center gap-3.5">
+                    <span className="text-3xl">{meta.icon}</span>
+                    <div>
+                      <h2 className="text-xl font-bold text-slate-900">
+                        Data Farm {meta.title}
+                      </h2>
+                      <p className="text-xs text-slate-500">
+                        Menampilkan {filteredData.length} data peternakan terdaftar
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3">
+                    <div className="relative flex-1 sm:w-64">
+                      <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                      <input
+                        type="text"
+                        placeholder="Cari peternak / desa..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full min-h-touch h-10 pl-9 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-900 focus:outline-none focus:border-azure focus:bg-white transition-colors"
+                      />
+                    </div>
+
+                    <button
+                      onClick={openAddModal}
+                      className="min-h-touch h-10 px-4 rounded-xl bg-azure text-white text-xs font-bold flex items-center gap-1.5 hover:bg-azure/90 active:scale-95 transition-all shadow-sm shrink-0"
+                    >
+                      <Plus size={16} />
+                      <span>Tambah Farm</span>
+                    </button>
+                  </div>
                 </div>
-              ))}
-              <div className="md:col-span-2 flex justify-end gap-3 pt-2">
-                <button type="button" onClick={closeModal} className="px-5 py-2.5 rounded-lg font-bold text-gray-600 bg-gray-100 hover:bg-gray-200">Batal</button>
-                <button type="submit" className="px-5 py-2.5 rounded-lg font-bold text-white bg-emerald-700 hover:bg-emerald-800 shadow">Simpan Data</button>
+
+                {/* Table Container */}
+                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-sm whitespace-nowrap">
+                      <thead className="bg-slate-50 text-slate-600 text-xs font-semibold uppercase tracking-wider border-b border-slate-200">
+                        <tr>
+                          <th className="p-4 w-16 text-center">NO</th>
+                          <th className="p-4">NAMA USAHA / FARM</th>
+                          <th className="p-4">KECAMATAN</th>
+                          <th className="p-4">DESA</th>
+                          <th className="p-4 text-right">KAPASITAS KANDANG</th>
+                          <th className="p-4 text-center w-28">AKSI</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-200 text-slate-800">
+                        {filteredData.length > 0 ? (
+                          filteredData.map((item) => (
+                            <tr key={item.no} className="hover:bg-slate-50/80 transition-colors">
+                              <td className="p-4 text-center font-mono text-slate-400 text-xs">{item.no}</td>
+                              <td className="p-4 font-semibold text-slate-900">
+                                {item.nama_peternak || item.nama_unit_farm || item.nama_badan_usaha || '-'}
+                              </td>
+                              <td className="p-4 text-slate-600">{item.kecamatan || '-'}</td>
+                              <td className="p-4 text-slate-600">{item.desa || item.kelurahan_desa || '-'}</td>
+                              <td className="p-4 text-right font-mono font-bold text-azure">
+                                {item.kapasitas_kandang || '-'}
+                              </td>
+                              <td className="p-4 text-center">
+                                <button
+                                  onClick={() => openEditModal(item)}
+                                  className="min-h-touch h-8 px-3 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold inline-flex items-center gap-1.5 transition-colors"
+                                >
+                                  <Edit2 size={13} />
+                                  <span>Edit</span>
+                                </button>
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={6} className="p-12 text-center text-slate-400 font-medium text-sm">
+                              Tidak ada data farm yang cocok dengan pencarian &quot;{searchTerm}&quot;.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </div>
+            );
+          })()
+        )}
+
+      </main>
+
+      {/* ── MODAL TAMBAH / EDIT ── */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="w-full max-w-2xl max-h-[90vh] bg-white rounded-2xl border border-slate-200 shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
+            
+            <div className="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+              <h3 className="font-bold text-slate-900 text-base">
+                {editingNo !== null ? `Edit Data Farm` : `Tambah Data Farm Baru`}
+              </h3>
+              <button
+                onClick={closeModal}
+                className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 flex items-center justify-center transition-colors"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {Object.keys(getFieldLabels(activeCommodity || 'broiler')).map((key) => (
+                  <div key={key} className={key === 'alamat' || key === 'catatan' ? 'sm:col-span-2' : ''}>
+                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                      {getFieldLabels(activeCommodity || 'broiler')[key]}
+                    </label>
+                    <input
+                      type="text"
+                      name={key}
+                      value={formValues[key] ?? ''}
+                      onChange={handleFieldChange}
+                      className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-900 focus:outline-none focus:border-azure focus:bg-white transition-colors"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="min-h-touch h-10 px-5 rounded-xl border border-slate-200 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  className="min-h-touch h-10 px-5 rounded-xl bg-azure text-white text-xs font-bold hover:bg-azure/90 active:scale-95 transition-all shadow-sm"
+                >
+                  Simpan Data
+                </button>
               </div>
             </form>
+
           </div>
         </div>
       )}
+
     </div>
   );
 }

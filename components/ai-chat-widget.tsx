@@ -1,26 +1,32 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Bot, Send, X, Sparkles } from "lucide-react";
+import { Bot, Send, X, Sparkles, CornerDownLeft } from "lucide-react";
 
 type Message = { role: "user" | "assistant"; content: string };
 
 export default function AiChatWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", content: "Halo! Saya asisten AI SiMantap. Tanyakan data peternakan, misal: 'Berapa populasi sapi di Desa Sumberadi?'" },
+    {
+      role: "assistant",
+      content:
+        "Halo! Saya asisten data SiMantap. Anda dapat menanyakan ringkasan populasi ternak, sebaran farm, atau data produksi di Kebumen.",
+    },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (open) {
+      endRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages, open]);
 
   async function sendMessage() {
     if (!input.trim() || loading) return;
-    const newMessages: Message[] = [...messages, { role: "user", content: input }];
+    const newMessages: Message[] = [...messages, { role: "user", content: input.trim() }];
     setMessages(newMessages);
     setInput("");
     setLoading(true);
@@ -34,7 +40,10 @@ export default function AiChatWidget() {
       const data = await res.json();
       setMessages((prev) => [...prev, { role: "assistant", content: data.reply }]);
     } catch {
-      setMessages((prev) => [...prev, { role: "assistant", content: "Maaf, ada gangguan koneksi." }]);
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: "Maaf, koneksi ke asisten sedang mengalami gangguan. Silakan coba kembali sesaat lagi." },
+      ]);
     } finally {
       setLoading(false);
     }
@@ -42,60 +51,96 @@ export default function AiChatWidget() {
 
   return (
     <>
-      {/* Floating button */}
+      {/* Floating launcher button — 56px touch target */}
       <button
         onClick={() => setOpen(!open)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-purple-600 to-violet-500 shadow-lg shadow-purple-900/50 flex items-center justify-center hover:scale-110 transition-transform"
+        aria-label={open ? "Tutup Asisten AI" : "Buka Asisten AI"}
+        className="fixed bottom-5 right-5 sm:bottom-7 sm:right-7 z-50 w-14 h-14 rounded-2xl bg-obsidian text-white border-2 border-azure shadow-[0_12px_32px_rgba(33,146,255,0.25)] flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-azure/40"
       >
-        {open ? <X className="w-6 h-6 text-white" /> : <Bot className="w-6 h-6 text-white" />}
+        {open ? <X className="w-6 h-6 text-white" /> : <Bot className="w-6 h-6 text-azure" />}
+        {!open && (
+          <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-lime border-2 border-obsidian" />
+        )}
       </button>
 
-      {/* Chat panel */}
+      {/* Chat window — clean, responsive, human-crafted */}
       {open && (
-        <div className="fixed bottom-24 right-6 z-50 w-80 sm:w-96 h-[28rem] rounded-2xl bg-slate-950/80 backdrop-blur-xl border border-purple-500/30 shadow-2xl shadow-purple-900/40 flex flex-col overflow-hidden">
+        <div className="fixed inset-x-4 bottom-22 sm:inset-x-auto sm:right-7 sm:bottom-24 z-50 sm:w-[400px] h-[500px] max-h-[80vh] rounded-2xl bg-obsidian-surface text-slate-100 border border-obsidian-border shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-6 duration-200">
+          
           {/* Header */}
-          <div className="px-4 py-3 bg-gradient-to-r from-purple-700/60 to-violet-600/60 border-b border-purple-500/20 flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-purple-200" />
-            <span className="text-sm font-semibold text-white">SiMantap AI Assistant</span>
+          <div className="px-5 py-4 bg-obsidian-soft border-b border-obsidian-border flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-azure/15 border border-azure/30 flex items-center justify-center text-azure">
+                <Sparkles className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-sm text-white tracking-tight">Asisten Data SiMantap</h3>
+                <p className="text-xs text-lime font-mono flex items-center gap-1.5 mt-0.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-lime animate-pulse" />
+                  Sistem Aktif
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setOpen(false)}
+              aria-label="Tutup jendela chat"
+              className="w-8 h-8 rounded-lg text-slate-400 hover:text-white hover:bg-obsidian-border/50 flex items-center justify-center transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
 
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto px-3 py-3 space-y-2">
+          {/* Conversation history */}
+          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3.5 text-sm leading-relaxed">
             {messages.map((m, i) => (
               <div
                 key={i}
-                className={`max-w-[85%] px-3 py-2 rounded-xl text-sm ${
-                  m.role === "user"
-                    ? "ml-auto bg-purple-600/80 text-white"
-                    : "bg-white/10 text-purple-100 border border-white/10"
-                }`}
+                className={`flex flex-col ${m.role === "user" ? "items-end" : "items-start"}`}
               >
-                {m.content}
+                <div
+                  className={`max-w-[88%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
+                    m.role === "user"
+                      ? "bg-azure text-white rounded-br-none shadow-md font-medium"
+                      : "bg-obsidian-soft text-slate-200 border border-obsidian-border rounded-bl-none font-normal"
+                  }`}
+                >
+                  {m.content}
+                </div>
               </div>
             ))}
+
             {loading && (
-              <div className="bg-white/10 text-purple-200 text-sm px-3 py-2 rounded-xl w-fit border border-white/10">
-                Mengetik...
+              <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-obsidian-soft border border-obsidian-border text-slate-300 text-xs w-fit">
+                <span className="w-2 h-2 rounded-full bg-azure animate-bounce" />
+                <span className="w-2 h-2 rounded-full bg-vitality animate-bounce [animation-delay:0.2s]" />
+                <span className="w-2 h-2 rounded-full bg-lime animate-bounce [animation-delay:0.4s]" />
+                <span className="font-medium ml-1">Mencari data dinas...</span>
               </div>
             )}
             <div ref={endRef} />
           </div>
 
-          {/* Input */}
-          <div className="p-3 border-t border-purple-500/20 flex gap-2">
+          {/* Input field */}
+          <div className="p-3 bg-obsidian-soft border-t border-obsidian-border flex items-center gap-2">
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-              placeholder="Tanya data peternakan..."
-              className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-purple-300/50 outline-none focus:border-purple-400"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  sendMessage();
+                }
+              }}
+              placeholder="Tanyakan data peternakan..."
+              className="flex-1 bg-obsidian border border-obsidian-border rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-azure transition-colors"
             />
             <button
               onClick={sendMessage}
-              disabled={loading}
-              className="w-9 h-9 rounded-lg bg-purple-600 flex items-center justify-center hover:bg-purple-500 disabled:opacity-50"
+              disabled={loading || !input.trim()}
+              aria-label="Kirim pertanyaan"
+              className="min-w-touch min-h-touch h-10 w-10 rounded-xl bg-azure text-white flex items-center justify-center hover:bg-azure/90 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
             >
-              <Send className="w-4 h-4 text-white" />
+              <Send className="w-4 h-4" />
             </button>
           </div>
         </div>

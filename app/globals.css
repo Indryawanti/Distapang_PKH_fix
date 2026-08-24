@@ -2,32 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --canvas: #FFFFFF;
+    --canvas-subtle: #F8FAFC;
+    --paper: #FFFFFF;
+    --paper-soft: #F1F5F9;
+    --ink: #0B0F19;
+    --ink-soft: #334155;
+    --ink-faint: #64748B;
+    --line: #E2E8F0;
+    --line-strong: #CBD5E1;
+  }
+
+  .dark {
+    --canvas: #090A0F;
+    --canvas-subtle: #0E1118;
+    --paper: #12151E;
+    --paper-soft: #181C28;
+    --ink: #F8FAFC;
+    --ink-soft: #CBD5E1;
+    --ink-faint: #94A3B8;
+    --line: #262C3D;
+    --line-strong: #384157;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-/* KODE SAKTI ANTI GETAR GLOBAL */
 html, body {
   overflow-y: scroll !important;
   scrollbar-gutter: stable !important;
   overflow-x: hidden !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom minimal tactile scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.6);
+}
+
+/* Focus styles for keyboard accessibility */
+:focus-visible {
+  outline: 2px solid #2192FF;
+  outline-offset: 2px;
 }

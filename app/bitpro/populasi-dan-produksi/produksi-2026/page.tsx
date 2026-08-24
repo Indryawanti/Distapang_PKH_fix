@@ -1,6 +1,8 @@
 'use client';
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { ArrowLeft, Download, Plus } from 'lucide-react';
 
 const bulan = [
   'JAN', 'FEB', 'MAR', 'APRIL', 'MEI', 'JUNI',
@@ -20,7 +22,7 @@ export default function Produksi2026() {
         setDataDaging(data.dataDaging || []);
         setDataTelur(data.dataTelur || []);
       } catch (error) {
-        console.error('Gagal menyedot data:', error);
+        console.error('Gagal menyedot data produksi 2026:', error);
       } finally {
         setIsLoading(false);
       }
@@ -29,113 +31,173 @@ export default function Produksi2026() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col p-6 font-sans text-gray-900" style={{background:'linear-gradient(135deg,#052e16 0%,#064e3b 40%,#065f46 100%)'}}>
-      <div className="flex flex-wrap items-center justify-center sm:justify-between gap-3 mb-8 text-center sm:text-left">
-        <Link
-          href="/bitpro/populasi-dan-produksi"
-          className="order-2 sm:order-1 bg-emerald-600 hover:bg-emerald-500 text-white px-4 sm:px-5 py-2 rounded-lg font-bold shadow-md text-sm sm:text-base transition-colors"
-        >
-          ← Kembali
-        </Link>
-        <h1 className="order-1 sm:order-2 w-full sm:w-auto text-2xl sm:text-3xl font-black text-white">
-          Data Produksi Ternak 2026
-        </h1>
-        <button className="order-3 bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-5 py-2 rounded-lg font-bold shadow-md text-sm sm:text-base">
-          📥 Export Nonosoft
-        </button>
-      </div>
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white pb-20">
+      
+      {/* ── TOP HEADER ── */}
+      <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+          
+          <div className="flex items-center gap-3">
+            <Link
+              href="/bitpro/populasi-dan-produksi"
+              className="min-h-touch min-w-touch w-10 h-10 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors"
+              aria-label="Kembali ke Menu Produksi"
+            >
+              <ArrowLeft size={18} />
+            </Link>
 
-      {isLoading ? (
-        <div className="flex justify-center items-center h-64 w-full">
-          <span className="text-white font-bold animate-pulse text-xl">Menyiapkan Lembar Kerja 2026... 🚀</span>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 w-full">
-          {/* PANEL DAGING */}
-          <div className="bg-white p-6 rounded-3xl shadow-xl border-t-8 border-red-600 flex flex-col h-full">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <span className="text-4xl">🥩</span>
-                <h2 className="text-2xl font-bold text-red-800">Produksi Daging (KG)</h2>
+            <div>
+              <div className="flex items-center gap-2">
+                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                  Bitpro
+                </Link>
+                <span className="text-slate-300">/</span>
+                <Link href="/bitpro/populasi-dan-produksi" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                  Produksi
+                </Link>
+                <span className="text-slate-300">/</span>
+                <span className="text-xs font-bold text-azure">Tahun 2026</span>
               </div>
-              <button className="bg-red-100 text-red-700 font-bold px-4 py-2 rounded-lg hover:bg-red-200">✏️ Input Data</button>
-            </div>
-            <div className="overflow-x-auto rounded-xl border border-gray-200 flex-grow">
-              <table className="w-full text-sm text-right whitespace-nowrap">
-                <thead className="bg-red-50 text-red-900 font-bold border-b-2 border-red-200">
-                  <tr>
-                    <th className="p-3 text-left sticky left-0 bg-red-50 z-10">Jenis Ternak</th>
-                    {bulan.map((b) => (<th key={b} className="p-3">{b}</th>))}
-                    <th className="p-3 bg-red-100">TOTAL</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dataDaging.map((row, i) => (
-                    <tr key={i} className="border-b hover:bg-gray-50">
-                      <td className="p-3 font-bold text-left sticky left-0 bg-white z-10 border-r">{row.jenis}</td>
-                      <td className="p-3">{Number(row.jan).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.feb).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.mar).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.apr).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.mei).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.jun).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.jul).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.agt).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.sep).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.okt).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.nov).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.des).toLocaleString('id-ID')}</td>
-                      <td className="p-3 font-bold bg-red-50 text-red-700">{Number(row.total).toLocaleString('id-ID')}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
+                Lembar Kerja Produksi Ternak Tahun 2026
+              </h1>
             </div>
           </div>
 
-          {/* PANEL TELUR */}
-          <div className="bg-white p-6 rounded-3xl shadow-xl border-t-8 border-amber-500 flex flex-col h-full">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <span className="text-4xl">🥚</span>
-                <h2 className="text-2xl font-bold text-amber-800">Produksi Telur (KG)</h2>
-              </div>
-              <button className="bg-amber-100 text-amber-800 font-bold px-4 py-2 rounded-lg hover:bg-amber-200">✏️ Input Data</button>
-            </div>
-            <div className="overflow-x-auto rounded-xl border border-gray-200 flex-grow">
-              <table className="w-full text-sm text-right whitespace-nowrap">
-                <thead className="bg-amber-50 text-amber-900 font-bold border-b-2 border-amber-200">
-                  <tr>
-                    <th className="p-3 text-left sticky left-0 bg-amber-50 z-10">Jenis Unggas</th>
-                    {bulan.map((b) => (<th key={b} className="p-3">{b}</th>))}
-                    <th className="p-3 bg-amber-100">TOTAL</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dataTelur.map((row, i) => (
-                    <tr key={i} className="border-b hover:bg-gray-50">
-                      <td className="p-3 font-bold text-left sticky left-0 bg-white z-10 border-r">{row.jenis}</td>
-                      <td className="p-3">{Number(row.jan).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.feb).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.mar).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.apr).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.mei).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.jun).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.jul).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.agt).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.sep).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.okt).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.nov).toLocaleString('id-ID')}</td>
-                      <td className="p-3">{Number(row.des).toLocaleString('id-ID')}</td>
-                      <td className="p-3 font-bold bg-amber-50 text-amber-700">{Number(row.total).toLocaleString('id-ID')}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
         </div>
-      )}
+      </header>
+
+      {/* ── MAIN WORKSPACE ── */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64 w-full">
+            <span className="font-mono text-xs text-slate-500 uppercase tracking-widest animate-pulse">
+              Menyiapkan lembar kerja produksi 2026...
+            </span>
+          </div>
+        ) : (
+          <div className="space-y-8">
+            
+            {/* PANEL PRODUKSI DAGING */}
+            <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+              <div className="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-2xl">🥩</span>
+                  <div>
+                    <h2 className="font-bold text-base text-slate-900">
+                      Produksi Daging Siap Potong (Kilogram) — 2026
+                    </h2>
+                    <p className="text-xs text-slate-500">
+                      Pencatatan data dinamis pemotongan ternak periode berjalan
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs text-right whitespace-nowrap">
+                  <thead className="bg-slate-50 text-slate-600 font-semibold uppercase tracking-wider border-b border-slate-200">
+                    <tr>
+                      <th className="p-3.5 text-left sticky left-0 bg-slate-50 z-10 border-r border-slate-200">
+                        JENIS TERNAK
+                      </th>
+                      {bulan.map((b) => (
+                        <th key={b} className="p-3.5">{b}</th>
+                      ))}
+                      <th className="p-3.5 bg-slate-100 text-slate-900 font-bold border-l border-slate-200">TOTAL (KG)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 text-slate-800">
+                    {dataDaging.map((row, i) => (
+                      <tr key={i} className="hover:bg-slate-50/80 transition-colors">
+                        <td className="p-3.5 font-bold text-left text-slate-900 sticky left-0 bg-white z-10 border-r border-slate-100">
+                          {row.jenis}
+                        </td>
+                        <td className="p-3.5 font-mono">{Number(row.jan).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.feb).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.mar).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.apr).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.mei).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.jun).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.jul).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.agt).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.sep).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.okt).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.nov).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.des).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono font-bold text-azure bg-slate-50/80 border-l border-slate-100">
+                          {Number(row.total).toLocaleString('id-ID')}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* PANEL PRODUKSI TELUR */}
+            <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+              <div className="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-2xl">🥚</span>
+                  <div>
+                    <h2 className="font-bold text-base text-slate-900">
+                      Produksi Telur Konsumsi (Kilogram) — 2026
+                    </h2>
+                    <p className="text-xs text-slate-500">
+                      Pencatatan data dinamis komoditas unggas petelur periode berjalan
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs text-right whitespace-nowrap">
+                  <thead className="bg-slate-50 text-slate-600 font-semibold uppercase tracking-wider border-b border-slate-200">
+                    <tr>
+                      <th className="p-3.5 text-left sticky left-0 bg-slate-50 z-10 border-r border-slate-200">
+                        KOMODITAS UNGGAS
+                      </th>
+                      {bulan.map((b) => (
+                        <th key={b} className="p-3.5">{b}</th>
+                      ))}
+                      <th className="p-3.5 bg-slate-100 text-slate-900 font-bold border-l border-slate-200">TOTAL (KG)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 text-slate-800">
+                    {dataTelur.map((row, i) => (
+                      <tr key={i} className="hover:bg-slate-50/80 transition-colors">
+                        <td className="p-3.5 font-bold text-left text-slate-900 sticky left-0 bg-white z-10 border-r border-slate-100">
+                          {row.jenis}
+                        </td>
+                        <td className="p-3.5 font-mono">{Number(row.jan).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.feb).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.mar).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.apr).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.mei).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.jun).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.jul).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.agt).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.sep).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.okt).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.nov).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono">{Number(row.des).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-mono font-bold text-amber-600 bg-slate-50/80 border-l border-slate-100">
+                          {Number(row.total).toLocaleString('id-ID')}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        )}
+
+      </main>
+
     </div>
   );
 }
