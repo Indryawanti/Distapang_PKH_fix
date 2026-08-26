@@ -31,7 +31,7 @@ export default function Produksi2025() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white pb-20">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-600 selection:text-white pb-20">
       
       {/* ── TOP HEADER ── */}
       <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
@@ -48,15 +48,15 @@ export default function Produksi2025() {
 
             <div>
               <div className="flex items-center gap-2">
-                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
                   Bitpro
                 </Link>
                 <span className="text-slate-300">/</span>
-                <Link href="/bitpro/populasi-dan-produksi" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                <Link href="/bitpro/populasi-dan-produksi" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
                   Produksi
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-azure">Tahun 2025</span>
+                <span className="text-xs font-bold text-emerald-700">Tahun 2025</span>
               </div>
               <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
                 Laporan Produksi Daging & Telur Tahun 2025
@@ -72,7 +72,7 @@ export default function Produksi2025() {
         
         {isLoading ? (
           <div className="flex justify-center items-center h-64 w-full">
-            <span className="font-mono text-xs text-slate-500 uppercase tracking-widest animate-pulse">
+            <span className="font-sans text-xs text-slate-500 uppercase tracking-widest animate-pulse">
               Memuat data produksi peternakan 2025...
             </span>
           </div>
@@ -114,19 +114,19 @@ export default function Produksi2025() {
                         <td className="p-3.5 font-bold text-left text-slate-900 sticky left-0 bg-white z-10 border-r border-slate-100">
                           {row.jenis}
                         </td>
-                        <td className="p-3.5 font-mono">{Number(row.jan).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.feb).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.mar).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.apr).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.mei).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.jun).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.jul).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.agt).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.sep).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.okt).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.nov).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.des).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono font-bold text-azure bg-slate-50/80 border-l border-slate-100">
+                        <td className="p-3.5 font-sans">{Number(row.jan).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.feb).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.mar).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.apr).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.mei).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.jun).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.jul).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.agt).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.sep).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.okt).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.nov).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.des).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans font-bold text-emerald-600 bg-slate-50/80 border-l border-slate-100">
                           {Number(row.total).toLocaleString('id-ID')}
                         </td>
                       </tr>
@@ -171,19 +171,19 @@ export default function Produksi2025() {
                         <td className="p-3.5 font-bold text-left text-slate-900 sticky left-0 bg-white z-10 border-r border-slate-100">
                           {row.jenis}
                         </td>
-                        <td className="p-3.5 font-mono">{Number(row.jan).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.feb).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.mar).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.apr).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.mei).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.jun).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.jul).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.agt).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.sep).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.okt).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.nov).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono">{Number(row.des).toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 font-mono font-bold text-amber-600 bg-slate-50/80 border-l border-slate-100">
+                        <td className="p-3.5 font-sans">{Number(row.jan).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.feb).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.mar).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.apr).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.mei).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.jun).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.jul).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.agt).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.sep).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.okt).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.nov).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans">{Number(row.des).toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 font-sans font-bold text-amber-600 bg-slate-50/80 border-l border-slate-100">
                           {Number(row.total).toLocaleString('id-ID')}
                         </td>
                       </tr>

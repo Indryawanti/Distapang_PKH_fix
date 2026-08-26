@@ -325,7 +325,7 @@ export default function SapiTimePage() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white pb-20">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-600 selection:text-white pb-20">
       
       {/* ── TOP HEADER ── */}
       <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
@@ -342,11 +342,11 @@ export default function SapiTimePage() {
 
             <div>
               <div className="flex items-center gap-2">
-                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
                   Bitpro
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-azure">SapiTime</span>
+                <span className="text-xs font-bold text-emerald-700">SapiTime</span>
               </div>
               <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
                 Smart Monitoring Reproduksi Sapi
@@ -357,7 +357,7 @@ export default function SapiTimePage() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowAddModal(true)}
-              className="min-h-touch h-10 px-4 rounded-xl bg-azure text-white text-xs font-bold flex items-center gap-1.5 hover:bg-azure/90 active:scale-95 transition-all shadow-sm"
+              className="min-h-touch h-10 px-4 rounded-xl bg-emerald-600 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-emerald-700 active:scale-95 transition-all shadow-sm cursor-pointer"
             >
               <Plus size={16} />
               <span>Tambah Sapi</span>
@@ -385,7 +385,7 @@ export default function SapiTimePage() {
                 onClick={() => setActiveTab(tab.key as any)}
                 className={`min-h-touch h-11 px-4 sm:px-5 rounded-t-xl text-xs sm:text-sm font-bold border-t border-x transition-all ${
                   active
-                    ? 'bg-white border-slate-200 text-azure border-b-white translate-y-px shadow-sm'
+                    ? 'bg-white border-slate-200 text-emerald-600 border-b-white translate-y-px shadow-sm'
                     : 'border-transparent text-slate-500 hover:text-slate-900 bg-slate-100/60'
                 }`}
               >
@@ -402,37 +402,37 @@ export default function SapiTimePage() {
             {/* Quick KPI Stats */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-                <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+                <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
                   Total Indukan
                 </p>
-                <p className="font-mono text-2xl sm:text-3xl font-bold text-slate-900">
+                <p className="font-sans text-2xl sm:text-3xl font-bold text-slate-900">
                   {cattleList.length} <span className="text-xs font-normal text-slate-500">Ekor</span>
                 </p>
               </div>
 
               <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-                <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+                <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
                   Sedang Bunting
                 </p>
-                <p className="font-mono text-2xl sm:text-3xl font-bold text-vitality">
+                <p className="font-sans text-2xl sm:text-3xl font-bold text-vitality">
                   {cattleList.filter((c) => c.status === 'Bunting').length} <span className="text-xs font-normal text-slate-500">Ekor</span>
                 </p>
               </div>
 
               <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-                <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+                <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
                   Status Estrus / Birahi
                 </p>
-                <p className="font-mono text-2xl sm:text-3xl font-bold text-amber-600">
+                <p className="font-sans text-2xl sm:text-3xl font-bold text-amber-600">
                   {cattleList.filter((c) => c.status === 'Estrus').length} <span className="text-xs font-normal text-slate-500">Ekor</span>
                 </p>
               </div>
 
               <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-                <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+                <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
                   Siklus Aman
                 </p>
-                <p className="font-mono text-2xl sm:text-3xl font-bold text-azure">
+                <p className="font-sans text-2xl sm:text-3xl font-bold text-emerald-600">
                   {cattleList.filter((c) => c.status !== 'Bunting' && c.status !== 'Estrus').length} <span className="text-xs font-normal text-slate-500">Ekor</span>
                 </p>
               </div>
@@ -454,7 +454,7 @@ export default function SapiTimePage() {
                     >
                       <div>
                         <div className="flex items-center justify-between mb-2">
-                          <span className="font-mono text-xs text-slate-400 font-bold">{c.id}</span>
+                          <span className="font-sans text-xs text-slate-400 font-bold">{c.id}</span>
                           <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${statusData.badgeColor}`}>
                             {c.status}
                           </span>
@@ -475,7 +475,7 @@ export default function SapiTimePage() {
                             setSelectedCattleForIB(c);
                             setShowIBModal(true);
                           }}
-                          className="min-h-touch h-8 px-3 rounded-lg bg-azure text-white text-xs font-bold hover:bg-azure/90 flex items-center gap-1"
+                          className="min-h-touch h-8 px-3 rounded-lg bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-600/90 flex items-center gap-1"
                         >
                           <Syringe size={13} />
                           <span>Catat IB</span>
@@ -518,7 +518,7 @@ export default function SapiTimePage() {
                   placeholder="Cari sapi, peternak, ID..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full min-h-touch h-10 pl-9 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-900 focus:outline-none focus:border-azure focus:bg-white"
+                  className="w-full min-h-touch h-10 pl-9 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-900 focus:outline-none focus:border-emerald-500 focus:bg-white"
                 />
               </div>
             </div>
@@ -539,7 +539,7 @@ export default function SapiTimePage() {
                   <tbody className="divide-y divide-slate-200 text-slate-800">
                     {filteredCattle.map((c) => (
                       <tr key={c.id} className="hover:bg-slate-50/80 transition-colors">
-                        <td className="p-4 font-mono font-bold text-xs text-slate-400">{c.id}</td>
+                        <td className="p-4 font-sans font-bold text-xs text-slate-400">{c.id}</td>
                         <td className="p-4">
                           <span className="font-bold text-slate-900 block text-sm">{c.name}</span>
                           <span className="text-xs text-slate-500">Peternak: {c.ownerName || '-'}</span>
@@ -563,7 +563,7 @@ export default function SapiTimePage() {
                                 setSelectedCattleForIB(c);
                                 setShowIBModal(true);
                               }}
-                              className="min-h-touch h-8 px-2 rounded-lg bg-azure text-white text-xs font-bold"
+                              className="min-h-touch h-8 px-2 rounded-lg bg-emerald-600 text-white text-xs font-bold"
                             >
                               + IB
                             </button>
@@ -616,7 +616,7 @@ export default function SapiTimePage() {
             {/* Calendar Grid */}
             <div className="grid grid-cols-7 gap-2 text-center text-xs">
               {['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'].map((d) => (
-                <div key={d} className="font-bold font-mono text-slate-500 py-1">{d}</div>
+                <div key={d} className="font-bold font-sans text-slate-500 py-1">{d}</div>
               ))}
               {Array.from({ length: 31 }).map((_, i) => {
                 const day = i + 1;
@@ -627,15 +627,15 @@ export default function SapiTimePage() {
                     onClick={() => setSelectedDay(day)}
                     className={`min-h-[70px] p-1.5 rounded-xl border text-left flex flex-col justify-between transition-colors cursor-pointer ${
                       events.length > 0
-                        ? 'border-azure/40 bg-azure/5 hover:bg-azure/10'
+                        ? 'border-emerald-600/40 bg-emerald-600/5 hover:bg-emerald-600/10'
                         : 'border-slate-100 hover:bg-slate-50'
                     }`}
                   >
-                    <span className="font-mono font-bold text-slate-700 text-xs">{day}</span>
+                    <span className="font-sans font-bold text-slate-700 text-xs">{day}</span>
                     {events.length > 0 && (
                       <div className="space-y-0.5">
                         {events.slice(0, 2).map((ev, idx) => (
-                          <div key={idx} className="px-1 py-0.5 rounded bg-azure text-white text-[10px] truncate font-medium">
+                          <div key={idx} className="px-1 py-0.5 rounded bg-emerald-600 text-white text-[10px] truncate font-medium">
                             {ev.name}: {ev.desc}
                           </div>
                         ))}
@@ -661,7 +661,7 @@ export default function SapiTimePage() {
                   <span className="text-lg">{item.icon || '📌'}</span>
                   <div>
                     <p className="font-semibold text-slate-900">{item.description}</p>
-                    <span className="text-slate-400 font-mono text-[11px]">
+                    <span className="text-slate-400 font-sans text-[11px]">
                       {item.timestamp ? new Date(item.timestamp).toLocaleString('id-ID') : '-'}
                     </span>
                   </div>
@@ -689,7 +689,7 @@ export default function SapiTimePage() {
                   required
                   value={formData.name || ''}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full h-10 px-3 rounded-xl border bg-slate-50 text-sm outline-none focus:border-azure"
+                  className="w-full h-10 px-3 rounded-xl border bg-slate-50 text-sm outline-none focus:border-emerald-500"
                 />
               </div>
               <div>
@@ -699,7 +699,7 @@ export default function SapiTimePage() {
                   required
                   value={formData.ownerName || ''}
                   onChange={(e) => setFormData({ ...formData, ownerName: e.target.value })}
-                  className="w-full h-10 px-3 rounded-xl border bg-slate-50 text-sm outline-none focus:border-azure"
+                  className="w-full h-10 px-3 rounded-xl border bg-slate-50 text-sm outline-none focus:border-emerald-500"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -709,7 +709,7 @@ export default function SapiTimePage() {
                     type="text"
                     value={formData.kecamatan || ''}
                     onChange={(e) => setFormData({ ...formData, kecamatan: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border bg-slate-50 text-sm outline-none focus:border-azure"
+                    className="w-full h-10 px-3 rounded-xl border bg-slate-50 text-sm outline-none focus:border-emerald-500"
                   />
                 </div>
                 <div>
@@ -718,14 +718,14 @@ export default function SapiTimePage() {
                     type="text"
                     value={formData.desa || ''}
                     onChange={(e) => setFormData({ ...formData, desa: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border bg-slate-50 text-sm outline-none focus:border-azure"
+                    className="w-full h-10 px-3 rounded-xl border bg-slate-50 text-sm outline-none focus:border-emerald-500"
                   />
                 </div>
               </div>
             </div>
             <div className="pt-3 border-t flex justify-end gap-2">
               <button onClick={() => setShowAddModal(false)} className="h-10 px-4 rounded-xl border bg-slate-100 text-xs font-bold">Batal</button>
-              <button onClick={handleAddCattle} className="h-10 px-5 rounded-xl bg-azure text-white text-xs font-bold">Simpan Sapi</button>
+              <button onClick={handleAddCattle} className="h-10 px-5 rounded-xl bg-emerald-600 text-white text-xs font-bold">Simpan Sapi</button>
             </div>
           </div>
         </div>
@@ -788,7 +788,7 @@ export default function SapiTimePage() {
             </div>
             <div className="pt-3 border-t flex justify-end gap-2">
               <button onClick={() => setShowIBModal(false)} className="h-10 px-4 rounded-xl border bg-slate-100 text-xs font-bold">Batal</button>
-              <button onClick={handleAddInsemination} className="h-10 px-5 rounded-xl bg-azure text-white text-xs font-bold">Simpan & Kirim IB</button>
+              <button onClick={handleAddInsemination} className="h-10 px-5 rounded-xl bg-emerald-600 text-white text-xs font-bold">Simpan & Kirim IB</button>
             </div>
           </div>
         </div>

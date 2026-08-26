@@ -103,7 +103,7 @@ export default function InputPopulasi2026() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white pb-20">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-600 selection:text-white pb-20">
       
       {/* ── TOP HEADER ── */}
       <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
@@ -120,15 +120,15 @@ export default function InputPopulasi2026() {
 
             <div>
               <div className="flex items-center gap-2">
-                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
                   Bitpro
                 </Link>
                 <span className="text-slate-300">/</span>
-                <Link href="/bitpro/populasi-dan-produksi" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                <Link href="/bitpro/populasi-dan-produksi" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
                   Populasi
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-azure">Tahun 2026</span>
+                <span className="text-xs font-bold text-emerald-700">Tahun 2026</span>
               </div>
               <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
                 Input Data Populasi Ternak Tahun 2026
@@ -158,18 +158,18 @@ export default function InputPopulasi2026() {
             <h2 className="font-bold text-base text-slate-900">
               {editIdx !== null ? 'Edit Data Sensus Desa ✏️' : 'Formulir Input Sensus Per Desa'}
             </h2>
-            <span className="text-xs font-mono text-slate-500">Periode Berjalan 2026</span>
+            <span className="text-xs font-sans text-slate-500">Periode Berjalan 2026</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+              <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                 Triwulan (TW)
               </label>
               <select
                 value={tw}
                 onChange={(e) => setTw(e.target.value)}
-                className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure outline-none"
+                className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none"
               >
                 <option>TW 1</option>
                 <option>TW 2</option>
@@ -179,7 +179,7 @@ export default function InputPopulasi2026() {
             </div>
 
             <div>
-              <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+              <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                 Kecamatan
               </label>
               <select
@@ -188,7 +188,7 @@ export default function InputPopulasi2026() {
                   setKec(e.target.value);
                   setDesa('');
                 }}
-                className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure outline-none"
+                className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none"
               >
                 <option value="">Pilih Kecamatan</option>
                 {Object.keys(DATA_WILAYAH).map((k) => (
@@ -198,14 +198,14 @@ export default function InputPopulasi2026() {
             </div>
 
             <div>
-              <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+              <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                 Desa
               </label>
               <select
                 value={desa}
                 onChange={(e) => setDesa(e.target.value)}
                 disabled={!kec}
-                className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure outline-none disabled:opacity-50"
+                className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none disabled:opacity-50"
               >
                 <option value="">{kec ? 'Pilih Desa' : 'Pilih Kecamatan Dulu'}</option>
                 {kec &&
@@ -218,13 +218,13 @@ export default function InputPopulasi2026() {
 
           {/* Grid of 60 commodity numerical inputs */}
           <div>
-            <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-2">
+            <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-2">
               Isi Nilai Sensus (60 Kolom Komoditas)
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 max-h-80 overflow-y-auto p-4 bg-slate-50 rounded-xl border border-slate-200">
               {HEADERS.map((h) => (
                 <div key={h} className="space-y-1">
-                  <label className="text-[11px] font-mono font-bold text-slate-600 block truncate" title={h}>
+                  <label className="text-[11px] font-sans font-bold text-slate-600 block truncate" title={h}>
                     {h}
                   </label>
                   <input
@@ -233,7 +233,7 @@ export default function InputPopulasi2026() {
                     placeholder="0"
                     value={values[h] || ''}
                     onChange={(e) => setValues({ ...values, [h]: e.target.value })}
-                    className="w-full min-h-touch h-9 px-2.5 rounded-lg border border-slate-200 bg-white font-mono font-bold text-xs text-slate-900 text-right focus:border-azure outline-none"
+                    className="w-full min-h-touch h-9 px-2.5 rounded-lg border border-slate-200 bg-white font-sans font-bold text-xs text-slate-900 text-right focus:border-emerald-500 outline-none"
                   />
                 </div>
               ))}
@@ -243,7 +243,7 @@ export default function InputPopulasi2026() {
           <div className="flex items-center justify-end gap-3 pt-2">
             <button
               type="submit"
-              className="min-h-touch h-11 px-6 rounded-xl bg-azure text-white text-xs font-bold shadow-sm hover:bg-azure/90 active:scale-95 transition-all"
+              className="min-h-touch h-11 px-6 rounded-xl bg-emerald-600 text-white text-xs font-bold shadow-sm hover:bg-emerald-600/90 active:scale-95 transition-all"
             >
               {editIdx !== null ? 'Perbarui Data Desa' : 'Simpan Data Desa'}
             </button>
@@ -273,10 +273,10 @@ export default function InputPopulasi2026() {
                 {savedData.length > 0 ? (
                   savedData.map((d, i) => (
                     <tr key={i} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="p-3.5 font-mono text-xs font-semibold">{d.tw}</td>
+                      <td className="p-3.5 font-sans text-xs font-semibold">{d.tw}</td>
                       <td className="p-3.5 font-bold text-slate-900">{d.kec}</td>
                       <td className="p-3.5 text-slate-700">{d.desa}</td>
-                      <td className="p-3.5 font-mono text-xs text-slate-600 max-w-md truncate">
+                      <td className="p-3.5 font-sans text-xs text-slate-600 max-w-md truncate">
                         {Object.entries(d.values)
                           .filter(([_, v]) => v && v !== '0')
                           .map(([k, v]) => `${k}: ${v}`)

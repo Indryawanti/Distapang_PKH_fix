@@ -22,28 +22,40 @@ import {
   Layers,
   Sparkles,
   Lock,
+  Activity,
+  Award,
+  Calendar,
+  FolderKanban,
+  FileText,
+  TrendingUp,
+  PackageCheck,
+  FlaskConical,
+  Flame,
+  Ambulance,
+  Compass,
+  Landmark,
 } from 'lucide-react';
 
 /* ─────────────────────────────────────────────
    DATA STATISTIK RESMI KEBUMEN (2025)
 ───────────────────────────────────────────── */
 const REKAP_POPULASI_2025 = [
-  { komoditas: 'Sapi Potong', total: 64996, icon: '🐄' },
-  { komoditas: 'Sapi Perah', total: 0, icon: '🐄' },
-  { komoditas: 'Kerbau', total: 170, icon: '🐃' },
-  { komoditas: 'Kuda', total: 274, icon: '🐎' },
-  { komoditas: 'Kambing', total: 101255, icon: '🐐' },
-  { komoditas: 'Domba', total: 25552, icon: '🐑' },
-  { komoditas: 'Babi', total: 780, icon: '🐖' },
-  { komoditas: 'Ayam Kampung', total: 864412, icon: '🐣' },
-  { komoditas: 'Ayam Petelur', total: 73976, icon: '🐓' },
-  { komoditas: 'Ayam Broiler', total: 2636000, icon: '🐔' },
-  { komoditas: 'Puyuh', total: 70808, icon: '🐦' },
-  { komoditas: 'Itik', total: 87200, icon: '🦆' },
-  { komoditas: 'Entog', total: 81573, icon: '🦢' },
-  { komoditas: 'Angsa', total: 2153, icon: '🪿' },
-  { komoditas: 'Merpati', total: 54168, icon: '🕊️' },
-  { komoditas: 'Kelinci', total: 3907, icon: '🐇' },
+  { komoditas: 'Sapi Potong', total: 64996 },
+  { komoditas: 'Sapi Perah', total: 0 },
+  { komoditas: 'Kerbau', total: 170 },
+  { komoditas: 'Kuda', total: 274 },
+  { komoditas: 'Kambing', total: 101255 },
+  { komoditas: 'Domba', total: 25552 },
+  { komoditas: 'Babi', total: 780 },
+  { komoditas: 'Ayam Kampung', total: 864412 },
+  { komoditas: 'Ayam Petelur', total: 73976 },
+  { komoditas: 'Ayam Broiler', total: 2636000 },
+  { komoditas: 'Puyuh', total: 70808 },
+  { komoditas: 'Itik', total: 87200 },
+  { komoditas: 'Entog', total: 81573 },
+  { komoditas: 'Angsa', total: 2153 },
+  { komoditas: 'Merpati', total: 54168 },
+  { komoditas: 'Kelinci', total: 3907 },
 ];
 
 const dataDaging = [
@@ -86,7 +98,6 @@ const METRIC_CONFIGS = {
     unit: 'Ekor',
     data: TOP_KOMODITAS,
     max: TOP_KOMODITAS[0]?.total ?? 1,
-    getIcon: (r: any) => r.icon,
     getName: (r: any) => r.komoditas,
     barColor: '#38E54D',
   },
@@ -95,7 +106,6 @@ const METRIC_CONFIGS = {
     unit: 'Kg',
     data: TOP_DAGING,
     max: TOP_DAGING[0]?.total ?? 1,
-    getIcon: () => '🥩',
     getName: (r: any) => r.jenis,
     barColor: '#2192FF',
   },
@@ -104,7 +114,6 @@ const METRIC_CONFIGS = {
     unit: 'Kg',
     data: TOP_TELUR,
     max: TOP_TELUR[0]?.total ?? 1,
-    getIcon: () => '🥚',
     getName: (r: any) => r.jenis,
     barColor: '#EAB308',
   },
@@ -115,25 +124,25 @@ const MODULES = [
     key: 'bitpro',
     label: 'Bitpro',
     caption: 'Perbibitan & Produksi Ternak',
-    icon: '🐄',
-    accent: '#38E54D',
+    icon: Activity,
+    accent: '#059669',
     badge: 'bg-emerald-50 text-emerald-800 border-emerald-200',
   },
   {
     key: 'keswan',
     label: 'Keswan',
     caption: 'Kesehatan Hewan & Puskeswan',
-    icon: '🩺',
-    accent: '#2192FF',
+    icon: Stethoscope,
+    accent: '#2563eb',
     badge: 'bg-blue-50 text-blue-800 border-blue-200',
   },
   {
     key: 'kesmavet',
     label: 'Kesmavet',
     caption: 'Kesehatan Masyarakat Veteriner',
-    icon: '🔬',
-    accent: '#84CC16',
-    badge: 'bg-lime-50 text-lime-900 border-lime-200',
+    icon: FlaskConical,
+    accent: '#7c3aed',
+    badge: 'bg-purple-50 text-purple-800 border-purple-200',
   },
 ] as const;
 
@@ -189,7 +198,7 @@ export default function LandingPage() {
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white">
       
       {/* ─────────────────────────────────────────────
-          1. TOP NAVIGATION (Clean SaaS Header)
+          1. TOP NAVIGATION
       ───────────────────────────────────────────── */}
       <header className="fixed top-0 inset-x-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur-md shadow-xs">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 sm:h-20 flex items-center justify-between">
@@ -203,17 +212,19 @@ export default function LandingPage() {
                 className="w-full h-full object-contain"
                 onError={(e: any) => {
                   e.currentTarget.style.display = 'none';
-                  e.currentTarget.nextSibling.style.display = 'block';
+                  e.currentTarget.nextSibling.style.display = 'flex';
                 }}
               />
-              <span className="hidden text-lg">🏛️</span>
+              <div className="hidden text-azure items-center justify-center">
+                <Landmark size={20} />
+              </div>
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-editorial text-xl sm:text-2xl font-bold tracking-tight text-azure">
+                <span className="font-sans text-xl sm:text-2xl font-bold tracking-tight text-azure">
                   SiMantap
                 </span>
-                <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-800 uppercase tracking-wider">
+                <span className="text-[11px] font-bold px-2 py-0.5 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-800 uppercase tracking-wider">
                   Kebumen
                 </span>
               </div>
@@ -273,30 +284,33 @@ export default function LandingPage() {
             <a
               href="#ringkasan"
               onClick={() => setMobileMenuOpen(false)}
-              className="block py-2 text-sm font-bold text-slate-800 hover:text-azure"
+              className="flex items-center gap-2 py-2 text-sm font-bold text-slate-800 hover:text-azure"
             >
-              📊 Ringkasan Wilayah
+              <BarChart3 size={16} className="text-azure" />
+              <span>Ringkasan Wilayah</span>
             </a>
             <a
               href="#modul"
               onClick={() => setMobileMenuOpen(false)}
-              className="block py-2 text-sm font-bold text-slate-800 hover:text-azure"
+              className="flex items-center gap-2 py-2 text-sm font-bold text-slate-800 hover:text-azure"
             >
-              🗂️ Modul Data
+              <FolderKanban size={16} className="text-vitality" />
+              <span>Modul Data</span>
             </a>
             <a
               href="#bantuan"
               onClick={() => setMobileMenuOpen(false)}
-              className="block py-2 text-sm font-bold text-slate-800 hover:text-azure"
+              className="flex items-center gap-2 py-2 text-sm font-bold text-slate-800 hover:text-azure"
             >
-              ℹ️ Bantuan Akses
+              <ShieldCheck size={16} className="text-slate-500" />
+              <span>Bantuan Akses</span>
             </a>
           </div>
         )}
       </header>
 
       {/* ─────────────────────────────────────────────
-          2. HERO SECTION (Editorial & Clean)
+          2. HERO SECTION
       ───────────────────────────────────────────── */}
       <section id="ringkasan" className="pt-28 pb-12 sm:pt-36 sm:pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         
@@ -310,7 +324,7 @@ export default function LandingPage() {
 
         {/* Editorial Headline */}
         <div className="text-center max-w-4xl mx-auto mb-8">
-          <h1 className="font-editorial text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 leading-[1.18] mb-5">
+          <h1 className="font-sans text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 leading-[1.18] mb-5">
             Satu Ekosistem untuk Data <br className="hidden sm:inline" />
             <span className="text-azure">Peternakan Kebumen</span>
           </h1>
@@ -347,69 +361,77 @@ export default function LandingPage() {
           {/* Stat 1: Total Ternak */}
           <div className="p-5 sm:p-6 rounded-2xl border border-slate-200 bg-white shadow-xs">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-2xl">🐾</span>
-              <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-md border border-emerald-200 bg-emerald-50 text-emerald-800">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                <Activity size={20} />
+              </div>
+              <span className="text-xs font-sans font-semibold font-semibold px-2.5 py-0.5 rounded-md border border-emerald-200 bg-emerald-50 text-emerald-800">
                 TAHUN 2025
               </span>
             </div>
             <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-500 mb-1">
               Total Populasi Ternak
             </p>
-            <p className="font-mono text-2xl sm:text-3xl font-bold text-vitality tracking-tight">
+            <p className="font-sans font-semibold text-2xl sm:text-3xl font-bold text-vitality tracking-tight">
               {TOTAL_POPULASI.toLocaleString('id-ID')}
             </p>
-            <p className="text-xs text-slate-500 mt-1 font-mono">Ekor di seluruh Kebumen</p>
+            <p className="text-xs text-slate-500 mt-1 font-sans font-semibold">Ekor di seluruh Kebumen</p>
           </div>
 
           {/* Stat 2: Produksi Daging */}
           <div className="p-5 sm:p-6 rounded-2xl border border-slate-200 bg-white shadow-xs">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-2xl">🥩</span>
-              <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-md border border-blue-200 bg-blue-50 text-blue-800">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 text-azure flex items-center justify-center">
+                <TrendingUp size={20} />
+              </div>
+              <span className="text-xs font-sans font-semibold font-semibold px-2.5 py-0.5 rounded-md border border-blue-200 bg-blue-50 text-blue-800">
                 PRODUKSI
               </span>
             </div>
             <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-500 mb-1">
               Produksi Daging
             </p>
-            <p className="font-mono text-2xl sm:text-3xl font-bold text-azure tracking-tight">
+            <p className="font-sans font-semibold text-2xl sm:text-3xl font-bold text-azure tracking-tight">
               {Math.round(TOTAL_DAGING).toLocaleString('id-ID')}
             </p>
-            <p className="text-xs text-slate-500 mt-1 font-mono">Kilogram / tahun</p>
+            <p className="text-xs text-slate-500 mt-1 font-sans font-semibold">Kilogram / tahun</p>
           </div>
 
           {/* Stat 3: Produksi Telur */}
           <div className="p-5 sm:p-6 rounded-2xl border border-slate-200 bg-white shadow-xs">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-2xl">🥚</span>
-              <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-md border border-amber-200 bg-amber-50 text-amber-900">
+              <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                <PackageCheck size={20} />
+              </div>
+              <span className="text-xs font-sans font-semibold font-semibold px-2.5 py-0.5 rounded-md border border-amber-200 bg-amber-50 text-amber-900">
                 UNGGAS
               </span>
             </div>
             <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-500 mb-1">
               Produksi Telur
             </p>
-            <p className="font-mono text-2xl sm:text-3xl font-bold text-amber-600 tracking-tight">
+            <p className="font-sans font-semibold text-2xl sm:text-3xl font-bold text-amber-600 tracking-tight">
               {Math.round(TOTAL_TELUR).toLocaleString('id-ID')}
             </p>
-            <p className="text-xs text-slate-500 mt-1 font-mono">Kilogram / tahun</p>
+            <p className="text-xs text-slate-500 mt-1 font-sans font-semibold">Kilogram / tahun</p>
           </div>
 
           {/* Stat 4: Sebaran Farm */}
           <div className="p-5 sm:p-6 rounded-2xl border border-slate-200 bg-white shadow-xs">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-2xl">🏡</span>
-              <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-md border border-lime-200 bg-lime-50 text-lime-900">
+              <div className="w-10 h-10 rounded-xl bg-lime-50 text-lime-800 flex items-center justify-center">
+                <Building2 size={20} />
+              </div>
+              <span className="text-xs font-sans font-semibold font-semibold px-2.5 py-0.5 rounded-md border border-lime-200 bg-lime-50 text-lime-900">
                 TERVERIFIKASI
               </span>
             </div>
             <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-500 mb-1">
               Sebaran Data Farm
             </p>
-            <p className="font-mono text-2xl sm:text-3xl font-bold text-lime tracking-tight">
+            <p className="font-sans font-semibold text-2xl sm:text-3xl font-bold text-lime tracking-tight">
               {TOTAL_FARM} Unit
             </p>
-            <p className="text-xs text-slate-500 mt-1 font-mono">Peternakan terdata</p>
+            <p className="text-xs text-slate-500 mt-1 font-sans font-semibold">Peternakan terdata</p>
           </div>
 
         </div>
@@ -424,10 +446,10 @@ export default function LandingPage() {
         {/* Section Title */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6">
           <div>
-            <span className="text-xs font-mono font-bold uppercase tracking-widest text-azure mb-1 block">
+            <span className="text-xs font-bold uppercase tracking-widest text-azure mb-1 block">
               Eksplorasi Data Terpadu
             </span>
-            <h2 className="font-editorial text-2xl sm:text-3xl font-bold text-slate-900">
+            <h2 className="font-sans text-2xl sm:text-3xl font-bold text-slate-900">
               Modul Pelayanan & Laporan
             </h2>
           </div>
@@ -440,6 +462,7 @@ export default function LandingPage() {
         <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6">
           {MODULES.map((mod) => {
             const isActive = activeModule === mod.key;
+            const IconComponent = mod.icon;
             return (
               <button
                 key={mod.key}
@@ -453,7 +476,9 @@ export default function LandingPage() {
                     : 'bg-slate-100/80 border-slate-200 text-slate-600 hover:bg-white hover:text-slate-900'
                 }`}
               >
-                <span className="text-2xl sm:text-3xl shrink-0">{mod.icon}</span>
+                <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 ${isActive ? 'bg-azure text-white' : 'bg-slate-200 text-slate-600'}`}>
+                  <IconComponent size={20} />
+                </div>
                 <div className="min-w-0 flex-1 hidden sm:block">
                   <p className="font-bold text-sm leading-tight truncate">{mod.label}</p>
                   <p className="text-xs truncate text-slate-500">{mod.caption}</p>
@@ -473,13 +498,13 @@ export default function LandingPage() {
           <div className="flex flex-wrap items-center justify-between gap-3 pb-5 mb-6 border-b border-slate-200">
             <div className="flex items-center gap-3">
               <span className="w-3 h-3 rounded-full" style={{ backgroundColor: activeMod.accent }} />
-              <h3 className="font-editorial text-lg sm:text-xl font-bold text-slate-900">
+              <h3 className="font-sans text-lg sm:text-xl font-bold text-slate-900">
                 {activeMod.label} — {activeMod.caption}
               </h3>
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono uppercase px-3 py-1 rounded-full border border-slate-200 bg-slate-50 text-slate-700 font-semibold">
+              <span className="text-xs font-sans font-semibold uppercase px-3 py-1 rounded-full border border-slate-200 bg-slate-50 text-slate-700 font-semibold">
                 Pratinjau Publik
               </span>
             </div>
@@ -492,12 +517,12 @@ export default function LandingPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <h4 className="text-base sm:text-lg font-bold text-slate-900">
-                    {detailView === 'populasi' && '📊 Data Lengkap Sensus Populasi & Produksi Ternak'}
-                    {detailView === 'farm' && '🏡 Sebaran Data Farm Peternakan Kebumen'}
-                    {detailView === 'ktt' && '👥 Database Kelompok Tani Ternak (KTT)'}
-                    {detailView === 'sklb' && '📄 Surat Keterangan Layak Bibit (SKLB)'}
-                    {detailView === 'keswan_info' && '🩺 Informasi Puskeswan & Vaksinasi'}
-                    {detailView === 'kesmavet_info' && '🔬 Data Usaha & Sertifikasi Halal'}
+                    {detailView === 'populasi' && 'Data Lengkap Sensus Populasi & Produksi Ternak'}
+                    {detailView === 'farm' && 'Sebaran Data Farm Peternakan Kebumen'}
+                    {detailView === 'ktt' && 'Database Kelompok Tani Ternak (KTT)'}
+                    {detailView === 'sklb' && 'Surat Keterangan Layak Bibit (SKLB)'}
+                    {detailView === 'keswan_info' && 'Informasi Puskeswan & Vaksinasi'}
+                    {detailView === 'kesmavet_info' && 'Data Usaha & Sertifikasi Halal'}
                   </h4>
                   <p className="text-xs text-slate-500">
                     Tersinkronisasi dengan basis data Dinas Pertanian dan Pangan Kebumen
@@ -523,7 +548,7 @@ export default function LandingPage() {
                     <button
                       key={tab.key}
                       onClick={() => setSubTabProd(tab.key as any)}
-                      className={`min-h-touch h-9 px-3.5 rounded-lg text-xs font-mono font-bold uppercase tracking-wider border transition-all ${
+                      className={`min-h-touch h-9 px-3.5 rounded-lg text-xs font-bold uppercase tracking-wider border transition-all ${
                         subTabProd === tab.key
                           ? 'bg-azure text-white border-azure shadow-xs'
                           : 'border-slate-200 bg-slate-50 text-slate-600 hover:text-slate-900'
@@ -543,18 +568,17 @@ export default function LandingPage() {
                       <tr>
                         <th className="p-3.5 w-14 text-center">NO</th>
                         <th className="p-3.5">KOMODITAS TERNAK</th>
-                        <th className="p-3.5 text-right font-mono">TOTAL POPULASI (2025)</th>
+                        <th className="p-3.5 text-right font-sans font-semibold">TOTAL POPULASI (2025)</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 text-slate-800">
                       {REKAP_POPULASI_2025.map((row, idx) => (
                         <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
-                          <td className="p-3.5 text-center font-mono text-slate-400">{idx + 1}</td>
-                          <td className="p-3.5 font-bold flex items-center gap-2">
-                            <span>{row.icon}</span>
-                            <span>{row.komoditas}</span>
+                          <td className="p-3.5 text-center font-sans font-semibold text-slate-400">{idx + 1}</td>
+                          <td className="p-3.5 font-bold text-slate-900">
+                            {row.komoditas}
                           </td>
-                          <td className="p-3.5 text-right font-mono font-bold text-vitality">
+                          <td className="p-3.5 text-right font-bold text-vitality">
                             {row.total.toLocaleString('id-ID')} Ekor
                           </td>
                         </tr>
@@ -569,15 +593,15 @@ export default function LandingPage() {
                       <tr>
                         <th className="p-3.5 w-14 text-center">NO</th>
                         <th className="p-3.5">JENIS TERNAK POTONG</th>
-                        <th className="p-3.5 text-right font-mono">TOTAL PRODUKSI DAGING (2025)</th>
+                        <th className="p-3.5 text-right font-sans font-semibold">TOTAL PRODUKSI DAGING (2025)</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 text-slate-800">
                       {dataDaging.map((row, idx) => (
                         <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
-                          <td className="p-3.5 text-center font-mono text-slate-400">{idx + 1}</td>
-                          <td className="p-3.5 font-bold">🥩 {row.jenis}</td>
-                          <td className="p-3.5 text-right font-mono font-bold text-azure">
+                          <td className="p-3.5 text-center font-sans font-semibold text-slate-400">{idx + 1}</td>
+                          <td className="p-3.5 font-bold text-slate-900">{row.jenis}</td>
+                          <td className="p-3.5 text-right font-bold text-azure">
                             {row.total.toLocaleString('id-ID')} Kg
                           </td>
                         </tr>
@@ -592,15 +616,15 @@ export default function LandingPage() {
                       <tr>
                         <th className="p-3.5 w-14 text-center">NO</th>
                         <th className="p-3.5">KOMODITAS UNGGAS PETELUR</th>
-                        <th className="p-3.5 text-right font-mono">TOTAL PRODUKSI TELUR (2025)</th>
+                        <th className="p-3.5 text-right font-sans font-semibold">TOTAL PRODUKSI TELUR (2025)</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 text-slate-800">
                       {dataTelur.map((row, idx) => (
                         <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
-                          <td className="p-3.5 text-center font-mono text-slate-400">{idx + 1}</td>
-                          <td className="p-3.5 font-bold">🥚 {row.jenis}</td>
-                          <td className="p-3.5 text-right font-mono font-bold text-amber-600">
+                          <td className="p-3.5 text-center font-sans font-semibold text-slate-400">{idx + 1}</td>
+                          <td className="p-3.5 font-bold text-slate-900">{row.jenis}</td>
+                          <td className="p-3.5 text-right font-bold text-amber-600">
                             {row.total.toLocaleString('id-ID')} Kg
                           </td>
                         </tr>
@@ -615,17 +639,17 @@ export default function LandingPage() {
                       <tr>
                         <th className="p-3.5 w-14 text-center">NO</th>
                         <th className="p-3.5">KOMODITAS FARM</th>
-                        <th className="p-3.5 text-center font-mono">JUMLAH FARM</th>
-                        <th className="p-3.5 text-right font-mono">TOTAL KAPASITAS</th>
+                        <th className="p-3.5 text-center font-sans font-semibold">JUMLAH FARM</th>
+                        <th className="p-3.5 text-right font-sans font-semibold">TOTAL KAPASITAS</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 text-slate-800">
                       {REKAP_SEBARAN_FARM.map((row, idx) => (
                         <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
-                          <td className="p-3.5 text-center font-mono text-slate-400">{idx + 1}</td>
-                          <td className="p-3.5 font-bold">{row.komoditas}</td>
-                          <td className="p-3.5 text-center font-mono font-bold text-slate-900">{row.jumlah_farm} Unit</td>
-                          <td className="p-3.5 text-right font-mono font-bold text-lime">
+                          <td className="p-3.5 text-center font-sans font-semibold text-slate-400">{idx + 1}</td>
+                          <td className="p-3.5 font-bold text-slate-900">{row.komoditas}</td>
+                          <td className="p-3.5 text-center font-bold text-slate-900">{row.jumlah_farm} Unit</td>
+                          <td className="p-3.5 text-right font-bold text-lime">
                             {row.total_populasi}
                           </td>
                         </tr>
@@ -637,7 +661,7 @@ export default function LandingPage() {
                 {(detailView === 'ktt' || detailView === 'sklb' || detailView === 'keswan_info' || detailView === 'kesmavet_info') && (
                   <div className="py-12 px-6 text-center space-y-3">
                     <div className="w-12 h-12 rounded-2xl bg-azure/10 border border-azure/30 text-azure flex items-center justify-center mx-auto text-xl">
-                      🔒
+                      <Lock size={22} />
                     </div>
                     <h5 className="font-bold text-base text-slate-900">
                       Akses Khusus Petugas Terdaftar
@@ -669,7 +693,7 @@ export default function LandingPage() {
                   <div className="p-5 sm:p-6 rounded-2xl border border-slate-200 bg-slate-50/50">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
                       <div>
-                        <h4 className="font-editorial text-lg sm:text-xl font-bold text-slate-900">
+                        <h4 className="font-sans text-lg sm:text-xl font-bold text-slate-900">
                           Peringkat 5 Tertinggi — {cfg.label}
                         </h4>
                         <p className="text-xs text-slate-500">
@@ -683,7 +707,7 @@ export default function LandingPage() {
                           <button
                             key={key}
                             onClick={() => setRankedMetric(key)}
-                            className={`min-h-touch h-8 px-3 rounded-lg text-xs font-mono font-bold uppercase transition-colors ${
+                            className={`min-h-touch h-8 px-3 rounded-lg text-xs font-bold uppercase transition-colors ${
                               rankedMetric === key
                                 ? 'bg-white text-slate-900 shadow-xs'
                                 : 'text-slate-600 hover:text-slate-900'
@@ -699,17 +723,16 @@ export default function LandingPage() {
                     <div className="space-y-3.5">
                       {cfg.data.map((row: any, i: number) => {
                         const name = cfg.getName(row);
-                        const icon = cfg.getIcon(row);
                         const percent = Math.round((row.total / cfg.max) * 100);
 
                         return (
                           <div key={name} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
                             <div className="flex items-center gap-2 w-48 shrink-0">
-                              <span className={`w-5 h-5 rounded-md font-mono text-xs font-bold flex items-center justify-center ${i === 0 ? 'bg-azure text-white' : 'bg-slate-200 text-slate-700'}`}>
+                              <span className={`w-5 h-5 rounded-md font-sans font-semibold text-xs font-bold flex items-center justify-center ${i === 0 ? 'bg-azure text-white' : 'bg-slate-200 text-slate-700'}`}>
                                 {i + 1}
                               </span>
                               <span className="text-xs sm:text-sm font-bold truncate text-slate-900">
-                                {icon} {name}
+                                {name}
                               </span>
                             </div>
 
@@ -723,7 +746,7 @@ export default function LandingPage() {
                               />
                             </div>
 
-                            <span className="font-mono text-xs sm:text-sm font-bold text-right w-36 shrink-0 text-slate-900">
+                            <span className="font-sans font-semibold text-xs sm:text-sm font-bold text-right w-36 shrink-0 text-slate-900">
                               {Math.round(row.total).toLocaleString('id-ID')} {cfg.unit}
                             </span>
                           </div>
@@ -740,7 +763,9 @@ export default function LandingPage() {
                       className="p-5 rounded-2xl border border-slate-200 bg-white text-left flex flex-col justify-between min-h-[130px] transition-all hover:border-azure hover:shadow-sm active:scale-[0.99]"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-2xl">📊</span>
+                        <div className="w-9 h-9 rounded-xl bg-blue-50 text-azure flex items-center justify-center">
+                          <BarChart3 size={18} />
+                        </div>
                         <ChevronRight size={18} className="text-azure" />
                       </div>
                       <div>
@@ -756,7 +781,9 @@ export default function LandingPage() {
                       className="p-5 rounded-2xl border border-slate-200 bg-white text-left flex flex-col justify-between min-h-[130px] transition-all hover:border-vitality hover:shadow-sm active:scale-[0.99]"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-2xl">🏡</span>
+                        <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                          <Building2 size={18} />
+                        </div>
                         <ChevronRight size={18} className="text-vitality" />
                       </div>
                       <div>
@@ -772,7 +799,9 @@ export default function LandingPage() {
                       className="p-5 rounded-2xl border border-slate-200 bg-white text-left flex flex-col justify-between min-h-[130px] transition-all hover:border-lime hover:shadow-sm active:scale-[0.99]"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-2xl">👥</span>
+                        <div className="w-9 h-9 rounded-xl bg-lime-50 text-lime-800 flex items-center justify-center">
+                          <Users size={18} />
+                        </div>
                         <ChevronRight size={18} className="text-lime" />
                       </div>
                       <div>
@@ -788,7 +817,9 @@ export default function LandingPage() {
                       className="p-5 rounded-2xl border border-slate-200 bg-white text-left flex flex-col justify-between min-h-[130px] transition-all hover:border-amber-400 hover:shadow-sm active:scale-[0.99]"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-2xl">📄</span>
+                        <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                          <FileText size={18} />
+                        </div>
                         <ChevronRight size={18} className="text-amber-500" />
                       </div>
                       <div>
@@ -807,42 +838,48 @@ export default function LandingPage() {
               {activeModule === 'keswan' && (
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                   <div className="p-6 rounded-2xl border border-slate-200 bg-slate-50/50">
-                    <span className="text-3xl mb-3 block">🩺</span>
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 text-azure flex items-center justify-center mb-3">
+                      <Stethoscope size={22} />
+                    </div>
                     <h4 className="font-bold text-base text-slate-900 mb-1">Puskeswan Aktif</h4>
                     <p className="text-xs text-slate-600 mb-4">
                       Pelayanan rawat, pasif, pusling, dan konsultasi kesehatan ternak di seluruh kecamatan.
                     </p>
                     <button
                       onClick={() => setDetailView('keswan_info')}
-                      className="text-xs font-mono font-bold text-azure hover:underline flex items-center gap-1"
+                      className="text-xs font-bold text-azure hover:underline flex items-center gap-1"
                     >
                       LIHAT LAYANAN →
                     </button>
                   </div>
 
                   <div className="p-6 rounded-2xl border border-slate-200 bg-slate-50/50">
-                    <span className="text-3xl mb-3 block">💉</span>
+                    <div className="w-10 h-10 rounded-xl bg-emerald-50 text-vitality flex items-center justify-center mb-3">
+                      <Syringe size={22} />
+                    </div>
                     <h4 className="font-bold text-base text-slate-900 mb-1">Vaksinasi PMK & LSD</h4>
                     <p className="text-xs text-slate-600 mb-4">
                       Monitoring capaian vaksinasi berkala dan penanganan penyakit menular ternak.
                     </p>
                     <button
                       onClick={() => setDetailView('keswan_info')}
-                      className="text-xs font-mono font-bold text-azure hover:underline flex items-center gap-1"
+                      className="text-xs font-bold text-azure hover:underline flex items-center gap-1"
                     >
                       LIHAT CAPAIAN →
                     </button>
                   </div>
 
                   <div className="p-6 rounded-2xl border border-slate-200 bg-slate-50/50">
-                    <span className="text-3xl mb-3 block">🚑</span>
+                    <div className="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center mb-3">
+                      <Ambulance size={22} />
+                    </div>
                     <h4 className="font-bold text-base text-slate-900 mb-1">Tanggap Darurat Medis</h4>
                     <p className="text-xs text-slate-600 mb-4">
                       Sistem respon cepat laporan wabah dan pengobatan hewan ternak masyarakat.
                     </p>
                     <button
                       onClick={() => setDetailView('keswan_info')}
-                      className="text-xs font-mono font-bold text-azure hover:underline flex items-center gap-1"
+                      className="text-xs font-bold text-azure hover:underline flex items-center gap-1"
                     >
                       KONTAK PETUGAS →
                     </button>
@@ -854,42 +891,48 @@ export default function LandingPage() {
               {activeModule === 'kesmavet' && (
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                   <div className="p-6 rounded-2xl border border-slate-200 bg-slate-50/50">
-                    <span className="text-3xl mb-3 block">🥩</span>
+                    <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center mb-3">
+                      <Building2 size={22} />
+                    </div>
                     <h4 className="font-bold text-base text-slate-900 mb-1">RPH & TPH Terbina</h4>
                     <p className="text-xs text-slate-600 mb-4">
                       Rumah Potong Hewan dan Tempat Pemotongan Hewan resmi berstandar sanitasi.
                     </p>
                     <button
                       onClick={() => setDetailView('kesmavet_info')}
-                      className="text-xs font-mono font-bold text-lime hover:underline flex items-center gap-1"
+                      className="text-xs font-bold text-lime hover:underline flex items-center gap-1"
                     >
                       LIHAT DATA UNIT →
                     </button>
                   </div>
 
                   <div className="p-6 rounded-2xl border border-slate-200 bg-slate-50/50">
-                    <span className="text-3xl mb-3 block">✅</span>
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 text-azure flex items-center justify-center mb-3">
+                      <CheckCircle2 size={22} />
+                    </div>
                     <h4 className="font-bold text-base text-slate-900 mb-1">Sertifikasi Halal & NKV</h4>
                     <p className="text-xs text-slate-600 mb-4">
                       Verifikasi Nomor Kontrol Veteriner dan jaminan kehalalan produk asal hewan.
                     </p>
                     <button
                       onClick={() => setDetailView('kesmavet_info')}
-                      className="text-xs font-mono font-bold text-lime hover:underline flex items-center gap-1"
+                      className="text-xs font-bold text-lime hover:underline flex items-center gap-1"
                     >
                       STATUS SERTIFIKAT →
                     </button>
                   </div>
 
                   <div className="p-6 rounded-2xl border border-slate-200 bg-slate-50/50">
-                    <span className="text-3xl mb-3 block">🔬</span>
+                    <div className="w-10 h-10 rounded-xl bg-lime-50 text-lime-800 flex items-center justify-center mb-3">
+                      <FlaskConical size={22} />
+                    </div>
                     <h4 className="font-bold text-base text-slate-900 mb-1">Pengujian Lab Higiene</h4>
                     <p className="text-xs text-slate-600 mb-4">
                       Pemeriksaan laboratorium mutu produk asal hewan yang aman, sehat, utuh, dan halal (ASUH).
                     </p>
                     <button
                       onClick={() => setDetailView('kesmavet_info')}
-                      className="text-xs font-mono font-bold text-lime hover:underline flex items-center gap-1"
+                      className="text-xs font-bold text-lime hover:underline flex items-center gap-1"
                     >
                       INFO UJI LAB →
                     </button>
@@ -905,7 +948,7 @@ export default function LandingPage() {
       </section>
 
       {/* ─────────────────────────────────────────────
-          5. MODAL LOGIN PETUGAS (48px Inputs)
+          5. MODAL LOGIN PETUGAS
       ───────────────────────────────────────────── */}
       {showLoginModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
@@ -925,7 +968,7 @@ export default function LandingPage() {
               <div className="w-12 h-12 rounded-2xl bg-azure/10 border border-azure/30 flex items-center justify-center text-azure mb-3">
                 <ShieldCheck size={24} />
               </div>
-              <h3 className="font-editorial text-2xl font-bold tracking-tight text-slate-900">
+              <h3 className="font-sans text-2xl font-bold tracking-tight text-slate-900">
                 Masuk Sistem SiMantap
               </h3>
               <p className="text-xs text-slate-500 mt-1">
@@ -944,7 +987,7 @@ export default function LandingPage() {
             {/* Form */}
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
-                <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                   ID Petugas (Email Dinas)
                 </label>
                 <input
@@ -958,7 +1001,7 @@ export default function LandingPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
                   Kata Sandi
                 </label>
                 <div className="relative">
@@ -1005,19 +1048,19 @@ export default function LandingPage() {
       )}
 
       {/* ─────────────────────────────────────────────
-          6. FOOTER (Clean & Crisp)
+          6. FOOTER
       ───────────────────────────────────────────── */}
       <footer id="bantuan" className="border-t border-slate-200 py-10 px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-600 bg-white">
         <div className="max-w-4xl mx-auto space-y-3">
           <div className="flex items-center justify-center gap-2">
-            <span className="font-editorial text-lg font-bold text-azure">SiMantap</span>
+            <span className="font-sans text-lg font-bold text-azure">SiMantap</span>
             <span>—</span>
             <span>Dinas Pertanian dan Pangan Kabupaten Kebumen</span>
           </div>
           <p className="text-xs text-slate-500 max-w-xl mx-auto">
             Bidang Peternakan dan Kesehatan Hewan · Jl. Tentara Pelajar No. 25, Kebumen, Jawa Tengah.
           </p>
-          <p className="text-xs font-mono text-slate-400 pt-1">
+          <p className="text-xs font-sans font-semibold text-slate-400 pt-1">
             &copy; {new Date().getFullYear()} Pemerintah Kabupaten Kebumen. Seluruh Hak Cipta Dilindungi.
           </p>
         </div>

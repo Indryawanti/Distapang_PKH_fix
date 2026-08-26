@@ -51,7 +51,7 @@ export default function Populasi2025() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white pb-20">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-600 selection:text-white pb-20">
       
       {/* ── TOP HEADER ── */}
       <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
@@ -68,15 +68,15 @@ export default function Populasi2025() {
 
             <div>
               <div className="flex items-center gap-2">
-                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
                   Bitpro
                 </Link>
                 <span className="text-slate-300">/</span>
-                <Link href="/bitpro/populasi-dan-produksi" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                <Link href="/bitpro/populasi-dan-produksi" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
                   Populasi
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-azure">Tahun 2025</span>
+                <span className="text-xs font-bold text-emerald-700">Tahun 2025</span>
               </div>
               <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
                 Sensus Populasi Ternak TW 4 Tahun 2025
@@ -92,7 +92,7 @@ export default function Populasi2025() {
                 placeholder="Cari desa atau kecamatan..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full min-h-touch h-10 pl-9 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-900 focus:outline-none focus:border-azure focus:bg-white transition-colors"
+                className="w-full min-h-touch h-10 pl-9 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-900 focus:outline-none focus:border-emerald-600 focus:bg-white transition-colors"
               />
             </div>
           </div>
@@ -109,14 +109,14 @@ export default function Populasi2025() {
             <h2 className="font-bold text-sm text-slate-900">
               Tabel Sensus Lengkap (16 Komoditas Ternak)
             </h2>
-            <span className="font-mono text-xs text-slate-500">
+            <span className="font-sans text-xs text-slate-500">
               Menampilkan {filteredData.length} baris desa terdaftar
             </span>
           </div>
 
           {isLoading ? (
             <div className="flex justify-center items-center h-64">
-              <span className="font-mono text-xs text-slate-500 uppercase tracking-widest animate-pulse">
+              <span className="font-sans text-xs text-slate-500 uppercase tracking-widest animate-pulse">
                 Memuat data populasi ternak 2025...
               </span>
             </div>
@@ -129,14 +129,14 @@ export default function Populasi2025() {
                     <th className="p-3 sticky left-[48px] bg-slate-100 z-30 border-r border-slate-200">Kecamatan</th>
                     <th className="p-3 sticky left-[168px] bg-slate-100 z-30 border-r border-slate-200">Desa</th>
                     {HEADERS.map((h, i) => (
-                      <th key={i} className="p-3 text-right font-mono border-r border-slate-200">{h}</th>
+                      <th key={i} className="p-3 text-right font-sans border-r border-slate-200">{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-slate-800">
                   {filteredData.map((row, idx) => (
                     <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="p-3 text-center font-mono text-slate-400 sticky left-0 bg-white z-10 border-r border-slate-100">
+                      <td className="p-3 text-center font-sans text-slate-400 sticky left-0 bg-white z-10 border-r border-slate-100">
                         {row.no}
                       </td>
                       <td className="p-3 font-semibold text-slate-900 sticky left-[48px] bg-white z-10 border-r border-slate-100">
@@ -146,7 +146,7 @@ export default function Populasi2025() {
                         {row.desa}
                       </td>
                       {row.v.map((val: any, i: number) => (
-                        <td key={i} className="p-3 text-right font-mono tabular-nums border-r border-slate-100">
+                        <td key={i} className="p-3 text-right font-sans tabular-nums border-r border-slate-100">
                           {Number(val).toLocaleString('id-ID')}
                         </td>
                       ))}
@@ -155,11 +155,11 @@ export default function Populasi2025() {
                 </tbody>
                 <tfoot>
                   <tr className="bg-slate-100 text-slate-900 font-bold sticky bottom-0 z-20 border-t-2 border-slate-300">
-                    <td colSpan={3} className="p-3 text-center sticky left-0 bg-slate-100 z-30 border-r border-slate-300 font-mono uppercase">
+                    <td colSpan={3} className="p-3 text-center sticky left-0 bg-slate-100 z-30 border-r border-slate-300 font-sans uppercase">
                       TOTAL KABUPATEN
                     </td>
                     {TOTAL_ROW.map((val, i) => (
-                      <td key={i} className="p-3 text-right font-mono text-azure font-bold border-r border-slate-300">
+                      <td key={i} className="p-3 text-right font-sans text-emerald-600 font-bold border-r border-slate-300">
                         {Number(val).toLocaleString('id-ID')}
                       </td>
                     ))}

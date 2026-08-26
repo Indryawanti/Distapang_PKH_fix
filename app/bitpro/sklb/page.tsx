@@ -188,13 +188,13 @@ export default function UnifiedSKLBPage() {
       <div className="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
         <div>
           <h3 className="font-bold text-sm text-slate-900">{judul}</h3>
-          <span className="text-xs font-mono text-slate-500">{data.length} Lokasi Terjadwal</span>
+          <span className="text-xs font-sans text-slate-500">{data.length} Lokasi Terjadwal</span>
         </div>
         <button
           onClick={() =>
             setModalRekap({ open: true, mode: 'tambah', data: { grup, no_urut: data.length + 1 } })
           }
-          className="min-h-touch h-8 px-3 rounded-lg bg-azure text-white text-xs font-bold hover:bg-azure/90 flex items-center gap-1 shadow-sm"
+          className="min-h-touch h-8 px-3 rounded-lg bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-600/90 flex items-center gap-1 shadow-sm"
         >
           <Plus size={14} />
           <span>Tambah</span>
@@ -209,9 +209,9 @@ export default function UnifiedSKLBPage() {
               <th className="p-3">TANGGAL</th>
               <th className="p-3 text-left">DESA</th>
               <th className="p-3 text-left">KECAMATAN</th>
-              <th className="p-3 font-mono">TARGET</th>
-              <th className="p-3 font-mono">CAPAIAN</th>
-              <th className="p-3 font-mono">SELISIH</th>
+              <th className="p-3 font-sans">TARGET</th>
+              <th className="p-3 font-sans">CAPAIAN</th>
+              <th className="p-3 font-sans">SELISIH</th>
               <th className="p-3 w-20">AKSI</th>
             </tr>
           </thead>
@@ -225,13 +225,13 @@ export default function UnifiedSKLBPage() {
             ) : (
               data.map((row) => (
                 <tr key={row.id || row.no_urut} className="hover:bg-slate-50/80 transition-colors">
-                  <td className="p-3 font-mono text-slate-400">{row.no_urut}</td>
-                  <td className="p-3 font-mono">{row.tanggal}</td>
+                  <td className="p-3 font-sans text-slate-400">{row.no_urut}</td>
+                  <td className="p-3 font-sans">{row.tanggal}</td>
                   <td className="p-3 font-semibold text-slate-900 text-left">{row.desa}</td>
                   <td className="p-3 text-slate-600 text-left">{row.kecamatan}</td>
-                  <td className="p-3 font-mono font-medium">{row.target}</td>
-                  <td className="p-3 font-mono font-bold text-azure">{row.capaian}</td>
-                  <td className="p-3 font-mono font-semibold text-slate-700">{row.selisih}</td>
+                  <td className="p-3 font-sans font-medium">{row.target}</td>
+                  <td className="p-3 font-sans font-bold text-emerald-600">{row.capaian}</td>
+                  <td className="p-3 font-sans font-semibold text-slate-700">{row.selisih}</td>
                   <td className="p-3">
                     <div className="flex items-center justify-center gap-1">
                       <button
@@ -255,12 +255,12 @@ export default function UnifiedSKLBPage() {
           {data.length > 0 && (
             <tfoot>
               <tr className="bg-slate-100 font-bold text-slate-900 border-t-2 border-slate-300">
-                <td colSpan={4} className="p-3 text-right font-mono uppercase">
+                <td colSpan={4} className="p-3 text-right font-sans uppercase">
                   Total
                 </td>
-                <td className="p-3 font-mono">{sum(data, 'target')}</td>
-                <td className="p-3 font-mono text-azure font-black">{sum(data, 'capaian')}</td>
-                <td className="p-3 font-mono font-black text-slate-800">{sum(data, 'selisih')}</td>
+                <td className="p-3 font-sans">{sum(data, 'target')}</td>
+                <td className="p-3 font-sans text-emerald-600 font-black">{sum(data, 'capaian')}</td>
+                <td className="p-3 font-sans font-black text-slate-800">{sum(data, 'selisih')}</td>
                 <td />
               </tr>
             </tfoot>
@@ -271,7 +271,7 @@ export default function UnifiedSKLBPage() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white pb-20">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-600 selection:text-white pb-20">
       
       {/* ── TOP HEADER ── */}
       <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
@@ -288,11 +288,11 @@ export default function UnifiedSKLBPage() {
 
             <div>
               <div className="flex items-center gap-2">
-                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
                   Bitpro
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-azure">SKLB 2026</span>
+                <span className="text-xs font-bold text-emerald-700">Sertifikat SKLB</span>
               </div>
               <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
                 Surat Keterangan Layak Bibit (SKLB)
@@ -303,7 +303,7 @@ export default function UnifiedSKLBPage() {
           <div className="flex items-center gap-2">
             <button
               onClick={handleExportExcel}
-              className="min-h-touch h-10 px-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-sm"
+              className="min-h-touch h-10 px-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-sm cursor-pointer"
             >
               <Download size={15} />
               <span className="hidden sm:inline">Export Excel</span>
@@ -313,7 +313,7 @@ export default function UnifiedSKLBPage() {
               <button
                 onClick={handleSyncRekap}
                 disabled={isSyncingRekap}
-                className="min-h-touch h-10 px-4 rounded-xl bg-azure text-white text-xs font-bold flex items-center gap-1.5 hover:bg-azure/90 disabled:opacity-50 transition-all shadow-sm"
+                className="min-h-touch h-10 px-4 rounded-xl bg-emerald-600 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-emerald-700 disabled:opacity-50 transition-all shadow-sm cursor-pointer"
               >
                 <RefreshCw size={14} className={isSyncingRekap ? 'animate-spin' : ''} />
                 <span>{isSyncingRekap ? 'Menyinkronkan...' : 'Tarik Data Rekap'}</span>
@@ -322,7 +322,7 @@ export default function UnifiedSKLBPage() {
               <button
                 onClick={handleSyncDetail}
                 disabled={isSyncingDetail}
-                className="min-h-touch h-10 px-4 rounded-xl bg-azure text-white text-xs font-bold flex items-center gap-1.5 hover:bg-azure/90 disabled:opacity-50 transition-all shadow-sm"
+                className="min-h-touch h-10 px-4 rounded-xl bg-emerald-600 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-emerald-700 disabled:opacity-50 transition-all shadow-sm cursor-pointer"
               >
                 <RefreshCw size={14} className={isSyncingDetail ? 'animate-spin' : ''} />
                 <span>{isSyncingDetail ? 'Menyinkronkan 29 Desa...' : 'Tarik Data Detail'}</span>
@@ -349,7 +349,7 @@ export default function UnifiedSKLBPage() {
                 onClick={() => setActiveTab(tab.key as any)}
                 className={`min-h-touch h-11 px-4 sm:px-5 rounded-t-xl text-xs sm:text-sm font-bold border-t border-x transition-all ${
                   active
-                    ? 'bg-white border-slate-200 text-azure border-b-white translate-y-px shadow-sm'
+                    ? 'bg-white border-slate-200 text-emerald-600 border-b-white translate-y-px shadow-sm'
                     : 'border-transparent text-slate-500 hover:text-slate-900 bg-slate-100/60'
                 }`}
               >
@@ -381,7 +381,7 @@ export default function UnifiedSKLBPage() {
                     placeholder="Cari nama peternak atau sapi..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="w-full min-h-touch h-10 pl-9 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-900 focus:outline-none focus:border-azure focus:bg-white"
+                    className="w-full min-h-touch h-10 pl-9 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-900 focus:outline-none focus:border-emerald-500 focus:bg-white"
                   />
                 </div>
 
@@ -389,7 +389,7 @@ export default function UnifiedSKLBPage() {
                   <select
                     value={filterDesa}
                     onChange={(e) => setFilterDesa(e.target.value)}
-                    className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 focus:outline-none focus:border-azure focus:bg-white"
+                    className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 focus:outline-none focus:border-emerald-500 focus:bg-white"
                   >
                     {daftarDesa.map((desa) => (
                       <option key={desa} value={desa}>
@@ -402,7 +402,7 @@ export default function UnifiedSKLBPage() {
 
               <button
                 onClick={() => setModalDetail({ open: true, mode: 'tambah', data: {} })}
-                className="min-h-touch h-10 px-4 rounded-xl bg-azure text-white text-xs font-bold flex items-center gap-1.5 hover:bg-azure/90 shadow-sm w-full sm:w-auto justify-center"
+                className="min-h-touch h-10 px-4 rounded-xl bg-emerald-600 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-emerald-600/90 shadow-sm w-full sm:w-auto justify-center"
               >
                 <Plus size={15} />
                 <span>Tambah Data Sapi</span>
@@ -420,11 +420,11 @@ export default function UnifiedSKLBPage() {
                       <th className="p-3.5">DUSUN (RT/RW)</th>
                       <th className="p-3.5">NAMA SAPI</th>
                       <th className="p-3.5 text-center">KELAMIN</th>
-                      <th className="p-3.5 text-center font-mono">UMUR (BLN)</th>
-                      <th className="p-3.5 text-right font-mono">TP (CM)</th>
-                      <th className="p-3.5 text-right font-mono">PB (CM)</th>
-                      <th className="p-3.5 text-right font-mono">LD (CM)</th>
-                      <th className="p-3.5 text-right font-mono font-bold text-slate-900 bg-slate-100">BB (KG)</th>
+                      <th className="p-3.5 text-center font-sans">UMUR (BLN)</th>
+                      <th className="p-3.5 text-right font-sans">TP (CM)</th>
+                      <th className="p-3.5 text-right font-sans">PB (CM)</th>
+                      <th className="p-3.5 text-right font-sans">LD (CM)</th>
+                      <th className="p-3.5 text-right font-sans font-bold text-slate-900 bg-slate-100">BB (KG)</th>
                       <th className="p-3.5 text-center w-24">AKSI</th>
                     </tr>
                   </thead>
@@ -438,7 +438,7 @@ export default function UnifiedSKLBPage() {
                     ) : (
                       filteredData.map((row) => (
                         <tr key={row.id} className="hover:bg-slate-50/80 transition-colors">
-                          <td className="p-3.5 font-bold text-azure">{row.desa_lokasi}</td>
+                          <td className="p-3.5 font-bold text-emerald-600">{row.desa_lokasi}</td>
                           <td className="p-3.5 font-semibold text-slate-900">{row.nama_pemilik}</td>
                           <td className="p-3.5 text-slate-600">
                             {row.dusun || '-'} ({row.rt || '-'}/{row.rw || '-'})
@@ -455,11 +455,11 @@ export default function UnifiedSKLBPage() {
                               {row.jenis_kelamin || '-'}
                             </span>
                           </td>
-                          <td className="p-3.5 text-center font-mono">{row.umur_bulan || '-'}</td>
-                          <td className="p-3.5 text-right font-mono">{row.tinggi_pundak || '-'}</td>
-                          <td className="p-3.5 text-right font-mono">{row.panjang_badan || '-'}</td>
-                          <td className="p-3.5 text-right font-mono">{row.lingkar_dada || '-'}</td>
-                          <td className="p-3.5 text-right font-mono font-bold text-emerald-700 bg-emerald-50/40">
+                          <td className="p-3.5 text-center font-sans">{row.umur_bulan || '-'}</td>
+                          <td className="p-3.5 text-right font-sans">{row.tinggi_pundak || '-'}</td>
+                          <td className="p-3.5 text-right font-sans">{row.panjang_badan || '-'}</td>
+                          <td className="p-3.5 text-right font-sans">{row.lingkar_dada || '-'}</td>
+                          <td className="p-3.5 text-right font-sans font-bold text-emerald-700 bg-emerald-50/40">
                             {row.berat_badan || '-'}
                           </td>
                           <td className="p-3.5 text-center">
@@ -609,7 +609,7 @@ export default function UnifiedSKLBPage() {
                 >
                   Batal
                 </button>
-                <button type="submit" className="h-10 px-5 rounded-xl bg-azure text-white text-xs font-bold">
+                <button type="submit" className="h-10 px-5 rounded-xl bg-emerald-600 text-white text-xs font-bold">
                   Simpan
                 </button>
               </div>
@@ -793,7 +793,7 @@ export default function UnifiedSKLBPage() {
                 >
                   Batal
                 </button>
-                <button type="submit" className="h-10 px-5 rounded-xl bg-azure text-white text-xs font-bold">
+                <button type="submit" className="h-10 px-5 rounded-xl bg-emerald-600 text-white text-xs font-bold">
                   Simpan Sapi
                 </button>
               </div>

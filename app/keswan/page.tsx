@@ -9,10 +9,12 @@ import {
   LogOut,
   ChevronRight,
   Syringe,
-  Truck,
-  AlertTriangle,
-  Building,
+  Building2,
+  Stethoscope,
   Activity,
+  ShieldCheck,
+  Package,
+  HeartPulse,
 } from 'lucide-react';
 
 export default function KeswanPage() {
@@ -35,16 +37,16 @@ export default function KeswanPage() {
 
   const menus = [
     {
-      title: 'Data Vaksinasi',
-      desc: 'Pencatatan target & realisasi vaksinasi PMK, LSD, dan droping vaksin APBD',
-      icon: '💉',
+      title: 'Rekapitulasi Data Vaksinasi',
+      desc: 'Pencatatan target & realisasi vaksinasi PMK, LSD, log harian dosis, dan alokasi droping vaksin APBD',
+      icon: Syringe,
       path: '/keswan/data-vaksinasi',
-      badge: 'Vaksinasi',
+      badge: 'Vaksinasi PMK & LSD',
     },
     {
-      title: 'Layanan Puskeswan',
-      desc: 'Rekapitulasi kunjungan, pelayanan aktif, pasif, pusling, IB, dan PKB',
-      icon: '🏥',
+      title: 'Kinerja Pelayanan Puskeswan',
+      desc: 'Rekapitulasi diagnosa penyakit, pelayanan medis aktif/pasif, pusling keliling, dan penerimaan retribusi 8 Puskeswan',
+      icon: Building2,
       path: '/keswan/puskeswan',
       badge: 'Klinik & Pusling',
     },
@@ -52,12 +54,12 @@ export default function KeswanPage() {
 
   if (!isAuthorized) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center font-sans">
+      <div className="min-h-screen bg-blue-50/50 flex items-center justify-center font-sans">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-azure/20 border border-azure/40 flex items-center justify-center animate-spin">
-            <span className="w-3.5 h-3.5 rounded-full bg-azure" />
+          <div className="w-10 h-10 rounded-2xl bg-blue-100 border border-blue-300 flex items-center justify-center animate-spin text-blue-600">
+            <HeartPulse size={22} />
           </div>
-          <p className="font-mono text-xs uppercase tracking-widest text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-wider text-blue-800">
             Memeriksa Hak Akses Keswan...
           </p>
         </div>
@@ -66,16 +68,16 @@ export default function KeswanPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white">
+    <div className="min-h-screen bg-blue-50/30 text-slate-900 font-sans selection:bg-blue-600 selection:text-white pb-20">
       
-      {/* ── TOP APP BAR ── */}
-      <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
+      {/* ── TOP APP BAR (Tema Biru) ── */}
+      <header className="border-b border-blue-100 bg-white sticky top-0 z-30 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
           
           <div className="flex items-center gap-3">
             <Link
               href="/beranda"
-              className="min-h-touch min-w-touch w-10 h-10 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors"
+              className="min-h-touch min-w-touch w-10 h-10 rounded-xl border border-blue-200 bg-blue-50 hover:bg-blue-100 flex items-center justify-center text-blue-800 transition-colors"
               aria-label="Kembali ke Beranda"
             >
               <ArrowLeft size={18} />
@@ -83,11 +85,11 @@ export default function KeswanPage() {
 
             <div>
               <div className="flex items-center gap-2">
-                <Link href="/beranda" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                <Link href="/beranda" className="text-xs font-semibold text-slate-500 hover:text-blue-700 transition-colors">
                   SiMantap
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-azure">Keswan</span>
+                <span className="text-xs font-bold text-blue-700">Bidang Keswan</span>
               </div>
               <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
                 Kesehatan Hewan & Puskeswan
@@ -98,7 +100,7 @@ export default function KeswanPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={handleLogout}
-              className="min-h-touch h-10 px-4 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 text-xs font-bold flex items-center gap-1.5 transition-colors"
+              className="min-h-touch h-10 px-4 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <LogOut size={15} />
               <span className="hidden sm:inline">Keluar</span>
@@ -109,33 +111,30 @@ export default function KeswanPage() {
       </header>
 
       {/* ── MAIN CONTENT ── */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
         
-        {/* Module Header Banner */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="flex items-start gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 text-3xl flex items-center justify-center shrink-0">
-              🩺
+        {/* Module Header Banner (Tema Biru) */}
+        <section className="rounded-3xl border border-blue-200 bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 sm:p-8 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
+          <div className="relative z-10 flex items-start gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-white/20 border border-white/30 text-white flex items-center justify-center shrink-0 shadow-inner">
+              <Stethoscope size={28} />
             </div>
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+            <div className="space-y-1">
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
                   Bidang Keswan
                 </h2>
-                <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                  Modul Aktif
-                </span>
               </div>
-              <p className="text-sm text-slate-600 max-w-2xl leading-relaxed">
-                Pusat data monitoring vaksinasi penyakit menular strategis (PMK & LSD), pelayanan medis di Puskeswan, rekapitulasi log harian petugas, dan pencegahan wabah ternak.
+              <p className="text-sm text-blue-50 max-w-2xl leading-relaxed">
+                Pusat data monitoring vaksinasi penyakit menular ternak strategis (PMK & LSD), pelayanan medis di 8 Puskeswan, rekapitulasi log dosis harian, dan pencegahan wabah.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 self-start md:self-auto shrink-0">
-            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 font-mono">
-              <span className="font-bold text-slate-900 block text-sm">{menus.length} Sub-Modul</span>
-              Tersinkronisasi
+          <div className="relative z-10 flex items-center gap-3 self-start md:self-auto shrink-0">
+            <div className="p-3.5 rounded-2xl bg-white/10 border border-white/20 text-xs text-blue-100">
+              <span className="font-bold text-white block text-sm">{menus.length} Layanan Data</span>
+              Tersinkronisasi Realtime
             </div>
           </div>
         </section>
@@ -143,40 +142,49 @@ export default function KeswanPage() {
         {/* Module Cards Grid */}
         <section className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-base font-bold text-slate-900 uppercase tracking-wider text-xs font-mono text-slate-500">
-              Daftar Sub-Pelayanan Keswan
+            <h3 className="text-sm font-bold uppercase tracking-wider text-blue-900 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-blue-600" />
+              Menu & Pelayanan Data Keswan
             </h3>
+            <span className="text-xs text-slate-500 font-medium">Pilih menu untuk melihat rekapitulasi</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-            {menus.map((menu) => (
-              <Link
-                key={menu.title}
-                href={menu.path}
-                className="group rounded-xl border border-slate-200 bg-white p-6 flex flex-col justify-between min-h-[200px] shadow-sm hover:border-azure hover:shadow-md transition-all duration-200"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-3xl">{menu.icon}</span>
-                    <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200">
-                      {menu.badge}
-                    </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {menus.map((menu) => {
+              const IconComp = menu.icon;
+              return (
+                <Link
+                  key={menu.title}
+                  href={menu.path}
+                  className="group rounded-2xl border border-slate-200 bg-white p-6 sm:p-7 flex flex-col justify-between min-h-[220px] shadow-xs hover:border-blue-500 hover:shadow-md transition-all duration-200"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-700 group-hover:bg-blue-600 group-hover:text-white flex items-center justify-center transition-colors">
+                        <IconComp size={24} />
+                      </div>
+                      <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-50 text-blue-800 border border-blue-200">
+                        {menu.badge}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h4 className="text-lg font-bold text-slate-900 group-hover:text-blue-700 transition-colors">
+                        {menu.title}
+                      </h4>
+                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mt-1">
+                        {menu.desc}
+                      </p>
+                    </div>
                   </div>
 
-                  <h4 className="text-lg font-bold text-slate-900 group-hover:text-azure transition-colors mb-1.5">
-                    {menu.title}
-                  </h4>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    {menu.desc}
-                  </p>
-                </div>
-
-                <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-azure group-hover:text-azure/90">
-                  <span>Buka Layanan</span>
-                  <ChevronRight size={16} className="transition-transform group-hover:translate-x-1" />
-                </div>
-              </Link>
-            ))}
+                  <div className="pt-4 mt-2 border-t border-slate-100 flex items-center justify-between text-xs sm:text-sm font-bold text-blue-700 group-hover:text-blue-800">
+                    <span>Buka Layanan</span>
+                    <ChevronRight size={18} className="transition-transform group-hover:translate-x-1" />
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </section>
 

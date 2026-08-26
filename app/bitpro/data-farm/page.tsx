@@ -11,6 +11,10 @@ import {
   Building2,
   ChevronRight,
   Filter,
+  PackageCheck,
+  Activity,
+  Layers,
+  TrendingUp,
 } from 'lucide-react';
 
 /* ======================= TIPE DATA & KONFIGURASI ======================= */
@@ -73,33 +77,38 @@ const COMMODITY_META: Record<CommodityKey, any> = {
   broiler: {
     title: 'Ayam Broiler',
     subtitle: 'Ayam Pedaging',
-    icon: '🍗',
+    icon: Building2,
+    iconColor: 'text-emerald-600 bg-blue-50',
     badge: 'Unggas Daging',
   },
   petelur: {
     title: 'Ayam Petelur',
     subtitle: 'Ayam Ras Petelur',
-    icon: '🥚',
+    icon: PackageCheck,
+    iconColor: 'text-amber-600 bg-amber-50',
     badge: 'Unggas Telur',
   },
   sapi: {
     title: 'Sapi Potong',
     subtitle: 'Ternak Sapi Potong Binaan',
-    icon: '🐄',
+    icon: Activity,
+    iconColor: 'text-vitality bg-emerald-50',
     jenisTernak: 'Sapi Potong',
     badge: 'Ruminansia Besar',
   },
   domba: {
     title: 'Domba & Kambing',
     subtitle: 'Ternak Ruminansia Kecil',
-    icon: '🐑',
+    icon: Layers,
+    iconColor: 'text-lime-800 bg-lime-50',
     jenisTernak: 'Domba',
     badge: 'Ruminansia Kecil',
   },
   babi: {
     title: 'Babi',
     subtitle: 'Peternakan Non-Ruminansia',
-    icon: '🐖',
+    icon: TrendingUp,
+    iconColor: 'text-slate-700 bg-slate-100',
     jenisTernak: 'Babi',
     badge: 'Non-Ruminansia',
   },
@@ -214,10 +223,10 @@ export default function DataFarmPage() {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center font-sans">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-azure/20 border border-azure/40 flex items-center justify-center animate-spin">
-            <span className="w-3.5 h-3.5 rounded-full bg-azure" />
+          <div className="w-9 h-9 rounded-xl bg-emerald-600/20 border border-emerald-600/40 flex items-center justify-center animate-spin">
+            <span className="w-3.5 h-3.5 rounded-full bg-emerald-600" />
           </div>
-          <p className="font-mono text-xs uppercase tracking-widest text-slate-500">
+          <p className="font-sans text-xs uppercase tracking-widest text-slate-500">
             Memuat Data Farm Kabupaten...
           </p>
         </div>
@@ -226,7 +235,7 @@ export default function DataFarmPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-600 selection:text-white">
       
       {/* ── TOP HEADER ── */}
       <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
@@ -243,11 +252,11 @@ export default function DataFarmPage() {
 
             <div>
               <div className="flex items-center gap-2">
-                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
                   Bitpro
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-azure">Data Farm</span>
+                <span className="text-xs font-bold text-emerald-700">Data Farm</span>
               </div>
               <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
                 Sebaran Unit Usaha Peternakan
@@ -293,6 +302,7 @@ export default function DataFarmPage() {
               {COMMODITY_ORDER.map((key) => {
                 const meta = COMMODITY_META[key];
                 const stats = getStats(key);
+                const IconComp = meta.icon;
                 return (
                   <button
                     key={key}
@@ -300,17 +310,19 @@ export default function DataFarmPage() {
                       setActiveCommodity(key);
                       setSearchTerm('');
                     }}
-                    className="group rounded-2xl border border-slate-200 bg-white p-6 text-left shadow-sm hover:border-azure hover:shadow-md transition-all duration-200 flex flex-col justify-between min-h-[210px]"
+                    className="group rounded-2xl border border-slate-200 bg-white p-6 text-left shadow-sm hover:border-emerald-600 hover:shadow-md transition-all duration-200 flex flex-col justify-between min-h-[210px]"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-4">
-                        <span className="text-3xl">{meta.icon}</span>
-                        <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                        <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${meta.iconColor}`}>
+                          <IconComp size={22} />
+                        </div>
+                        <span className="text-xs font-sans font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
                           {meta.badge}
                         </span>
                       </div>
 
-                      <h3 className="text-xl font-bold text-slate-900 group-hover:text-azure transition-colors mb-0.5">
+                      <h3 className="text-xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors mb-0.5">
                         {meta.title}
                       </h3>
                       <p className="text-xs text-slate-500 font-medium">
@@ -320,19 +332,19 @@ export default function DataFarmPage() {
 
                     <div className="pt-4 mt-4 border-t border-slate-100 flex items-end justify-between">
                       <div>
-                        <p className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
+                        <p className="text-[11px] font-sans uppercase tracking-wider text-slate-400 font-semibold">
                           Jumlah Farm
                         </p>
-                        <p className="text-2xl font-bold font-mono text-slate-900">
+                        <p className="text-2xl font-bold font-sans text-slate-900">
                           {stats.jumlahFarm} <span className="text-xs font-normal text-slate-500">Unit</span>
                         </p>
                       </div>
 
                       <div className="text-right">
-                        <p className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
+                        <p className="text-[11px] font-sans uppercase tracking-wider text-slate-400 font-semibold">
                           {stats.label}
                         </p>
-                        <p className="text-lg font-bold font-mono text-azure">
+                        <p className="text-lg font-bold font-sans text-emerald-600">
                           {formatNum(stats.totalPopulasi)}
                         </p>
                       </div>
@@ -348,6 +360,7 @@ export default function DataFarmPage() {
             const meta = COMMODITY_META[activeCommodity];
             const filteredData = getFilteredData(activeCommodity);
             const fieldLabels = getFieldLabels(activeCommodity);
+            const HeaderIcon = meta.icon;
 
             return (
               <div className="space-y-6 animate-in fade-in duration-200">
@@ -355,7 +368,9 @@ export default function DataFarmPage() {
                 {/* Header Action Bar */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm">
                   <div className="flex items-center gap-3.5">
-                    <span className="text-3xl">{meta.icon}</span>
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${meta.iconColor}`}>
+                      <HeaderIcon size={24} />
+                    </div>
                     <div>
                       <h2 className="text-xl font-bold text-slate-900">
                         Data Farm {meta.title}
@@ -374,13 +389,13 @@ export default function DataFarmPage() {
                         placeholder="Cari peternak / desa..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full min-h-touch h-10 pl-9 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-900 focus:outline-none focus:border-azure focus:bg-white transition-colors"
+                        className="w-full min-h-touch h-10 pl-9 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-900 focus:outline-none focus:border-emerald-600 focus:bg-white transition-colors"
                       />
                     </div>
 
                     <button
                       onClick={openAddModal}
-                      className="min-h-touch h-10 px-4 rounded-xl bg-azure text-white text-xs font-bold flex items-center gap-1.5 hover:bg-azure/90 active:scale-95 transition-all shadow-sm shrink-0"
+                      className="min-h-touch h-10 px-4 rounded-xl bg-emerald-600 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-emerald-600/90 active:scale-95 transition-all shadow-sm shrink-0"
                     >
                       <Plus size={16} />
                       <span>Tambah Farm</span>
@@ -406,13 +421,13 @@ export default function DataFarmPage() {
                         {filteredData.length > 0 ? (
                           filteredData.map((item) => (
                             <tr key={item.no} className="hover:bg-slate-50/80 transition-colors">
-                              <td className="p-4 text-center font-mono text-slate-400 text-xs">{item.no}</td>
+                              <td className="p-4 text-center font-sans text-slate-400 text-xs">{item.no}</td>
                               <td className="p-4 font-semibold text-slate-900">
                                 {item.nama_peternak || item.nama_unit_farm || item.nama_badan_usaha || '-'}
                               </td>
                               <td className="p-4 text-slate-600">{item.kecamatan || '-'}</td>
                               <td className="p-4 text-slate-600">{item.desa || item.kelurahan_desa || '-'}</td>
-                              <td className="p-4 text-right font-mono font-bold text-azure">
+                              <td className="p-4 text-right font-sans font-bold text-emerald-600">
                                 {item.kapasitas_kandang || '-'}
                               </td>
                               <td className="p-4 text-center">
@@ -466,7 +481,7 @@ export default function DataFarmPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {Object.keys(getFieldLabels(activeCommodity || 'broiler')).map((key) => (
                   <div key={key} className={key === 'alamat' || key === 'catatan' ? 'sm:col-span-2' : ''}>
-                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                    <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1.5">
                       {getFieldLabels(activeCommodity || 'broiler')[key]}
                     </label>
                     <input
@@ -474,7 +489,7 @@ export default function DataFarmPage() {
                       name={key}
                       value={formValues[key] ?? ''}
                       onChange={handleFieldChange}
-                      className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-900 focus:outline-none focus:border-azure focus:bg-white transition-colors"
+                      className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-900 focus:outline-none focus:border-emerald-600 focus:bg-white transition-colors"
                     />
                   </div>
                 ))}
@@ -490,7 +505,7 @@ export default function DataFarmPage() {
                 </button>
                 <button
                   type="submit"
-                  className="min-h-touch h-10 px-5 rounded-xl bg-azure text-white text-xs font-bold hover:bg-azure/90 active:scale-95 transition-all shadow-sm"
+                  className="min-h-touch h-10 px-5 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-600/90 active:scale-95 transition-all shadow-sm"
                 >
                   Simpan Data
                 </button>

@@ -5,7 +5,7 @@ import { ArrowLeft, ChevronRight, BarChart3, TrendingUp, Calendar, ArrowRight } 
 
 export default function PopulasiDanProduksiPage() {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white pb-20">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-600 selection:text-white pb-20">
       
       {/* ── TOP HEADER ── */}
       <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
@@ -22,11 +22,11 @@ export default function PopulasiDanProduksiPage() {
 
             <div>
               <div className="flex items-center gap-2">
-                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
                   Bitpro
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-azure">Populasi & Produksi</span>
+                <span className="text-xs font-bold text-emerald-700">Populasi & Produksi</span>
               </div>
               <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
                 Statistik Populasi dan Produksi Peternakan
@@ -57,10 +57,10 @@ export default function PopulasiDanProduksiPage() {
           <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm flex flex-col justify-between space-y-6">
             <div>
               <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center text-2xl">
-                  🐄
+                <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center">
+                  <BarChart3 size={24} />
                 </div>
-                <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <span className="text-xs font-sans font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
                   Sensus Populasi
                 </span>
               </div>
@@ -76,26 +76,26 @@ export default function PopulasiDanProduksiPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
               <Link
                 href="/bitpro/populasi-dan-produksi/2025"
-                className="group p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-azure hover:shadow-sm transition-all text-left flex flex-col justify-between min-h-[96px]"
+                className="group p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-emerald-600 hover:shadow-sm transition-all text-left flex flex-col justify-between min-h-[96px]"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-slate-500 uppercase">Tahun 2025</span>
-                  <ChevronRight size={16} className="text-slate-400 group-hover:text-azure transition-colors" />
+                  <span className="text-xs font-sans font-bold text-slate-500 uppercase">Tahun 2025</span>
+                  <ChevronRight size={16} className="text-slate-400 group-hover:text-emerald-600 transition-colors" />
                 </div>
-                <span className="font-bold text-sm text-slate-900 group-hover:text-azure transition-colors">
+                <span className="font-bold text-sm text-slate-900 group-hover:text-emerald-600 transition-colors">
                   Data Populasi 2025 →
                 </span>
               </Link>
 
               <Link
                 href="/bitpro/populasi-dan-produksi/2026"
-                className="group p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-azure hover:shadow-sm transition-all text-left flex flex-col justify-between min-h-[96px]"
+                className="group p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-emerald-600 hover:shadow-sm transition-all text-left flex flex-col justify-between min-h-[96px]"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-emerald-600 uppercase">Tahun 2026 (Live)</span>
-                  <ChevronRight size={16} className="text-slate-400 group-hover:text-azure transition-colors" />
+                  <span className="text-xs font-sans font-bold text-emerald-600 uppercase">Tahun 2026 (Live)</span>
+                  <ChevronRight size={16} className="text-slate-400 group-hover:text-emerald-600 transition-colors" />
                 </div>
-                <span className="font-bold text-sm text-slate-900 group-hover:text-azure transition-colors">
+                <span className="font-bold text-sm text-slate-900 group-hover:text-emerald-600 transition-colors">
                   Data Populasi 2026 →
                 </span>
               </Link>
@@ -106,11 +106,11 @@ export default function PopulasiDanProduksiPage() {
           <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm flex flex-col justify-between space-y-6">
             <div>
               <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 text-blue-700 flex items-center justify-center text-2xl">
-                  📈
+                <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center">
+                  <TrendingUp size={24} />
                 </div>
-                <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                  Produksi Ternak
+                <span className="text-xs font-sans font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  Laporan Produksi
                 </span>
               </div>
 
@@ -125,26 +125,26 @@ export default function PopulasiDanProduksiPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
               <Link
                 href="/bitpro/populasi-dan-produksi/produksi-2025"
-                className="group p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-azure hover:shadow-sm transition-all text-left flex flex-col justify-between min-h-[96px]"
+                className="group p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-emerald-600 hover:shadow-sm transition-all text-left flex flex-col justify-between min-h-[96px]"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-slate-500 uppercase">Tahun 2025</span>
-                  <ChevronRight size={16} className="text-slate-400 group-hover:text-azure transition-colors" />
+                  <span className="text-xs font-sans font-bold text-slate-500 uppercase">Tahun 2025</span>
+                  <ChevronRight size={16} className="text-slate-400 group-hover:text-emerald-600 transition-colors" />
                 </div>
-                <span className="font-bold text-sm text-slate-900 group-hover:text-azure transition-colors">
+                <span className="font-bold text-sm text-slate-900 group-hover:text-emerald-600 transition-colors">
                   Data Produksi 2025 →
                 </span>
               </Link>
 
               <Link
                 href="/bitpro/populasi-dan-produksi/produksi-2026"
-                className="group p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-azure hover:shadow-sm transition-all text-left flex flex-col justify-between min-h-[96px]"
+                className="group p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white hover:border-emerald-600 hover:shadow-sm transition-all text-left flex flex-col justify-between min-h-[96px]"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-azure uppercase">Tahun 2026 (Live)</span>
-                  <ChevronRight size={16} className="text-slate-400 group-hover:text-azure transition-colors" />
+                  <span className="text-xs font-sans font-bold text-emerald-600 uppercase">Tahun 2026 (Live)</span>
+                  <ChevronRight size={16} className="text-slate-400 group-hover:text-emerald-600 transition-colors" />
                 </div>
-                <span className="font-bold text-sm text-slate-900 group-hover:text-azure transition-colors">
+                <span className="font-bold text-sm text-slate-900 group-hover:text-emerald-600 transition-colors">
                   Data Produksi 2026 →
                 </span>
               </Link>

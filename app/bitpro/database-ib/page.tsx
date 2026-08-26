@@ -346,7 +346,7 @@ export default function DatabaseIBPage() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white pb-20">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-600 selection:text-white pb-20">
       
       {/* ── TOP HEADER ── */}
       <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
@@ -363,11 +363,11 @@ export default function DatabaseIBPage() {
 
             <div>
               <div className="flex items-center gap-2">
-                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
                   Bitpro
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-azure">Database IB</span>
+                <span className="text-xs font-bold text-emerald-700">Database IB</span>
               </div>
               <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
                 Pencatatan Inseminasi Buatan & Reproduksi
@@ -378,7 +378,7 @@ export default function DatabaseIBPage() {
           <div className="flex items-center gap-2 sm:gap-3">
             <button
               onClick={handleExportExcel}
-              className="min-h-touch h-10 px-3.5 sm:px-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-sm"
+              className="min-h-touch h-10 px-3.5 sm:px-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-sm cursor-pointer"
             >
               <Download size={15} />
               <span className="hidden sm:inline">Export Excel</span>
@@ -386,10 +386,10 @@ export default function DatabaseIBPage() {
 
             <Link
               href="/bitpro/sapitime"
-              className="min-h-touch h-10 px-4 rounded-xl bg-azure text-white text-xs font-bold flex items-center gap-1.5 hover:bg-azure/90 active:scale-95 transition-all shadow-sm"
+              className="min-h-touch h-10 px-4 rounded-xl bg-emerald-600 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-emerald-700 active:scale-95 transition-all shadow-sm"
             >
-              <Plus size={16} />
-              <span>Input SapiTime</span>
+              <span>Buka SapiTime</span>
+              <ChevronRight size={14} />
             </Link>
           </div>
 
@@ -402,37 +402,37 @@ export default function DatabaseIBPage() {
         {/* KPI Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+            <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
               Total Riwayat IB
             </p>
-            <p className="font-mono text-2xl sm:text-3xl font-bold text-slate-900">
+            <p className="font-sans text-2xl sm:text-3xl font-bold text-slate-900">
               {ibList.length} <span className="text-xs font-normal text-slate-500">Siklus</span>
             </p>
           </div>
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+            <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
               Status Kebuntingan
             </p>
-            <p className="font-mono text-2xl sm:text-3xl font-bold text-vitality">
+            <p className="font-sans text-2xl sm:text-3xl font-bold text-vitality">
               {ibList.filter((d) => d.pkbResult === 'Bunting').length} <span className="text-xs font-normal text-slate-500">Bunting</span>
             </p>
           </div>
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+            <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
               Pedet Lahir
             </p>
-            <p className="font-mono text-2xl sm:text-3xl font-bold text-azure">
+            <p className="font-sans text-2xl sm:text-3xl font-bold text-emerald-600">
               {ibList.filter((d) => d.birthDate).length} <span className="text-xs font-normal text-slate-500">Ekor</span>
             </p>
           </div>
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+            <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
               Rata-rata Calving Interval
             </p>
-            <p className="font-mono text-2xl sm:text-3xl font-bold text-amber-600">
+            <p className="font-sans text-2xl sm:text-3xl font-bold text-amber-600">
               {avgCalvingIntervalDays ? `${avgCalvingIntervalDays} Hari` : '-'}
             </p>
           </div>
@@ -446,7 +446,7 @@ export default function DatabaseIBPage() {
             <div>
               <h2 className="font-bold text-base text-slate-900 flex items-center gap-2">
                 <span>Data Pelacakan Siklus Reproduksi</span>
-                <span className="font-mono text-xs px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-semibold">
+                <span className="font-sans text-xs px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-semibold">
                   {filteredIB.length}
                 </span>
               </h2>
@@ -462,7 +462,7 @@ export default function DatabaseIBPage() {
                 placeholder="Cari sapi, peternak, petugas..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full min-h-touch h-10 pl-9 pr-4 rounded-xl border border-slate-200 bg-white text-xs text-slate-900 focus:outline-none focus:border-azure transition-colors"
+                className="w-full min-h-touch h-10 pl-9 pr-4 rounded-xl border border-slate-200 bg-white text-xs text-slate-900 focus:outline-none focus:border-emerald-500 transition-colors"
               />
             </div>
           </div>
@@ -493,8 +493,8 @@ export default function DatabaseIBPage() {
                           <span className="font-bold text-slate-900 block text-sm">
                             {ib.ownerName || 'Peternak Tidak Diketahui'}
                           </span>
-                          <span className="text-xs text-azure font-medium block mt-0.5">
-                            Sapi: {ib.cattleName} <span className="font-mono text-slate-400">({ib.cattleId})</span>
+                          <span className="text-xs text-emerald-600 font-medium block mt-0.5">
+                            Sapi: {ib.cattleName} <span className="font-sans text-slate-400">({ib.cattleId})</span>
                           </span>
                           <span className="text-xs text-slate-500 block mt-0.5">
                             📍 {ib.kecamatan || '-'}, {ib.desa || '-'}
@@ -503,7 +503,7 @@ export default function DatabaseIBPage() {
 
                         {/* 2. IB Info */}
                         <td className="p-4">
-                          <span className="font-mono font-semibold text-slate-900 block text-xs">
+                          <span className="font-sans font-semibold text-slate-900 block text-xs">
                             {fmtDate(ib.date)}
                           </span>
                           <span className="text-xs text-slate-500 block mt-0.5">
@@ -516,7 +516,7 @@ export default function DatabaseIBPage() {
                           <span className="font-semibold text-slate-800 block text-xs">
                             {ib.bullName || '-'} <span className="text-slate-500 font-normal">({ib.bullBreed || '-'})</span>
                           </span>
-                          <span className="font-mono text-[11px] text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 inline-block mt-1">
+                          <span className="font-sans text-[11px] text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 inline-block mt-1">
                             🧬 {ib.strawCode || '-'}
                           </span>
                         </td>
@@ -533,7 +533,7 @@ export default function DatabaseIBPage() {
                               <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 inline-block">
                                 ✓ Positif Bunting
                               </span>
-                              <span className="block text-xs text-slate-500 mt-1 font-mono">
+                              <span className="block text-xs text-slate-500 mt-1 font-sans">
                                 Tgl: {fmtDate(ib.pkbDateActual)}
                               </span>
                             </div>
@@ -543,7 +543,7 @@ export default function DatabaseIBPage() {
                               <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200 inline-block">
                                 ✕ Tidak Bunting
                               </span>
-                              <span className="block text-xs text-slate-500 mt-1 font-mono">
+                              <span className="block text-xs text-slate-500 mt-1 font-sans">
                                 Tgl: {fmtDate(ib.pkbDateActual)}
                               </span>
                             </div>
@@ -559,19 +559,19 @@ export default function DatabaseIBPage() {
                         <td className="p-4">
                           {ib.birthDate ? (
                             <div>
-                              <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-azure border border-blue-200 inline-block">
-                                🍼 Lahir: Pedet {ib.calfGender}
+                              <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 inline-block">
+                                Lahir: Pedet {ib.calfGender}
                               </span>
-                              <span className="block text-xs text-slate-500 mt-1 font-mono">
+                              <span className="block text-xs text-slate-500 mt-1 font-sans">
                                 Tgl: {fmtDate(ib.birthDate)}
                               </span>
                             </div>
                           ) : birthInfo ? (
                             <div>
                               <span className="text-xs text-slate-600 block">
-                                Estimasi: <span className="font-mono font-bold text-slate-900">{birthInfo.estimatedDateLabel}</span>
+                                Estimasi: <span className="font-sans font-bold text-slate-900">{birthInfo.estimatedDateLabel}</span>
                               </span>
-                              <span className={`text-[11px] font-mono font-semibold ${birthInfo.isOverdue ? 'text-red-600' : 'text-slate-500'}`}>
+                              <span className={`text-[11px] font-sans font-semibold ${birthInfo.isOverdue ? 'text-red-600' : 'text-slate-500'}`}>
                                 {birthInfo.isOverdue ? `Lewat ${Math.abs(birthInfo.daysRemaining)} hari` : `${birthInfo.daysRemaining} hari lagi`}
                               </span>
                             </div>
@@ -591,7 +591,7 @@ export default function DatabaseIBPage() {
                                     setPkbFormData({ date: '', result: 'Bunting', officer: '', notes: '' });
                                     setShowPkbModal(true);
                                   }}
-                                  className="min-h-touch h-8 px-2.5 rounded-lg bg-azure text-white text-xs font-bold hover:bg-azure/90 transition-colors"
+                                  className="min-h-touch h-8 px-2.5 rounded-lg bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-600/90 transition-colors"
                                 >
                                   Catat PKB
                                 </button>
@@ -661,25 +661,25 @@ export default function DatabaseIBPage() {
 
             <div className="space-y-3">
               <div>
-                <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                   Tanggal Pemeriksaan PKB
                 </label>
                 <input
                   type="date"
                   value={pkbFormData.date}
                   onChange={(e) => setPkbFormData({ ...pkbFormData, date: e.target.value })}
-                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure outline-none"
+                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                   Hasil Diagnosa PKB
                 </label>
                 <select
                   value={pkbFormData.result}
                   onChange={(e) => setPkbFormData({ ...pkbFormData, result: e.target.value as any })}
-                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure outline-none"
+                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none"
                 >
                   <option value="Bunting">Positif Bunting 🤰</option>
                   <option value="Tidak Bunting">Tidak Bunting / Kosong ❌</option>
@@ -687,7 +687,7 @@ export default function DatabaseIBPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                   Petugas Pemeriksa
                 </label>
                 <input
@@ -695,12 +695,12 @@ export default function DatabaseIBPage() {
                   placeholder="Nama petugas medis / pemeriksa"
                   value={pkbFormData.officer}
                   onChange={(e) => setPkbFormData({ ...pkbFormData, officer: e.target.value })}
-                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure outline-none"
+                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                   Catatan Tambahan
                 </label>
                 <input
@@ -708,7 +708,7 @@ export default function DatabaseIBPage() {
                   placeholder="Catatan kondisi rahim / saran penanganan"
                   value={pkbFormData.notes}
                   onChange={(e) => setPkbFormData({ ...pkbFormData, notes: e.target.value })}
-                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure outline-none"
+                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none"
                 />
               </div>
             </div>
@@ -724,7 +724,7 @@ export default function DatabaseIBPage() {
               <button
                 type="button"
                 onClick={handleSavePkb}
-                className="min-h-touch h-10 px-5 rounded-xl bg-azure text-white text-xs font-bold shadow-sm hover:bg-azure/90"
+                className="min-h-touch h-10 px-5 rounded-xl bg-emerald-600 text-white text-xs font-bold shadow-sm hover:bg-emerald-600/90"
               >
                 Simpan Hasil PKB
               </button>
@@ -753,25 +753,25 @@ export default function DatabaseIBPage() {
 
             <div className="space-y-3">
               <div>
-                <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                   Tanggal Kelahiran
                 </label>
                 <input
                   type="date"
                   value={birthFormData.date}
                   onChange={(e) => setBirthFormData({ ...birthFormData, date: e.target.value })}
-                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure outline-none"
+                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                   Jenis Kelamin Pedet
                 </label>
                 <select
                   value={birthFormData.gender}
                   onChange={(e) => setBirthFormData({ ...birthFormData, gender: e.target.value as any })}
-                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure outline-none"
+                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none"
                 >
                   <option value="Jantan">Pedet Jantan 🐂</option>
                   <option value="Betina">Pedet Betina 🐄</option>
@@ -779,7 +779,7 @@ export default function DatabaseIBPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                   Catatan Kondisi Pedet
                 </label>
                 <input
@@ -787,7 +787,7 @@ export default function DatabaseIBPage() {
                   placeholder="Kondisi sehat, bobot perkiraan, dll"
                   value={birthFormData.notes}
                   onChange={(e) => setBirthFormData({ ...birthFormData, notes: e.target.value })}
-                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure outline-none"
+                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none"
                 />
               </div>
             </div>
@@ -827,19 +827,19 @@ export default function DatabaseIBPage() {
 
             <div className="space-y-3">
               <div>
-                <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                   Tanggal
                 </label>
                 <input
                   type="date"
                   value={skipFormData.date}
                   onChange={(e) => setSkipFormData({ ...skipFormData, date: e.target.value })}
-                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure outline-none"
+                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                   Alasan Tidak Dilakukan PKB
                 </label>
                 <input
@@ -847,7 +847,7 @@ export default function DatabaseIBPage() {
                   placeholder="Sapi dijual, birahi kembali, peternak pindah, dll"
                   value={skipFormData.reason}
                   onChange={(e) => setSkipFormData({ ...skipFormData, reason: e.target.value })}
-                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure outline-none"
+                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none"
                 />
               </div>
             </div>

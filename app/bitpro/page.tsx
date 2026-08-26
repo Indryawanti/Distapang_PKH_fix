@@ -16,7 +16,10 @@ import {
   Calendar,
   BarChart3,
   Building2,
-  FolderOpen,
+  FolderKanban,
+  Syringe,
+  CheckCircle2,
+  Sparkles,
 } from 'lucide-react';
 
 export default function BitproPage() {
@@ -40,50 +43,43 @@ export default function BitproPage() {
   const menus = [
     {
       title: 'Database KTT',
-      desc: 'Manajemen data master Kelompok Tani Ternak binaan kabupaten',
-      icon: '🗂️',
+      desc: 'Manajemen data master Kelompok Tani Ternak binaan seluruh kecamatan di Kabupaten Kebumen',
+      icon: FolderKanban,
       path: '/bitpro/database-ktt',
       badge: 'Master Data',
     },
     {
-      title: 'SapiTime',
-      desc: 'Platform cerdas monitoring reproduksi & siklus pedet',
-      icon: '📱',
+      title: 'Populasi & Produksi',
+      desc: 'Statistik sensus populasi 16 komoditas ternak serta laporan tonase produksi daging dan telur',
+      icon: BarChart3,
+      path: '/bitpro/populasi-dan-produksi',
+      badge: 'Statistik 2025/2026',
+    },
+    {
+      title: 'Database Inseminasi Buatan (IB)',
+      desc: 'Pencatatan siklus IB, pemeriksaan kebuntingan (PKB), evaluasi kelahiran, dan Calving Interval',
+      icon: Syringe,
+      path: '/bitpro/database-ib',
+      badge: 'Pelayanan IB',
+    },
+    {
+      title: 'SapiTime Smart App',
+      desc: 'Aplikasi cerdas kalender reproduksi sapi, siklus estrus 21 hari, dan direktori indukan',
+      icon: Smartphone,
       path: '/bitpro/sapitime',
       badge: 'Smart App',
     },
     {
       title: 'Sertifikat SKLB',
-      desc: 'Pencatatan Surat Keterangan Layak Bibit ternak ruminansia',
-      icon: '🪪',
+      desc: 'Penerbitan dan rekapitulasi Surat Keterangan Layak Bibit ternak sapi Tim Barat & Tim Timur',
+      icon: Award,
       path: '/bitpro/sklb',
-      badge: 'Sertifikasi',
+      badge: 'Sertifikasi Bibit',
     },
     {
-      title: 'Database IB',
-      desc: 'Rekapitulasi Inseminasi Buatan dan evaluasi Calving Interval',
-      icon: '💉',
-      path: '/bitpro/database-ib',
-      badge: 'Pelayanan',
-    },
-    {
-      title: 'Monev KTT',
-      desc: 'Monitoring evaluasi aset ternak dan catatan lapangan petugas',
-      icon: '📈',
-      path: '/bitpro/monev-ktt',
-      badge: 'Pengawasan',
-    },
-    {
-      title: 'Populasi & Produksi',
-      desc: 'Statistik sensus populasi ternak serta rekap produksi daging & telur',
-      icon: '🐄',
-      path: '/bitpro/populasi-dan-produksi',
-      badge: 'Statistik 2025/2026',
-    },
-    {
-      title: 'Data Farm',
-      desc: 'Database sebaran unit usaha peternakan unggas dan ruminansia',
-      icon: '🚜',
+      title: 'Database Sebaran Farm',
+      desc: 'Pendataan 240+ unit peternakan mandiri & kemitraan unggas broiler, petelur, dan ruminansia',
+      icon: Building2,
       path: '/bitpro/data-farm',
       badge: 'Sebaran Farm',
     },
@@ -91,12 +87,12 @@ export default function BitproPage() {
 
   if (!isAuthorized) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center font-sans">
+      <div className="min-h-screen bg-emerald-50/50 flex items-center justify-center font-sans">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-vitality/20 border border-vitality/40 flex items-center justify-center animate-spin">
-            <span className="w-3.5 h-3.5 rounded-full bg-vitality" />
+          <div className="w-10 h-10 rounded-2xl bg-emerald-100 border border-emerald-300 flex items-center justify-center animate-spin text-emerald-600">
+            <Activity size={22} />
           </div>
-          <p className="font-mono text-xs uppercase tracking-widest text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-wider text-emerald-800">
             Memeriksa Hak Akses Bitpro...
           </p>
         </div>
@@ -105,17 +101,17 @@ export default function BitproPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white">
+    <div className="min-h-screen bg-emerald-50/30 text-slate-900 font-sans selection:bg-emerald-600 selection:text-white pb-20">
       
-      {/* ── TOP APP BAR ── */}
-      <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
+      {/* ── TOP APP BAR (Tema Hijau) ── */}
+      <header className="border-b border-emerald-100 bg-white sticky top-0 z-30 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
           
           {/* Breadcrumb & Identity */}
           <div className="flex items-center gap-3">
             <Link
               href="/beranda"
-              className="min-h-touch min-w-touch w-10 h-10 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors"
+              className="min-h-touch min-w-touch w-10 h-10 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 flex items-center justify-center text-emerald-800 transition-colors"
               aria-label="Kembali ke Beranda"
             >
               <ArrowLeft size={18} />
@@ -123,11 +119,11 @@ export default function BitproPage() {
 
             <div>
               <div className="flex items-center gap-2">
-                <Link href="/beranda" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                <Link href="/beranda" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
                   SiMantap
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-azure">Bitpro</span>
+                <span className="text-xs font-bold text-emerald-700">Bidang Bitpro</span>
               </div>
               <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
                 Perbibitan & Produksi Ternak
@@ -139,7 +135,7 @@ export default function BitproPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={handleLogout}
-              className="min-h-touch h-10 px-4 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 text-xs font-bold flex items-center gap-1.5 transition-colors"
+              className="min-h-touch h-10 px-4 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <LogOut size={15} />
               <span className="hidden sm:inline">Keluar</span>
@@ -150,33 +146,30 @@ export default function BitproPage() {
       </header>
 
       {/* ── MAIN CONTENT ── */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
         
-        {/* Module Header Banner */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="flex items-start gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-600 text-3xl flex items-center justify-center shrink-0">
-              🐄
+        {/* Module Header Banner (Tema Hijau) */}
+        <section className="rounded-3xl border border-emerald-200 bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-6 sm:p-8 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
+          <div className="relative z-10 flex items-start gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-white/20 border border-white/30 text-white flex items-center justify-center shrink-0 shadow-inner">
+              <Activity size={28} />
             </div>
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+            <div className="space-y-1">
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
                   Bidang Bitpro
                 </h2>
-                <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                  Modul Aktif
-                </span>
               </div>
-              <p className="text-sm text-slate-600 max-w-2xl leading-relaxed">
-                Pusat pengelolaan data perbibitan ternak, evaluasi inseminasi buatan, penerbitan sertifikat bibit, monitoring KTT, dan rekapitulasi data populasi peternakan Kabupaten Kebumen.
+              <p className="text-sm text-emerald-50 max-w-2xl leading-relaxed">
+                Pusat data perbibitan, sensus populasi ternak, evaluasi inseminasi buatan, sertifikasi bibit unggul, dan rekapitulasi produksi daging/telur Kabupaten Kebumen.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 self-start md:self-auto shrink-0">
-            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 font-mono">
-              <span className="font-bold text-slate-900 block text-sm">{menus.length} Sub-Modul</span>
-              Tersinkronisasi
+          <div className="relative z-10 flex items-center gap-3 self-start md:self-auto shrink-0">
+            <div className="p-3.5 rounded-2xl bg-white/10 border border-white/20 text-xs text-emerald-100">
+              <span className="font-bold text-white block text-sm">{menus.length} Layanan Data</span>
+              Tersinkronisasi Realtime
             </div>
           </div>
         </section>
@@ -184,40 +177,49 @@ export default function BitproPage() {
         {/* Module Cards Grid */}
         <section className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-base font-bold text-slate-900 uppercase tracking-wider text-xs font-mono text-slate-500">
-              Daftar Sub-Pelayanan Bitpro
+            <h3 className="text-sm font-bold uppercase tracking-wider text-emerald-900 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-600" />
+              Menu & Pelayanan Data Bitpro
             </h3>
+            <span className="text-xs text-slate-500 font-medium">Pilih menu untuk membuka tabel atau formulir</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
-            {menus.map((menu) => (
-              <Link
-                key={menu.title}
-                href={menu.path}
-                className="group rounded-xl border border-slate-200 bg-white p-5 flex flex-col justify-between min-h-[190px] shadow-sm hover:border-azure hover:shadow-md transition-all duration-200"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-3.5">
-                    <span className="text-2xl">{menu.icon}</span>
-                    <span className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200">
-                      {menu.badge}
-                    </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+            {menus.map((menu) => {
+              const IconComp = menu.icon;
+              return (
+                <Link
+                  key={menu.title}
+                  href={menu.path}
+                  className="group rounded-2xl border border-slate-200 bg-white p-6 flex flex-col justify-between min-h-[210px] shadow-xs hover:border-emerald-500 hover:shadow-md transition-all duration-200"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-700 group-hover:bg-emerald-600 group-hover:text-white flex items-center justify-center transition-colors">
+                        <IconComp size={22} />
+                      </div>
+                      <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full border bg-slate-100 text-slate-700 border-slate-200">
+                        {menu.badge}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h4 className="text-base font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
+                        {menu.title}
+                      </h4>
+                      <p className="text-xs text-slate-600 leading-relaxed mt-1 line-clamp-3">
+                        {menu.desc}
+                      </p>
+                    </div>
                   </div>
 
-                  <h4 className="text-base font-bold text-slate-900 group-hover:text-azure transition-colors mb-1">
-                    {menu.title}
-                  </h4>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    {menu.desc}
-                  </p>
-                </div>
-
-                <div className="pt-4 mt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-azure group-hover:text-azure/90">
-                  <span>Buka Layanan</span>
-                  <ChevronRight size={16} className="transition-transform group-hover:translate-x-1" />
-                </div>
-              </Link>
-            ))}
+                  <div className="pt-4 mt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-emerald-700 group-hover:text-emerald-800">
+                    <span>Buka Layanan</span>
+                    <ChevronRight size={16} className="transition-transform group-hover:translate-x-1" />
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </section>
 

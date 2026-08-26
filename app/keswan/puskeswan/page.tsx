@@ -50,7 +50,7 @@ export default function LaporanPuskeswanPage() {
   const totalLayanan = sum(dataLaporan, 'aktif') + sum(dataLaporan, 'semi_aktif') + sum(dataLaporan, 'pasif');
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white pb-20">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-600 selection:text-white pb-20">
       
       {/* ── TOP HEADER ── */}
       <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
@@ -67,11 +67,11 @@ export default function LaporanPuskeswanPage() {
 
             <div>
               <div className="flex items-center gap-2">
-                <Link href="/keswan" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                <Link href="/keswan" className="text-xs font-semibold text-slate-500 hover:text-blue-700 transition-colors">
                   Keswan
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-azure">Puskeswan</span>
+                <span className="text-xs font-bold text-blue-700">Pelayanan Puskeswan</span>
               </div>
               <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
                 Rekapitulasi Kinerja Bulanan Puskeswan 2026
@@ -83,7 +83,7 @@ export default function LaporanPuskeswanPage() {
             <button
               onClick={handleSync}
               disabled={isSyncing}
-              className="min-h-touch h-10 px-4 rounded-xl bg-azure text-white text-xs font-bold flex items-center gap-1.5 hover:bg-azure/90 disabled:opacity-50 transition-all shadow-sm"
+              className="min-h-touch h-10 px-4 rounded-xl bg-blue-600 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-blue-700 disabled:opacity-50 transition-all shadow-sm cursor-pointer"
             >
               <RefreshCw size={14} className={isSyncing ? 'animate-spin' : ''} />
               <span>{isSyncing ? 'Menyinkronkan...' : 'Tarik Data Live Sheets'}</span>
@@ -99,37 +99,37 @@ export default function LaporanPuskeswanPage() {
         {/* KPI Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+            <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
               Puskeswan Terpantau
             </p>
-            <p className="font-mono text-2xl sm:text-3xl font-bold text-slate-900">
+            <p className="font-sans text-2xl sm:text-3xl font-bold text-slate-900">
               8 <span className="text-xs font-normal text-slate-500">Unit Wilayah</span>
             </p>
           </div>
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+            <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
               Total Pelayanan
             </p>
-            <p className="font-mono text-2xl sm:text-3xl font-bold text-azure">
+            <p className="font-sans text-2xl sm:text-3xl font-bold text-blue-600">
               {totalLayanan.toLocaleString('id-ID')} <span className="text-xs font-normal text-slate-500">Kasus</span>
             </p>
           </div>
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+            <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
               Vaksinasi Terlaksana
             </p>
-            <p className="font-mono text-2xl sm:text-3xl font-bold text-vitality">
+            <p className="font-sans text-2xl sm:text-3xl font-bold text-vitality">
               {(sum(dataLaporan, 'pmk_vaks') + sum(dataLaporan, 'lsd_vaks')).toLocaleString('id-ID')} <span className="text-xs font-normal text-slate-500">Dosis</span>
             </p>
           </div>
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+            <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
               Penerimaan Retribusi
             </p>
-            <p className="font-mono text-2xl sm:text-3xl font-bold text-slate-900">
+            <p className="font-sans text-2xl sm:text-3xl font-bold text-slate-900">
               Rp {formatRp(totalRetribusi)}
             </p>
           </div>
@@ -141,7 +141,7 @@ export default function LaporanPuskeswanPage() {
             <h2 className="font-bold text-sm text-slate-900">
               Tabel Rekapitulasi Pelayanan, Diagnosa, & Retribusi Puskeswan
             </h2>
-            <span className="font-mono text-xs text-slate-500">Tahun Anggaran 2026</span>
+            <span className="font-sans text-xs text-slate-500">Tahun Anggaran 2026</span>
           </div>
 
           <div className="overflow-x-auto max-h-[70vh]">
@@ -163,26 +163,26 @@ export default function LaporanPuskeswanPage() {
                   <th colSpan={2} className="p-2 border-r border-slate-200 bg-emerald-50 text-emerald-900">
                     VAKSINASI
                   </th>
-                  <th rowSpan={2} className="p-3 text-right font-mono bg-slate-200/60">RETRIBUSI</th>
+                  <th rowSpan={2} className="p-3 text-right font-sans bg-slate-200/60">RETRIBUSI</th>
                 </tr>
                 <tr className="border-t border-slate-200 bg-slate-50 text-[11px]">
-                  <th className="p-2 border-r border-slate-200 font-mono">BEF</th>
-                  <th className="p-2 border-r border-slate-200 font-mono">CACING</th>
-                  <th className="p-2 border-r border-slate-200 font-mono">SCABIES</th>
-                  <th className="p-2 border-r border-slate-200 font-mono">ORF</th>
-                  <th className="p-2 border-r border-slate-200 font-mono">PMK</th>
-                  <th className="p-2 border-r border-slate-200 font-mono">LSD</th>
+                  <th className="p-2 border-r border-slate-200 font-sans">BEF</th>
+                  <th className="p-2 border-r border-slate-200 font-sans">CACING</th>
+                  <th className="p-2 border-r border-slate-200 font-sans">SCABIES</th>
+                  <th className="p-2 border-r border-slate-200 font-sans">ORF</th>
+                  <th className="p-2 border-r border-slate-200 font-sans">PMK</th>
+                  <th className="p-2 border-r border-slate-200 font-sans">LSD</th>
 
-                  <th className="p-2 border-r border-slate-200 font-mono">AKTIF</th>
-                  <th className="p-2 border-r border-slate-200 font-mono">SEMI</th>
-                  <th className="p-2 border-r border-slate-200 font-mono">PASIF</th>
+                  <th className="p-2 border-r border-slate-200 font-sans">AKTIF</th>
+                  <th className="p-2 border-r border-slate-200 font-sans">SEMI</th>
+                  <th className="p-2 border-r border-slate-200 font-sans">PASIF</th>
 
-                  <th className="p-2 border-r border-slate-200 font-mono">PUSLING</th>
-                  <th className="p-2 border-r border-slate-200 font-mono">IB</th>
-                  <th className="p-2 border-r border-slate-200 font-mono">PKB</th>
+                  <th className="p-2 border-r border-slate-200 font-sans">PUSLING</th>
+                  <th className="p-2 border-r border-slate-200 font-sans">IB</th>
+                  <th className="p-2 border-r border-slate-200 font-sans">PKB</th>
 
-                  <th className="p-2 border-r border-slate-200 font-mono">PMK</th>
-                  <th className="p-2 border-r border-slate-200 font-mono">LSD</th>
+                  <th className="p-2 border-r border-slate-200 font-sans">PMK</th>
+                  <th className="p-2 border-r border-slate-200 font-sans">LSD</th>
                 </tr>
               </thead>
 
@@ -193,35 +193,35 @@ export default function LaporanPuskeswanPage() {
                       {idx === 0 && (
                         <td
                           rowSpan={rows.length + 1}
-                          className="p-3 border-r border-slate-200 font-mono font-bold text-azure uppercase bg-slate-50/50 align-middle"
+                          className="p-3 border-r border-slate-200 font-sans font-bold text-blue-600 uppercase bg-slate-50/50 align-middle"
                         >
                           {bulan}
                         </td>
                       )}
-                      <td className="p-3 border-r border-slate-100 font-mono text-slate-400">{row.no}</td>
+                      <td className="p-3 border-r border-slate-100 font-sans text-slate-400">{row.no}</td>
                       <td className="p-3 text-left font-bold text-slate-900 border-r border-slate-100">
                         {row.puskeswan}
                       </td>
 
-                      <td className="p-3 border-r border-slate-100 font-mono">{row.bef || 0}</td>
-                      <td className="p-3 border-r border-slate-100 font-mono">{row.cacingan || 0}</td>
-                      <td className="p-3 border-r border-slate-100 font-mono">{row.scabies || 0}</td>
-                      <td className="p-3 border-r border-slate-100 font-mono">{row.orf || 0}</td>
-                      <td className="p-3 border-r border-slate-100 font-mono">{row.pmk_diag || 0}</td>
-                      <td className="p-3 border-r border-slate-100 font-mono">{row.lsd_diag || 0}</td>
+                      <td className="p-3 border-r border-slate-100 font-sans">{row.bef || 0}</td>
+                      <td className="p-3 border-r border-slate-100 font-sans">{row.cacingan || 0}</td>
+                      <td className="p-3 border-r border-slate-100 font-sans">{row.scabies || 0}</td>
+                      <td className="p-3 border-r border-slate-100 font-sans">{row.orf || 0}</td>
+                      <td className="p-3 border-r border-slate-100 font-sans">{row.pmk_diag || 0}</td>
+                      <td className="p-3 border-r border-slate-100 font-sans">{row.lsd_diag || 0}</td>
 
-                      <td className="p-3 border-r border-slate-100 font-mono">{row.aktif || 0}</td>
-                      <td className="p-3 border-r border-slate-100 font-mono">{row.semi_aktif || 0}</td>
-                      <td className="p-3 border-r border-slate-100 font-mono">{row.pasif || 0}</td>
+                      <td className="p-3 border-r border-slate-100 font-sans">{row.aktif || 0}</td>
+                      <td className="p-3 border-r border-slate-100 font-sans">{row.semi_aktif || 0}</td>
+                      <td className="p-3 border-r border-slate-100 font-sans">{row.pasif || 0}</td>
 
-                      <td className="p-3 border-r border-slate-100 font-mono">{row.pusling || 0}</td>
-                      <td className="p-3 border-r border-slate-100 font-mono">{row.ib || 0}</td>
-                      <td className="p-3 border-r border-slate-100 font-mono">{row.pkb || 0}</td>
+                      <td className="p-3 border-r border-slate-100 font-sans">{row.pusling || 0}</td>
+                      <td className="p-3 border-r border-slate-100 font-sans">{row.ib || 0}</td>
+                      <td className="p-3 border-r border-slate-100 font-sans">{row.pkb || 0}</td>
 
-                      <td className="p-3 border-r border-slate-100 font-mono">{row.pmk_vaks || 0}</td>
-                      <td className="p-3 border-r border-slate-100 font-mono">{row.lsd_vaks || 0}</td>
+                      <td className="p-3 border-r border-slate-100 font-sans">{row.pmk_vaks || 0}</td>
+                      <td className="p-3 border-r border-slate-100 font-sans">{row.lsd_vaks || 0}</td>
 
-                      <td className="p-3 text-right font-mono font-medium text-slate-900">
+                      <td className="p-3 text-right font-sans font-medium text-slate-900">
                         Rp {formatRp(row.retribusi)}
                       </td>
                     </tr>
@@ -229,28 +229,28 @@ export default function LaporanPuskeswanPage() {
 
                   {/* Subtotal Row */}
                   <tr className="bg-slate-100 font-bold text-slate-900 border-t-2 border-slate-300">
-                    <td colSpan={2} className="p-3 text-center border-r border-slate-200 font-mono uppercase">
+                    <td colSpan={2} className="p-3 text-center border-r border-slate-200 font-sans uppercase">
                       JUMLAH {bulan}
                     </td>
-                    <td className="p-3 border-r border-slate-200 font-mono">{sum(rows, 'bef')}</td>
-                    <td className="p-3 border-r border-slate-200 font-mono">{sum(rows, 'cacingan')}</td>
-                    <td className="p-3 border-r border-slate-200 font-mono">{sum(rows, 'scabies')}</td>
-                    <td className="p-3 border-r border-slate-200 font-mono">{sum(rows, 'orf')}</td>
-                    <td className="p-3 border-r border-slate-200 font-mono">{sum(rows, 'pmk_diag')}</td>
-                    <td className="p-3 border-r border-slate-200 font-mono">{sum(rows, 'lsd_diag')}</td>
+                    <td className="p-3 border-r border-slate-200 font-sans">{sum(rows, 'bef')}</td>
+                    <td className="p-3 border-r border-slate-200 font-sans">{sum(rows, 'cacingan')}</td>
+                    <td className="p-3 border-r border-slate-200 font-sans">{sum(rows, 'scabies')}</td>
+                    <td className="p-3 border-r border-slate-200 font-sans">{sum(rows, 'orf')}</td>
+                    <td className="p-3 border-r border-slate-200 font-sans">{sum(rows, 'pmk_diag')}</td>
+                    <td className="p-3 border-r border-slate-200 font-sans">{sum(rows, 'lsd_diag')}</td>
 
-                    <td className="p-3 border-r border-slate-200 font-mono text-azure">{sum(rows, 'aktif')}</td>
-                    <td className="p-3 border-r border-slate-200 font-mono text-azure">{sum(rows, 'semi_aktif')}</td>
-                    <td className="p-3 border-r border-slate-200 font-mono text-azure">{sum(rows, 'pasif')}</td>
+                    <td className="p-3 border-r border-slate-200 font-sans text-blue-600">{sum(rows, 'aktif')}</td>
+                    <td className="p-3 border-r border-slate-200 font-sans text-blue-600">{sum(rows, 'semi_aktif')}</td>
+                    <td className="p-3 border-r border-slate-200 font-sans text-blue-600">{sum(rows, 'pasif')}</td>
 
-                    <td className="p-3 border-r border-slate-200 font-mono">{sum(rows, 'pusling')}</td>
-                    <td className="p-3 border-r border-slate-200 font-mono">{sum(rows, 'ib')}</td>
-                    <td className="p-3 border-r border-slate-200 font-mono">{sum(rows, 'pkb')}</td>
+                    <td className="p-3 border-r border-slate-200 font-sans">{sum(rows, 'pusling')}</td>
+                    <td className="p-3 border-r border-slate-200 font-sans">{sum(rows, 'ib')}</td>
+                    <td className="p-3 border-r border-slate-200 font-sans">{sum(rows, 'pkb')}</td>
 
-                    <td className="p-3 border-r border-slate-200 font-mono text-emerald-700">{sum(rows, 'pmk_vaks')}</td>
-                    <td className="p-3 border-r border-slate-200 font-mono text-emerald-700">{sum(rows, 'lsd_vaks')}</td>
+                    <td className="p-3 border-r border-slate-200 font-sans text-emerald-700">{sum(rows, 'pmk_vaks')}</td>
+                    <td className="p-3 border-r border-slate-200 font-sans text-emerald-700">{sum(rows, 'lsd_vaks')}</td>
 
-                    <td className="p-3 text-right font-mono font-bold text-slate-900">
+                    <td className="p-3 text-right font-sans font-bold text-slate-900">
                       Rp {formatRp(sum(rows, 'retribusi'))}
                     </td>
                   </tr>

@@ -402,7 +402,7 @@ export default function DataVaksinasiPMKPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white pb-20">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-600 selection:text-white pb-20">
       
       {toast && (
         <div
@@ -430,11 +430,11 @@ export default function DataVaksinasiPMKPage() {
 
             <div>
               <div className="flex items-center gap-2">
-                <Link href="/keswan" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                <Link href="/keswan" className="text-xs font-semibold text-slate-500 hover:text-blue-700 transition-colors">
                   Keswan
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-azure">Vaksinasi PMK</span>
+                <span className="text-xs font-bold text-blue-700">Data Vaksinasi</span>
               </div>
               <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
                 Rekapitulasi & Pemantauan Vaksinasi PMK
@@ -445,14 +445,14 @@ export default function DataVaksinasiPMKPage() {
           <div className="flex items-center gap-2">
             <button
               onClick={handleExportExcel}
-              className="min-h-touch h-10 px-3.5 sm:px-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-sm"
+              className="min-h-touch h-10 px-3.5 sm:px-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-sm cursor-pointer"
             >
               <Download size={15} />
               <span className="hidden sm:inline">Export Excel</span>
             </button>
             <button
               onClick={fetchAll}
-              className="min-h-touch h-10 px-3.5 sm:px-4 rounded-xl bg-azure text-white text-xs font-bold flex items-center gap-1.5 hover:bg-azure/90 transition-all shadow-sm"
+              className="min-h-touch h-10 px-3.5 sm:px-4 rounded-xl bg-blue-600 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-blue-700 transition-all shadow-sm cursor-pointer"
             >
               <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
               <span className="hidden sm:inline">Muat Ulang</span>
@@ -479,7 +479,7 @@ export default function DataVaksinasiPMKPage() {
                 onClick={() => setActiveTab(tab.key as any)}
                 className={`min-h-touch h-11 px-4 sm:px-5 rounded-t-xl text-xs sm:text-sm font-bold border-t border-x transition-all ${
                   active
-                    ? 'bg-white border-slate-200 text-azure border-b-white translate-y-px shadow-sm'
+                    ? 'bg-white border-slate-200 text-blue-600 border-b-white translate-y-px shadow-sm'
                     : 'border-transparent text-slate-500 hover:text-slate-900 bg-slate-100/60'
                 }`}
               >
@@ -496,37 +496,37 @@ export default function DataVaksinasiPMKPage() {
             {/* KPI Cards */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-                <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+                <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
                   Target Kabupaten
                 </p>
-                <p className="font-mono text-2xl sm:text-3xl font-bold text-slate-900">
+                <p className="font-sans text-2xl sm:text-3xl font-bold text-slate-900">
                   {totalBulanan.target.toLocaleString('id-ID')} <span className="text-xs font-normal text-slate-500">Dosis</span>
                 </p>
               </div>
 
               <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-                <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+                <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
                   Pengambilan Vaksin
                 </p>
-                <p className="font-mono text-2xl sm:text-3xl font-bold text-azure">
+                <p className="font-sans text-2xl sm:text-3xl font-bold text-blue-600">
                   {totalBulanan.pengambilan.toLocaleString('id-ID')} <span className="text-xs font-normal text-slate-500">Dosis</span>
                 </p>
               </div>
 
               <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-                <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+                <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
                   Total Realisasi
                 </p>
-                <p className="font-mono text-2xl sm:text-3xl font-bold text-vitality">
+                <p className="font-sans text-2xl sm:text-3xl font-bold text-vitality">
                   {totalBulanan.realisasi.toLocaleString('id-ID')} <span className="text-xs font-normal text-slate-500">Dosis</span>
                 </p>
               </div>
 
               <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-                <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+                <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
                   Sisa Kekurangan
                 </p>
-                <p className="font-mono text-2xl sm:text-3xl font-bold text-rose-600">
+                <p className="font-sans text-2xl sm:text-3xl font-bold text-rose-600">
                   {totalBulanan.kekurangan.toLocaleString('id-ID')} <span className="text-xs font-normal text-slate-500">Dosis</span>
                 </p>
               </div>
@@ -546,7 +546,7 @@ export default function DataVaksinasiPMKPage() {
                     setFormBulanan(emptyBulananForm);
                     setModalBulanan({ open: true, edit: null });
                   }}
-                  className="min-h-touch h-8 px-3 rounded-lg bg-azure text-white text-xs font-bold hover:bg-azure/90 flex items-center gap-1 shadow-sm"
+                  className="min-h-touch h-8 px-3 rounded-lg bg-blue-600 text-white text-xs font-bold hover:bg-blue-600/90 flex items-center gap-1 shadow-sm"
                 >
                   <Plus size={14} />
                   <span>Tambah Puskeswan</span>
@@ -558,12 +558,12 @@ export default function DataVaksinasiPMKPage() {
                   <thead className="bg-slate-50 text-slate-600 font-semibold uppercase tracking-wider border-b border-slate-200">
                     <tr>
                       <th className="p-3.5 sticky left-0 bg-slate-50 z-10 border-r border-slate-200">PUSKESWAN</th>
-                      <th className="p-3.5 text-right font-mono">TARGET</th>
-                      <th className="p-3.5 text-right font-mono">AMBIL</th>
-                      <th className="p-3.5 text-right font-mono text-emerald-700">REALISASI</th>
-                      <th className="p-3.5 text-right font-mono text-rose-600">KURANG</th>
+                      <th className="p-3.5 text-right font-sans">TARGET</th>
+                      <th className="p-3.5 text-right font-sans">AMBIL</th>
+                      <th className="p-3.5 text-right font-sans text-emerald-700">REALISASI</th>
+                      <th className="p-3.5 text-right font-sans text-rose-600">KURANG</th>
                       {BULAN_LABEL.slice(1).map((b) => (
-                        <th key={b} className="p-3 text-right font-mono">{b}</th>
+                        <th key={b} className="p-3 text-right font-sans">{b}</th>
                       ))}
                       <th className="p-3.5 text-center w-20">AKSI</th>
                     </tr>
@@ -574,18 +574,18 @@ export default function DataVaksinasiPMKPage() {
                         <td className="p-3.5 font-bold text-slate-900 sticky left-0 bg-white z-10 border-r border-slate-100">
                           {row.puskeswan}
                         </td>
-                        <td className="p-3.5 text-right font-mono">{row.target.toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 text-right font-mono">{row.pengambilan}</td>
-                        <td className="p-3.5 text-right font-mono font-bold text-emerald-700 bg-emerald-50/30">
+                        <td className="p-3.5 text-right font-sans">{row.target.toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 text-right font-sans">{row.pengambilan}</td>
+                        <td className="p-3.5 text-right font-sans font-bold text-emerald-700 bg-emerald-50/30">
                           {row.realisasi.toLocaleString('id-ID')}
                         </td>
-                        <td className="p-3.5 text-right font-mono font-bold text-rose-600 bg-rose-50/30">
+                        <td className="p-3.5 text-right font-sans font-bold text-rose-600 bg-rose-50/30">
                           {row.kekurangan.toLocaleString('id-ID')}
                         </td>
                         {BULAN_KEY.map((k) => {
                           const val = n(row[k]);
                           return (
-                            <td key={k} className={`p-3 text-right font-mono ${val > 0 ? 'text-azure font-bold' : 'text-slate-400'}`}>
+                            <td key={k} className={`p-3 text-right font-sans ${val > 0 ? 'text-blue-600 font-bold' : 'text-slate-400'}`}>
                               {val ? val.toLocaleString('id-ID') : '-'}
                             </td>
                           );
@@ -612,17 +612,17 @@ export default function DataVaksinasiPMKPage() {
                   {bulanan.length > 0 && (
                     <tfoot>
                       <tr className="bg-slate-100 font-bold text-slate-900 border-t-2 border-slate-300">
-                        <td className="p-3.5 sticky left-0 bg-slate-100 z-10 border-r border-slate-300 font-mono uppercase">
+                        <td className="p-3.5 sticky left-0 bg-slate-100 z-10 border-r border-slate-300 font-sans uppercase">
                           TOTAL KABUPATEN
                         </td>
-                        <td className="p-3.5 text-right font-mono">{totalBulanan.target.toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 text-right font-mono">{totalBulanan.pengambilan.toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 text-right font-mono text-emerald-700 font-black">{totalBulanan.realisasi.toLocaleString('id-ID')}</td>
-                        <td className="p-3.5 text-right font-mono text-rose-600 font-black">{totalBulanan.kekurangan.toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 text-right font-sans">{totalBulanan.target.toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 text-right font-sans">{totalBulanan.pengambilan.toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 text-right font-sans text-emerald-700 font-black">{totalBulanan.realisasi.toLocaleString('id-ID')}</td>
+                        <td className="p-3.5 text-right font-sans text-rose-600 font-black">{totalBulanan.kekurangan.toLocaleString('id-ID')}</td>
                         {BULAN_KEY.map((k) => {
                           const sum = bulanan.reduce((s, r) => s + n(r[k]), 0);
                           return (
-                            <td key={k} className="p-3 text-right font-mono font-bold text-azure">
+                            <td key={k} className="p-3 text-right font-sans font-bold text-blue-600">
                               {sum ? sum.toLocaleString('id-ID') : '-'}
                             </td>
                           );
@@ -652,7 +652,7 @@ export default function DataVaksinasiPMKPage() {
                     onClick={() => setActiveMonth(idx + 1)}
                     className={`min-h-touch h-9 px-4 rounded-xl text-xs font-bold whitespace-nowrap transition-all border ${
                       isSelected
-                        ? 'bg-azure text-white border-azure shadow-sm'
+                        ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
                         : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                     }`}
                   >
@@ -680,11 +680,11 @@ export default function DataVaksinasiPMKPage() {
                   <thead className="bg-slate-50 text-slate-600 font-semibold uppercase tracking-wider border-b border-slate-200">
                     <tr>
                       <th className="p-3.5 sticky left-0 bg-slate-50 z-10 border-r border-slate-200">PUSKESWAN</th>
-                      <th className="p-3.5 text-right font-mono">TARGET</th>
-                      <th className="p-3.5 text-right font-mono">AMBIL</th>
-                      <th className="p-3.5 text-right font-mono text-emerald-700">REALISASI</th>
+                      <th className="p-3.5 text-right font-sans">TARGET</th>
+                      <th className="p-3.5 text-right font-sans">AMBIL</th>
+                      <th className="p-3.5 text-right font-sans text-emerald-700">REALISASI</th>
                       {Array.from({ length: daysInMonth(activeMonth) }, (_, i) => i + 1).map((d) => (
-                        <th key={d} className="p-2 text-center font-mono w-9 min-w-[36px]">{d}</th>
+                        <th key={d} className="p-2 text-center font-sans w-9 min-w-[36px]">{d}</th>
                       ))}
                     </tr>
                   </thead>
@@ -700,9 +700,9 @@ export default function DataVaksinasiPMKPage() {
                           <td className="p-3.5 font-bold text-slate-900 sticky left-0 bg-white z-10 border-r border-slate-100">
                             {row.puskeswan}
                           </td>
-                          <td className="p-3.5 text-right font-mono">{row.target.toLocaleString('id-ID')}</td>
-                          <td className="p-3.5 text-right font-mono">{row.pengambilan}</td>
-                          <td className="p-3.5 text-right font-mono font-bold text-emerald-700 bg-emerald-50/30">
+                          <td className="p-3.5 text-right font-sans">{row.target.toLocaleString('id-ID')}</td>
+                          <td className="p-3.5 text-right font-sans">{row.pengambilan}</td>
+                          <td className="p-3.5 text-right font-sans font-bold text-emerald-700 bg-emerald-50/30">
                             {realisasiBulanIni.toLocaleString('id-ID')}
                           </td>
                           {days.map((d) => {
@@ -712,8 +712,8 @@ export default function DataVaksinasiPMKPage() {
                               <td
                                 key={d}
                                 onClick={() => openCellHarian(row.puskeswan, dateStr)}
-                                className={`p-1 text-center font-mono cursor-pointer transition-colors ${
-                                  val ? 'bg-azure/10 text-azure font-bold hover:bg-azure/20' : 'text-slate-300 hover:bg-slate-100'
+                                className={`p-1 text-center font-sans cursor-pointer transition-colors ${
+                                  val ? 'bg-blue-600/10 text-blue-600 font-bold hover:bg-blue-600/20' : 'text-slate-300 hover:bg-slate-100'
                                 }`}
                               >
                                 {val ?? '-'}
@@ -750,20 +750,20 @@ export default function DataVaksinasiPMKPage() {
                     <thead className="bg-slate-50 text-slate-600 font-semibold uppercase tracking-wider border-b border-slate-200">
                       <tr>
                         <th className="p-3.5">PUSKESWAN</th>
-                        <th className="p-3.5 text-right font-mono">LSD</th>
-                        <th className="p-3.5 text-right font-mono">ND AI</th>
-                        <th className="p-3.5 text-right font-mono">RABIES</th>
-                        <th className="p-3.5 text-right font-mono">APHTOVAX</th>
+                        <th className="p-3.5 text-right font-sans">LSD</th>
+                        <th className="p-3.5 text-right font-sans">ND AI</th>
+                        <th className="p-3.5 text-right font-sans">RABIES</th>
+                        <th className="p-3.5 text-right font-sans">APHTOVAX</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 text-slate-800">
                       {apbdTarget.map((row) => (
                         <tr key={row.id} className="hover:bg-slate-50/80 transition-colors">
                           <td className="p-3.5 font-bold text-slate-900">{row.puskeswan}</td>
-                          <td className="p-3.5 text-right font-mono">{row.target_lsd}</td>
-                          <td className="p-3.5 text-right font-mono">{row.target_ndai}</td>
-                          <td className="p-3.5 text-right font-mono">{row.target_rabies}</td>
-                          <td className="p-3.5 text-right font-mono">{row.target_aphtovaks}</td>
+                          <td className="p-3.5 text-right font-sans">{row.target_lsd}</td>
+                          <td className="p-3.5 text-right font-sans">{row.target_ndai}</td>
+                          <td className="p-3.5 text-right font-sans">{row.target_rabies}</td>
+                          <td className="p-3.5 text-right font-sans">{row.target_aphtovaks}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -784,7 +784,7 @@ export default function DataVaksinasiPMKPage() {
                   </div>
                   <button
                     onClick={openAddDroping}
-                    className="min-h-touch h-8 px-3 rounded-lg bg-azure text-white text-xs font-bold hover:bg-azure/90 flex items-center gap-1 shadow-sm"
+                    className="min-h-touch h-8 px-3 rounded-lg bg-blue-600 text-white text-xs font-bold hover:bg-blue-600/90 flex items-center gap-1 shadow-sm"
                   >
                     <Plus size={14} />
                     <span>Catat Droping</span>
@@ -804,7 +804,7 @@ export default function DataVaksinasiPMKPage() {
                         </span>
                       </div>
                       <div className="flex items-center gap-3">
-                        <span className="font-mono font-bold text-azure text-sm bg-azure/10 px-2.5 py-1 rounded-lg">
+                        <span className="font-sans font-bold text-blue-600 text-sm bg-blue-600/10 px-2.5 py-1 rounded-lg">
                           {d.jumlah} Dosis
                         </span>
                         <div className="flex items-center gap-1">
@@ -839,7 +839,7 @@ export default function DataVaksinasiPMKPage() {
           <div className="bg-white rounded-2xl p-6 max-w-xs w-full shadow-2xl space-y-4">
             <div className="text-center pb-2 border-b border-slate-200">
               <h3 className="font-bold text-base text-slate-900">{modalHarian.puskeswan}</h3>
-              <p className="text-xs font-mono text-slate-500 mt-0.5">
+              <p className="text-xs font-sans text-slate-500 mt-0.5">
                 {new Date(modalHarian.tanggal).toLocaleDateString('id-ID', {
                   day: 'numeric',
                   month: 'long',
@@ -849,7 +849,7 @@ export default function DataVaksinasiPMKPage() {
             </div>
             <form onSubmit={submitHarian} className="space-y-4">
               <div>
-                <label className="block text-xs font-mono font-bold text-slate-500 uppercase mb-1 text-center">
+                <label className="block text-xs font-sans font-bold text-slate-500 uppercase mb-1 text-center">
                   Jumlah Dosis
                 </label>
                 <input
@@ -857,7 +857,7 @@ export default function DataVaksinasiPMKPage() {
                   autoFocus
                   value={formHarianJumlah}
                   onChange={(e) => setFormHarianJumlah(e.target.value)}
-                  className="w-full text-center text-3xl font-mono font-bold text-slate-900 py-2.5 rounded-xl border border-slate-300 focus:border-azure outline-none"
+                  className="w-full text-center text-3xl font-sans font-bold text-slate-900 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 outline-none"
                   placeholder="0"
                 />
               </div>
@@ -880,7 +880,7 @@ export default function DataVaksinasiPMKPage() {
                 )}
                 <button
                   type="submit"
-                  className="min-h-touch h-10 flex-1 rounded-xl bg-azure text-white text-xs font-bold shadow-sm"
+                  className="min-h-touch h-10 flex-1 rounded-xl bg-blue-600 text-white text-xs font-bold shadow-sm"
                 >
                   Simpan
                 </button>
@@ -941,7 +941,7 @@ export default function DataVaksinasiPMKPage() {
                 >
                   Batal
                 </button>
-                <button type="submit" className="h-10 px-5 rounded-xl bg-azure text-white text-xs font-bold">
+                <button type="submit" className="h-10 px-5 rounded-xl bg-blue-600 text-white text-xs font-bold">
                   Simpan
                 </button>
               </div>
@@ -1011,7 +1011,7 @@ export default function DataVaksinasiPMKPage() {
                 >
                   Batal
                 </button>
-                <button type="submit" className="h-10 px-5 rounded-xl bg-azure text-white text-xs font-bold">
+                <button type="submit" className="h-10 px-5 rounded-xl bg-blue-600 text-white text-xs font-bold">
                   Simpan
                 </button>
               </div>

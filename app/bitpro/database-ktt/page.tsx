@@ -70,7 +70,7 @@ function KelasBadge({ kelas }: { kelas: string }) {
   const isHigh = kelas === 'Madya' || kelas === 'Utama';
   return (
     <span
-      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold font-mono border ${
+      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold font-sans border ${
         isHigh
           ? 'bg-amber-50 text-amber-700 border-amber-200'
           : 'bg-slate-100 text-slate-700 border-slate-200'
@@ -221,10 +221,10 @@ export default function DatabaseKTTPage() {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center font-sans">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-azure/20 border border-azure/40 flex items-center justify-center animate-spin">
-            <span className="w-3.5 h-3.5 rounded-full bg-azure" />
+          <div className="w-9 h-9 rounded-xl bg-emerald-600/20 border border-emerald-600/40 flex items-center justify-center animate-spin">
+            <span className="w-3.5 h-3.5 rounded-full bg-emerald-600" />
           </div>
-          <p className="font-mono text-xs uppercase tracking-widest text-slate-500">
+          <p className="font-sans text-xs uppercase tracking-widest text-slate-500">
             Memuat Buku Register Kelompok Tani...
           </p>
         </div>
@@ -233,7 +233,7 @@ export default function DatabaseKTTPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white pb-20">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-600 selection:text-white pb-20">
       
       {/* ── TOP HEADER ── */}
       <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
@@ -254,7 +254,7 @@ export default function DatabaseKTTPage() {
                   Bitpro
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-azure">Database KTT</span>
+                <span className="text-xs font-bold text-emerald-600">Database KTT</span>
               </div>
               <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
                 Master Kelompok Tani Ternak
@@ -265,7 +265,7 @@ export default function DatabaseKTTPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={openAddModal}
-              className="min-h-touch h-10 px-4 rounded-xl bg-azure text-white text-xs font-bold flex items-center gap-1.5 hover:bg-azure/90 active:scale-95 transition-all shadow-sm"
+              className="min-h-touch h-10 px-4 rounded-xl bg-emerald-600 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-emerald-600/90 active:scale-95 transition-all shadow-sm"
             >
               <Plus size={16} />
               <span>Tambah KTT</span>
@@ -282,10 +282,10 @@ export default function DatabaseKTTPage() {
           {/* ── LEFT SIDEBAR: INDEKS KECAMATAN ── */}
           <aside className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:sticky lg:top-24 space-y-3">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <h3 className="font-bold text-xs uppercase tracking-wider text-slate-700 font-mono">
+              <h3 className="font-bold text-xs uppercase tracking-wider text-slate-700 font-sans">
                 Wilayah Kecamatan
               </h3>
-              <span className="text-[11px] font-mono text-slate-400">
+              <span className="text-[11px] font-sans text-slate-400">
                 {kecamatanIndex.filter((k) => k.jumlah > 0).length}/26 Aktif
               </span>
             </div>
@@ -295,12 +295,12 @@ export default function DatabaseKTTPage() {
                 onClick={() => pilihKecamatan("")}
                 className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
                   !filterKecamatan
-                    ? "bg-azure text-white font-bold"
+                    ? "bg-emerald-600 text-white font-bold"
                     : "text-slate-600 hover:bg-slate-100"
                 }`}
               >
                 <span>Semua Wilayah</span>
-                <span className="font-mono text-xs">{data.length}</span>
+                <span className="font-sans text-xs">{data.length}</span>
               </button>
 
               {kecamatanIndex.map(({ kecamatan, jumlah }) => {
@@ -311,12 +311,12 @@ export default function DatabaseKTTPage() {
                     onClick={() => pilihKecamatan(kecamatan)}
                     className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs transition-colors ${
                       active
-                        ? "bg-azure text-white font-bold shadow-sm"
+                        ? "bg-emerald-600 text-white font-bold shadow-sm"
                         : "text-slate-600 hover:bg-slate-100"
                     }`}
                   >
                     <span>{kecamatan}</span>
-                    <span className={`font-mono text-xs ${active ? "text-white" : "text-slate-400"}`}>
+                    <span className={`font-sans text-xs ${active ? "text-white" : "text-slate-400"}`}>
                       {jumlah}
                     </span>
                   </button>
@@ -340,7 +340,7 @@ export default function DatabaseKTTPage() {
                     setSearch(e.target.value);
                     setPage(1);
                   }}
-                  className="w-full min-h-touch h-10 pl-9 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-900 focus:outline-none focus:border-azure focus:bg-white transition-colors"
+                  className="w-full min-h-touch h-10 pl-9 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-900 focus:outline-none focus:border-emerald-500 focus:bg-white transition-colors"
                 />
               </div>
 
@@ -352,7 +352,7 @@ export default function DatabaseKTTPage() {
                       setFilterDesa(e.target.value);
                       setPage(1);
                     }}
-                    className="min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-700 focus:border-azure outline-none"
+                    className="min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-700 focus:border-emerald-500 outline-none"
                   >
                     <option value="">Semua Desa ({filterKecamatan})</option>
                     {desaList.map((d) => (
@@ -367,7 +367,7 @@ export default function DatabaseKTTPage() {
                     setFilterJenis(e.target.value);
                     setPage(1);
                   }}
-                  className="min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-700 focus:border-azure outline-none"
+                  className="min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-700 focus:border-emerald-500 outline-none"
                 >
                   <option value="">Semua Jenis</option>
                   {JENIS_KELOMPOK_OPTIONS.map((j) => (
@@ -396,14 +396,14 @@ export default function DatabaseKTTPage() {
                     {paginated.length > 0 ? (
                       paginated.map((row, idx) => (
                         <tr key={row.id} className="hover:bg-slate-50/80 transition-colors">
-                          <td className="p-4 text-center font-mono text-slate-400 text-xs">
+                          <td className="p-4 text-center font-sans text-slate-400 text-xs">
                             {(currentPage - 1) * PAGE_SIZE + idx + 1}
                           </td>
                           <td className="p-4">
                             <span className="font-bold text-slate-900 block text-sm">
                               {row.namaKelompok || '-'}
                             </span>
-                            <span className="text-xs font-mono text-slate-500 block">
+                            <span className="text-xs font-sans text-slate-500 block">
                               Reg: {row.nomorRegister || '-'}
                             </span>
                           </td>
@@ -411,7 +411,7 @@ export default function DatabaseKTTPage() {
                             <span className="text-slate-800 font-medium block text-xs">
                               {row.desa || '-'}
                             </span>
-                            <span className="text-xs text-slate-500 font-mono">
+                            <span className="text-xs text-slate-500 font-sans">
                               Kec. {row.kecamatan || '-'}
                             </span>
                           </td>
@@ -421,7 +421,7 @@ export default function DatabaseKTTPage() {
                           <td className="p-4 text-center">
                             <KelasBadge kelas={row.kelasKelompok} />
                           </td>
-                          <td className="p-4 text-right font-mono text-xs">
+                          <td className="p-4 text-right font-sans text-xs">
                             <span className="font-bold text-slate-900">
                               {(row.anggotaLaki || 0) + (row.anggotaPerempuan || 0)}
                             </span>
@@ -462,7 +462,7 @@ export default function DatabaseKTTPage() {
 
               {/* Pagination Bar */}
               <div className="p-4 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-600">
-                <span className="font-mono">
+                <span className="font-sans">
                   Menampilkan {paginated.length} dari {filtered.length} kelompok terdaftar
                 </span>
 
@@ -476,7 +476,7 @@ export default function DatabaseKTTPage() {
                     <span>Sebelumnya</span>
                   </button>
 
-                  <span className="font-mono px-2">
+                  <span className="font-sans px-2">
                     {currentPage} / {totalPages}
                   </span>
 
@@ -517,7 +517,7 @@ export default function DatabaseKTTPage() {
             <form onSubmit={handleFormSubmit} className="p-6 overflow-y-auto space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                  <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                     Nama Kelompok Tani
                   </label>
                   <input
@@ -526,12 +526,12 @@ export default function DatabaseKTTPage() {
                     placeholder="Contoh: KTT Lembu Agung"
                     value={formValues.namaKelompok}
                     onChange={(e) => setFormValues({ ...formValues, namaKelompok: e.target.value })}
-                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure focus:bg-white outline-none"
+                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 focus:bg-white outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                  <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                     Nomor Register / SK
                   </label>
                   <input
@@ -539,19 +539,19 @@ export default function DatabaseKTTPage() {
                     placeholder="Contoh: 524/12/2024"
                     value={formValues.nomorRegister}
                     onChange={(e) => setFormValues({ ...formValues, nomorRegister: e.target.value })}
-                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure focus:bg-white outline-none"
+                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 focus:bg-white outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                  <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                     Kecamatan
                   </label>
                   <select
                     required
                     value={formValues.kecamatan}
                     onChange={(e) => setFormValues({ ...formValues, kecamatan: e.target.value })}
-                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure focus:bg-white outline-none"
+                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 focus:bg-white outline-none"
                   >
                     <option value="">Pilih Kecamatan</option>
                     {KECAMATAN_OPTIONS.map((k) => (
@@ -561,7 +561,7 @@ export default function DatabaseKTTPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                  <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                     Desa / Kelurahan
                   </label>
                   <input
@@ -570,12 +570,12 @@ export default function DatabaseKTTPage() {
                     placeholder="Nama desa"
                     value={formValues.desa}
                     onChange={(e) => setFormValues({ ...formValues, desa: e.target.value })}
-                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure focus:bg-white outline-none"
+                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 focus:bg-white outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                  <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                     Nama Ketua Kelompok
                   </label>
                   <input
@@ -584,18 +584,18 @@ export default function DatabaseKTTPage() {
                     placeholder="Nama ketua"
                     value={formValues.namaKetuaKelompok}
                     onChange={(e) => setFormValues({ ...formValues, namaKetuaKelompok: e.target.value })}
-                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure focus:bg-white outline-none"
+                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 focus:bg-white outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                  <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                     Kelas Kelompok
                   </label>
                   <select
                     value={formValues.kelasKelompok}
                     onChange={(e) => setFormValues({ ...formValues, kelasKelompok: e.target.value })}
-                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure focus:bg-white outline-none"
+                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 focus:bg-white outline-none"
                   >
                     {KELAS_ORDER.map((k) => (
                       <option key={k} value={k}>{k}</option>
@@ -604,7 +604,7 @@ export default function DatabaseKTTPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                  <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                     Anggota Laki-laki
                   </label>
                   <input
@@ -612,12 +612,12 @@ export default function DatabaseKTTPage() {
                     min="0"
                     value={formValues.anggotaLaki}
                     onChange={(e) => setFormValues({ ...formValues, anggotaLaki: parseInt(e.target.value) || 0 })}
-                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure focus:bg-white outline-none"
+                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 focus:bg-white outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                  <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                     Anggota Perempuan
                   </label>
                   <input
@@ -625,7 +625,7 @@ export default function DatabaseKTTPage() {
                     min="0"
                     value={formValues.anggotaPerempuan}
                     onChange={(e) => setFormValues({ ...formValues, anggotaPerempuan: parseInt(e.target.value) || 0 })}
-                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure focus:bg-white outline-none"
+                    className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 focus:bg-white outline-none"
                   />
                 </div>
               </div>
@@ -641,7 +641,7 @@ export default function DatabaseKTTPage() {
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="min-h-touch h-10 px-5 rounded-xl bg-azure text-white text-xs font-bold shadow-sm hover:bg-azure/90 disabled:opacity-50"
+                  className="min-h-touch h-10 px-5 rounded-xl bg-emerald-600 text-white text-xs font-bold shadow-sm hover:bg-emerald-600/90 disabled:opacity-50"
                 >
                   {isSaving ? "Menyimpan..." : "Simpan Kelompok"}
                 </button>

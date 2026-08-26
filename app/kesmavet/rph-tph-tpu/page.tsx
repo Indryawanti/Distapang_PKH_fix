@@ -1625,7 +1625,7 @@ export default function RphTphTpuPage() {
   ).length;
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white pb-20">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-purple-600 selection:text-white pb-20">
       
       {/* ── TOP HEADER ── */}
       <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
@@ -1642,11 +1642,11 @@ export default function RphTphTpuPage() {
 
             <div>
               <div className="flex items-center gap-2">
-                <Link href="/kesmavet" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                <Link href="/kesmavet" className="text-xs font-semibold text-slate-500 hover:text-purple-700 transition-colors">
                   Kesmavet
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-azure">RPH & TPU</span>
+                <span className="text-xs font-bold text-purple-700">RPH, TPH & TPU</span>
               </div>
               <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
                 Database Rumah Potong & Tempat Pemotongan Hewan
@@ -1657,14 +1657,14 @@ export default function RphTphTpuPage() {
           <div className="flex items-center gap-2">
             <button
               onClick={handleExportExcel}
-              className="min-h-touch h-10 px-3.5 sm:px-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-sm"
+              className="min-h-touch h-10 px-3.5 sm:px-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-sm cursor-pointer"
             >
               <Download size={15} />
               <span className="hidden sm:inline">Export Excel</span>
             </button>
             <button
               onClick={openAddModal}
-              className="min-h-touch h-10 px-4 rounded-xl bg-azure text-white text-xs font-bold flex items-center gap-1.5 hover:bg-azure/90 transition-all shadow-sm"
+              className="min-h-touch h-10 px-4 rounded-xl bg-purple-600 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-purple-700 transition-all shadow-sm cursor-pointer"
             >
               <Plus size={15} />
               <span>Tambah Unit</span>
@@ -1680,37 +1680,37 @@ export default function RphTphTpuPage() {
         {/* KPI Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+            <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
               Total Unit Terdata
             </p>
-            <p className="font-mono text-2xl sm:text-3xl font-bold text-slate-900">
+            <p className="font-sans text-2xl sm:text-3xl font-bold text-slate-900">
               {dataRph.length} <span className="text-xs font-normal text-slate-500">Unit</span>
             </p>
           </div>
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+            <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
               Unit RPU & TPU
             </p>
-            <p className="font-mono text-2xl sm:text-3xl font-bold text-azure">
+            <p className="font-sans text-2xl sm:text-3xl font-bold text-purple-600">
               {countRPU + countTPU} <span className="text-xs font-normal text-slate-500">Unggas/Hewan</span>
             </p>
           </div>
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+            <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
               Sertifikasi Halal
             </p>
-            <p className="font-mono text-2xl sm:text-3xl font-bold text-vitality">
+            <p className="font-sans text-2xl sm:text-3xl font-bold text-vitality">
               {countHalal} <span className="text-xs font-normal text-slate-500">Tersertifikasi</span>
             </p>
           </div>
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <p className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 mb-1">
+            <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
               Memiliki NKV
             </p>
-            <p className="font-mono text-2xl sm:text-3xl font-bold text-lime">
+            <p className="font-sans text-2xl sm:text-3xl font-bold text-lime">
               {countNKV} <span className="text-xs font-normal text-slate-500">Unit</span>
             </p>
           </div>
@@ -1725,7 +1725,7 @@ export default function RphTphTpuPage() {
                 onClick={() => setSelectedKategori(cat)}
                 className={`min-h-touch h-9 px-3.5 rounded-xl text-xs font-bold transition-all border ${
                   selectedKategori === cat
-                    ? 'bg-azure text-white border-azure shadow-sm'
+                    ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
                     : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
                 }`}
               >
@@ -1741,7 +1741,7 @@ export default function RphTphTpuPage() {
               placeholder="Cari nama usaha, pemilik, lokasi..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full min-h-touch h-10 pl-9 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-900 focus:outline-none focus:border-azure focus:bg-white"
+              className="w-full min-h-touch h-10 pl-9 pr-4 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-900 focus:outline-none focus:border-purple-500 focus:bg-white"
             />
           </div>
         </div>
@@ -1758,7 +1758,7 @@ export default function RphTphTpuPage() {
                   <th className="p-3.5">PEMILIK</th>
                   <th className="p-3.5">KONTAK</th>
                   <th className="p-3.5">LOKASI USAHA</th>
-                  <th className="p-3.5 text-center font-mono">KAPASITAS (EKOR/HR)</th>
+                  <th className="p-3.5 text-center font-sans">KAPASITAS (EKOR/HR)</th>
                   <th className="p-3.5 text-center">STATUS HALAL</th>
                   <th className="p-3.5 text-center">STATUS NKV</th>
                   <th className="p-3.5 text-center w-24 sticky right-0 bg-slate-50">AKSI</th>
@@ -1779,7 +1779,7 @@ export default function RphTphTpuPage() {
 
                     return (
                       <tr key={item.no} className="hover:bg-slate-50/80 transition-colors">
-                        <td className="p-3.5 text-center font-mono text-slate-400">{item.no}</td>
+                        <td className="p-3.5 text-center font-sans text-slate-400">{item.no}</td>
                         <td className="p-3.5 font-bold text-slate-900">{item.nama_tph_r_u || '-'}</td>
                         <td className="p-3.5">
                           <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
@@ -1787,11 +1787,11 @@ export default function RphTphTpuPage() {
                           </span>
                         </td>
                         <td className="p-3.5 text-slate-700">{item.pemilik || '-'}</td>
-                        <td className="p-3.5 font-mono text-slate-600">{item.no_telp || '-'}</td>
+                        <td className="p-3.5 font-sans text-slate-600">{item.no_telp || '-'}</td>
                         <td className="p-3.5 text-slate-600 max-w-xs truncate" title={item.lokasi_rpu || item.lokasi_desa_kecamatan_alamat_pemilik}>
                           {item.lokasi_rpu || item.lokasi_desa_kecamatan_alamat_pemilik || '-'}
                         </td>
-                        <td className="p-3.5 text-center font-mono font-bold text-azure">
+                        <td className="p-3.5 text-center font-sans font-bold text-purple-600">
                           {item.pemotongan_per_hari_ekor || '-'}
                         </td>
                         <td className="p-3.5 text-center">
@@ -1886,7 +1886,7 @@ export default function RphTphTpuPage() {
                         : ''
                     }
                   >
-                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-600 mb-1">
+                    <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
                       {FIELD_LABELS[key]}
                     </label>
                     <input
@@ -1894,7 +1894,7 @@ export default function RphTphTpuPage() {
                       name={key}
                       value={(formValues as any)[key] ?? ''}
                       onChange={handleFieldChange}
-                      className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-azure focus:bg-white outline-none"
+                      className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-purple-500 focus:bg-white outline-none"
                     />
                   </div>
                 ))}
@@ -1910,7 +1910,7 @@ export default function RphTphTpuPage() {
                 </button>
                 <button
                   type="submit"
-                  className="min-h-touch h-10 px-6 rounded-xl bg-azure text-white text-xs font-bold shadow-sm hover:bg-azure/90"
+                  className="min-h-touch h-10 px-6 rounded-xl bg-purple-600 text-white text-xs font-bold shadow-sm hover:bg-purple-600/90"
                 >
                   {editingNo !== null ? 'Simpan Perubahan' : 'Tambah Data'}
                 </button>
