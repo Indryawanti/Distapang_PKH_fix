@@ -1,14 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { useState } from 'react';
+import Link from 'next/link';
 import {
   ArrowRight,
   Menu,
   X,
-  Eye,
-  EyeOff,
   ShieldCheck,
   ChevronRight,
   BarChart3,
@@ -17,7 +14,6 @@ import {
   FileCheck2,
   Stethoscope,
   Syringe,
-  AlertCircle,
   CheckCircle2,
   Layers,
   Sparkles,
@@ -147,10 +143,7 @@ const MODULES = [
 ] as const;
 
 export default function LandingPage() {
-  const router = useRouter();
-
-  // State Auth Modal & Navigation
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  // Navigation state
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Dashboard state
@@ -159,38 +152,6 @@ export default function LandingPage() {
   const [subTabProd, setSubTabProd] = useState<'populasi' | 'daging' | 'telur'>('populasi');
   const [rankedMetric, setRankedMetric] = useState<keyof typeof METRIC_CONFIGS>('populasi');
 
-  // Form login
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-
-  useEffect(() => {
-    const checkSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (session) router.push('/beranda');
-    };
-    checkSession();
-  }, [router]);
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
-
-    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-
-    if (signInError) {
-      setError('Akses ditolak. Periksa kembali ID Petugas atau kata sandi Anda.');
-      setIsLoading(false);
-    } else {
-      router.push('/beranda');
-    }
-  };
-
   const activeMod = MODULES.find((m) => m.key === activeModule)!;
   const cfg = METRIC_CONFIGS[rankedMetric];
 
@@ -198,14 +159,14 @@ export default function LandingPage() {
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-azure selection:text-white">
       
       {/* ─────────────────────────────────────────────
-          1. TOP NAVIGATION
+          1. TOP NAVIGATION (Lega & Bernapas)
       ───────────────────────────────────────────── */}
-      <header className="fixed top-0 inset-x-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur-md shadow-xs">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 sm:h-20 flex items-center justify-between">
+      <header className="fixed top-0 inset-x-0 z-40 border-b border-slate-200/80 bg-white/95 backdrop-blur-md shadow-xs">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 sm:h-22 flex items-center justify-between">
           
           {/* Logo Brand */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-slate-50 border border-slate-200 p-1 flex items-center justify-center shadow-xs shrink-0">
+          <div className="flex items-center gap-3.5">
+            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-slate-50 border border-slate-200 p-1.5 flex items-center justify-center shadow-xs shrink-0">
               <img
                 src="/logo-simantap.png"
                 alt="Logo SiMantap"
@@ -216,19 +177,19 @@ export default function LandingPage() {
                 }}
               />
               <div className="hidden text-azure items-center justify-center">
-                <Landmark size={20} />
+                <Landmark size={22} />
               </div>
             </div>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5">
                 <span className="font-sans text-xl sm:text-2xl font-bold tracking-tight text-azure">
                   SiMantap
                 </span>
-                <span className="text-[11px] font-bold px-2 py-0.5 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-800 uppercase tracking-wider">
+                <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-800 uppercase tracking-wider">
                   Kebumen
                 </span>
               </div>
-              <p className="text-xs text-slate-500 hidden sm:block leading-none mt-0.5">
+              <p className="text-xs text-slate-500 hidden sm:block leading-none mt-1">
                 Sistem Informasi Manajemen Peternakan Terpadu
               </p>
             </div>
@@ -236,37 +197,37 @@ export default function LandingPage() {
 
           {/* Desktop Nav Links */}
           <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
-            <a href="#ringkasan" className="hover:text-azure transition-colors">
+            <a href="#ringkasan" className="hover:text-azure transition-colors py-2">
               Ringkasan Wilayah
             </a>
-            <a href="#modul" className="hover:text-azure transition-colors">
+            <a href="#modul" className="hover:text-azure transition-colors py-2">
               Modul Data
             </a>
-            <a href="#bantuan" className="hover:text-azure transition-colors">
+            <a href="#bantuan" className="hover:text-azure transition-colors py-2">
               Bantuan Akses
             </a>
           </div>
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center gap-3">
-            <button
-              onClick={() => setShowLoginModal(true)}
-              className="min-h-touch h-11 px-5 rounded-xl bg-azure text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-xs hover:bg-azure/90 active:scale-[0.98] transition-all"
+            <Link
+              href="/login"
+              className="min-h-touch h-11 px-5 sm:px-6 rounded-xl bg-azure text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-xs hover:bg-azure/90 active:scale-[0.98] transition-all"
             >
               <span>Masuk Petugas</span>
               <ArrowRight size={16} />
-            </button>
+            </Link>
           </div>
 
           {/* Mobile Menu Trigger */}
           <div className="flex items-center gap-2 md:hidden">
-            <button
-              onClick={() => setShowLoginModal(true)}
-              className="min-h-touch h-10 px-3.5 rounded-xl bg-azure text-white font-bold text-xs flex items-center gap-1.5 shadow-xs"
+            <Link
+              href="/login"
+              className="min-h-touch h-10 px-4 rounded-xl bg-azure text-white font-bold text-xs flex items-center gap-1.5 shadow-xs"
             >
               <span>Masuk</span>
               <ArrowRight size={14} />
-            </button>
+            </Link>
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -297,14 +258,14 @@ export default function LandingPage() {
               <FolderKanban size={16} className="text-vitality" />
               <span>Modul Data</span>
             </a>
-            <a
-              href="#bantuan"
+            <Link
+              href="/login"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 py-2 text-sm font-bold text-slate-800 hover:text-azure"
+              className="flex items-center gap-2 py-2 text-sm font-bold text-azure hover:underline"
             >
-              <ShieldCheck size={16} className="text-slate-500" />
-              <span>Bantuan Akses</span>
-            </a>
+              <ShieldCheck size={16} className="text-azure" />
+              <span>Masuk Petugas Dinas</span>
+            </Link>
           </div>
         )}
       </header>
@@ -312,7 +273,7 @@ export default function LandingPage() {
       {/* ─────────────────────────────────────────────
           2. HERO SECTION
       ───────────────────────────────────────────── */}
-      <section id="ringkasan" className="pt-28 pb-12 sm:pt-36 sm:pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section id="ringkasan" className="pt-32 pb-16 sm:pt-40 sm:pb-24 lg:pt-44 lg:pb-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         
         {/* Kicker Badge */}
         <div className="flex justify-center mb-5">
@@ -336,13 +297,13 @@ export default function LandingPage() {
 
         {/* Primary Call to Actions */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-12">
-          <button
-            onClick={() => setShowLoginModal(true)}
+          <Link
+            href="/login"
             className="w-full sm:w-auto min-h-touch h-12 px-7 rounded-xl bg-azure text-white font-bold text-sm flex items-center justify-center gap-2 shadow-xs hover:bg-azure/90 active:scale-[0.98] transition-all"
           >
             <span>Masuk ke Dashboard Dinas</span>
             <ArrowRight size={16} />
-          </button>
+          </Link>
           
           <a
             href="#modul"
@@ -670,13 +631,13 @@ export default function LandingPage() {
                       Detail mutasi ternak, rekonsiliasi bantuan, dan data internal dinas dapat diakses melalui portal internal.
                     </p>
                     <div className="pt-2">
-                      <button
-                        onClick={() => setShowLoginModal(true)}
-                        className="min-h-touch h-10 px-5 rounded-xl bg-azure text-white font-bold text-xs inline-flex items-center gap-2 shadow-xs"
+                      <Link
+                        href="/login"
+                        className="min-h-touch h-10 px-5 rounded-xl bg-azure text-white font-bold text-xs inline-flex items-center gap-2 shadow-xs hover:bg-azure/90 active:scale-95 transition-all"
                       >
-                        Masuk untuk Akses Lengkap
+                        <span>Masuk untuk Akses Lengkap</span>
                         <ArrowRight size={14} />
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 )}
@@ -948,107 +909,7 @@ export default function LandingPage() {
       </section>
 
       {/* ─────────────────────────────────────────────
-          5. MODAL LOGIN PETUGAS
-      ───────────────────────────────────────────── */}
-      {showLoginModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 relative shadow-2xl animate-in zoom-in-95 duration-200 text-slate-900">
-            
-            {/* Close Button */}
-            <button
-              onClick={() => setShowLoginModal(false)}
-              aria-label="Tutup jendela login"
-              className="min-h-touch min-w-touch w-10 h-10 rounded-xl border border-slate-200 bg-slate-50 text-slate-500 hover:text-slate-900 absolute top-5 right-5 flex items-center justify-center transition-colors"
-            >
-              <X size={18} />
-            </button>
-
-            {/* Header */}
-            <div className="mb-6 text-left">
-              <div className="w-12 h-12 rounded-2xl bg-azure/10 border border-azure/30 flex items-center justify-center text-azure mb-3">
-                <ShieldCheck size={24} />
-              </div>
-              <h3 className="font-sans text-2xl font-bold tracking-tight text-slate-900">
-                Masuk Sistem SiMantap
-              </h3>
-              <p className="text-xs text-slate-500 mt-1">
-                Gunakan ID Petugas resmi Dinas Pertanian dan Pangan
-              </p>
-            </div>
-
-            {/* Error Message */}
-            {error && (
-              <div className="mb-4 p-3 rounded-xl border border-red-200 bg-red-50 text-red-700 text-xs font-semibold flex items-center gap-2">
-                <AlertCircle size={16} className="shrink-0" />
-                <span>{error}</span>
-              </div>
-            )}
-
-            {/* Form */}
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-                  ID Petugas (Email Dinas)
-                </label>
-                <input
-                  type="email"
-                  required
-                  placeholder="petugas@pkh.kebumenkab.go.id"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full min-h-touch h-11 px-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm font-sans outline-none focus:border-azure focus:bg-white transition-colors"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-                  Kata Sandi
-                </label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    placeholder="••••••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full min-h-touch h-11 pl-3.5 pr-11 rounded-xl border border-slate-200 bg-slate-50 text-sm font-sans outline-none focus:border-azure focus:bg-white transition-colors"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    aria-label={showPassword ? 'Sembunyikan sandi' : 'Tampilkan sandi'}
-                    className="min-h-touch min-w-touch w-10 h-10 absolute right-0.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-400 hover:text-slate-700"
-                  >
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full min-h-touch h-12 rounded-xl bg-azure text-white font-bold text-sm flex items-center justify-center gap-2 mt-5 shadow-xs hover:bg-azure/90 active:scale-[0.98] disabled:opacity-50 transition-all"
-              >
-                {isLoading ? (
-                  <span>Memverifikasi Akun...</span>
-                ) : (
-                  <>
-                    <span>Masuk ke Dashboard Petugas</span>
-                    <ArrowRight size={16} />
-                  </>
-                )}
-              </button>
-            </form>
-
-            <div className="mt-5 pt-4 border-t border-slate-200 text-center text-[11px] text-slate-500">
-              Butuh bantuan atau lupa kredensial? Hubungi Administrator Teknis Bidang PKH.
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ─────────────────────────────────────────────
-          6. FOOTER
+          5. FOOTER
       ───────────────────────────────────────────── */}
       <footer id="bantuan" className="border-t border-slate-200 py-10 px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-600 bg-white">
         <div className="max-w-4xl mx-auto space-y-3">

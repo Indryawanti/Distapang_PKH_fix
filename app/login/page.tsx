@@ -48,19 +48,19 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans flex flex-col justify-between selection:bg-blue-600 selection:text-white">
       
-      {/* Top Bar Navigation */}
-      <header className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-between">
+      {/* Top Bar Navigation (Lega) */}
+      <header className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex items-center justify-between">
         <Link
           href="/"
-          className="min-h-touch h-11 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 text-sm font-semibold flex items-center gap-2 transition-colors shadow-xs"
+          className="min-h-touch h-11 px-4 sm:px-5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold flex items-center gap-2 transition-colors shadow-xs"
         >
           <ArrowLeft size={16} />
-          <span>Kembali ke Beranda Publik</span>
+          <span>Kembali ke Portal Publik</span>
         </Link>
       </header>
 
       {/* Main Login Card Area */}
-      <main className="w-full max-w-md mx-auto px-4 py-8">
+      <main className="w-full max-w-md mx-auto px-4 py-6 sm:py-10">
         
         {/* Brand & Identity */}
         <div className="text-center mb-8 space-y-2">

@@ -32,7 +32,7 @@ export default function KeswanPage() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    router.push('/');
+    router.push('/login');
   };
 
   const menus = [
@@ -70,28 +70,28 @@ export default function KeswanPage() {
   return (
     <div className="min-h-screen bg-blue-50/30 text-slate-900 font-sans selection:bg-blue-600 selection:text-white pb-20">
       
-      {/* ── TOP APP BAR (Tema Biru) ── */}
-      <header className="border-b border-blue-100 bg-white sticky top-0 z-30 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+      {/* ── TOP APP BAR (Tema Biru - Lega & Bernapas) ── */}
+      <header className="border-b border-blue-100 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between">
           
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3.5">
             <Link
               href="/beranda"
-              className="min-h-touch min-w-touch w-10 h-10 rounded-xl border border-blue-200 bg-blue-50 hover:bg-blue-100 flex items-center justify-center text-blue-800 transition-colors"
+              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-blue-200 bg-blue-50 hover:bg-blue-100 flex items-center justify-center text-blue-800 transition-colors"
               aria-label="Kembali ke Beranda"
             >
               <ArrowLeft size={18} />
             </Link>
 
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 mb-0.5">
                 <Link href="/beranda" className="text-xs font-semibold text-slate-500 hover:text-blue-700 transition-colors">
                   SiMantap
                 </Link>
                 <span className="text-slate-300">/</span>
                 <span className="text-xs font-bold text-blue-700">Bidang Keswan</span>
               </div>
-              <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
+              <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-tight">
                 Kesehatan Hewan & Puskeswan
               </h1>
             </div>
@@ -100,9 +100,9 @@ export default function KeswanPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={handleLogout}
-              className="min-h-touch h-10 px-4 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="min-h-touch h-11 px-4 sm:px-5 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 text-xs sm:text-sm font-bold flex items-center gap-2 transition-colors cursor-pointer"
             >
-              <LogOut size={15} />
+              <LogOut size={16} />
               <span className="hidden sm:inline">Keluar</span>
             </button>
           </div>
@@ -111,29 +111,29 @@ export default function KeswanPage() {
       </header>
 
       {/* ── MAIN CONTENT ── */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 space-y-10">
         
         {/* Module Header Banner (Tema Biru) */}
-        <section className="rounded-3xl border border-blue-200 bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 sm:p-8 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
-          <div className="relative z-10 flex items-start gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-white/20 border border-white/30 text-white flex items-center justify-center shrink-0 shadow-inner">
-              <Stethoscope size={28} />
+        <section className="rounded-3xl border border-blue-200 bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-8 sm:p-10 lg:p-12 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-8 relative overflow-hidden">
+          <div className="relative z-10 flex items-start gap-5">
+            <div className="w-16 h-16 rounded-2xl bg-white/20 border border-white/30 text-white flex items-center justify-center shrink-0 shadow-inner">
+              <Stethoscope size={32} />
             </div>
-            <div className="space-y-1">
+            <div className="space-y-2">
               <div>
-                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white">
                   Bidang Keswan
                 </h2>
               </div>
-              <p className="text-sm text-blue-50 max-w-2xl leading-relaxed">
+              <p className="text-sm sm:text-base text-blue-50 max-w-2xl leading-relaxed">
                 Pusat data monitoring vaksinasi penyakit menular ternak strategis (PMK & LSD), pelayanan medis di 8 Puskeswan, rekapitulasi log dosis harian, dan pencegahan wabah.
               </p>
             </div>
           </div>
 
           <div className="relative z-10 flex items-center gap-3 self-start md:self-auto shrink-0">
-            <div className="p-3.5 rounded-2xl bg-white/10 border border-white/20 text-xs text-blue-100">
-              <span className="font-bold text-white block text-sm">{menus.length} Layanan Data</span>
+            <div className="p-4 rounded-2xl bg-white/10 border border-white/20 text-xs sm:text-sm text-blue-100">
+              <span className="font-bold text-white block text-sm sm:text-base">{menus.length} Layanan Data</span>
               Tersinkronisasi Realtime
             </div>
           </div>

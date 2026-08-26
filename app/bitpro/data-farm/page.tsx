@@ -237,41 +237,41 @@ export default function DataFarmPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-600 selection:text-white">
       
-      {/* ── TOP HEADER ── */}
-      <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+      {/* ── TOP HEADER (Tema Hijau - Lega & Bernapas) ── */}
+      <header className="border-b border-emerald-100 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between">
           
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3.5">
             <Link
               href="/bitpro"
-              className="min-h-touch min-w-touch w-10 h-10 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors"
+              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 flex items-center justify-center text-emerald-800 transition-colors"
               aria-label="Kembali ke Modul Bitpro"
             >
               <ArrowLeft size={18} />
             </Link>
 
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 mb-0.5">
                 <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
                   Bitpro
                 </Link>
                 <span className="text-slate-300">/</span>
                 <span className="text-xs font-bold text-emerald-700">Data Farm</span>
               </div>
-              <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
+              <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-tight">
                 Sebaran Unit Usaha Peternakan
               </h1>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {activeCommodity && (
               <button
                 onClick={() => {
                   setActiveCommodity(null);
                   setSearchTerm('');
                 }}
-                className="min-h-touch h-10 px-4 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 text-xs font-bold transition-colors"
+                className="min-h-touch h-11 px-4 sm:px-5 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 text-xs sm:text-sm font-bold transition-colors shadow-xs"
               >
                 ← Semua Komoditas
               </button>
@@ -282,7 +282,7 @@ export default function DataFarmPage() {
       </header>
 
       {/* ── MAIN CONTENT ── */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 space-y-8">
         
         {/* ── VIEW 1: OVERVIEW KARTU KOMODITAS ── */}
         {!activeCommodity ? (

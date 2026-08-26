@@ -60,3 +60,12 @@ html, body {
   outline: 2px solid #2192FF;
   outline-offset: 2px;
 }
+
+/* Horizontal tab scroll helper */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

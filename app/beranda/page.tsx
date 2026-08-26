@@ -67,7 +67,7 @@ export default function BerandaPage() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    router.push('/');
+    router.push('/login');
   };
 
   if (isLoading) {
@@ -89,15 +89,15 @@ export default function BerandaPage() {
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-600 selection:text-white pb-20">
       
       {/* ─────────────────────────────────────────────
-          1. TOP APP BAR
+          1. TOP APP BAR (Lega & Bernapas)
       ───────────────────────────────────────────── */}
-      <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+      <header className="border-b border-slate-200 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between">
           
           {/* Logo & Portal Identity */}
-          <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 p-1 flex items-center justify-center shadow-xs shrink-0 transition-transform group-hover:scale-105">
+          <div className="flex items-center gap-3.5">
+            <Link href="/" className="flex items-center gap-3.5 group">
+              <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-slate-50 border border-slate-200 p-1.5 flex items-center justify-center shadow-xs shrink-0 transition-transform group-hover:scale-105">
                 <img
                   src="/logo-simantap.png"
                   alt="Logo SiMantap"
@@ -108,19 +108,19 @@ export default function BerandaPage() {
                   }}
                 />
                 <div className="hidden text-blue-600 items-center justify-center">
-                  <Landmark size={20} />
+                  <Landmark size={22} />
                 </div>
               </div>
               <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xl font-bold tracking-tight text-blue-600">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-xl sm:text-2xl font-bold tracking-tight text-blue-600">
                     SiMantap
                   </span>
-                  <span className="text-xs font-bold px-2 py-0.5 rounded-full border border-blue-200 bg-blue-50 text-blue-700">
+                  <span className="text-xs font-bold px-2.5 py-0.5 rounded-full border border-blue-200 bg-blue-50 text-blue-700">
                     Dashboard Petugas
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 hidden sm:block leading-none mt-0.5">
+                <p className="text-xs text-slate-500 hidden sm:block leading-none mt-1">
                   Dinas Pertanian dan Pangan Kabupaten Kebumen
                 </p>
               </div>
@@ -128,20 +128,20 @@ export default function BerandaPage() {
           </div>
 
           {/* Navigation Actions */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="min-h-touch h-10 px-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold hidden sm:flex items-center gap-1.5 transition-colors shadow-xs"
+              className="min-h-touch h-11 px-4 sm:px-5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold flex items-center gap-2 transition-colors shadow-xs"
             >
               <span>Portal Publik</span>
-              <ExternalLink size={14} />
+              <ExternalLink size={15} />
             </Link>
 
             <button
               onClick={handleLogout}
-              className="min-h-touch h-10 px-4 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 shadow-xs cursor-pointer"
+              className="min-h-touch h-11 px-4 sm:px-5 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 text-xs sm:text-sm font-bold flex items-center gap-2 transition-all active:scale-95 shadow-xs cursor-pointer"
             >
-              <LogOut size={15} />
+              <LogOut size={16} />
               <span>Keluar</span>
             </button>
           </div>
@@ -152,23 +152,23 @@ export default function BerandaPage() {
       {/* ─────────────────────────────────────────────
           2. OFFICER PROFILE & TELEMETRY BANNER
       ───────────────────────────────────────────── */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 space-y-10">
         
         {/* Officer Status Card */}
-        <section className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xs">
+        <section className="rounded-3xl border border-slate-200 bg-white p-8 sm:p-10 lg:p-12 flex flex-col md:flex-row md:items-center justify-between gap-8 shadow-xs">
           
-          <div className="flex items-start sm:items-center gap-4">
-            <div className="w-13 h-13 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 shrink-0">
-              <UserCheck size={26} />
+          <div className="flex items-start sm:items-center gap-5">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 shrink-0">
+              <UserCheck size={30} />
             </div>
 
-            <div>
-              <div className="flex flex-wrap items-center gap-2 mb-1">
-                <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            <div className="space-y-1.5">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 tracking-tight">
                   Selamat Bertugas
                 </h2>
                 <span
-                  className={`text-xs font-bold px-2.5 py-0.5 rounded-full border ${
+                  className={`text-xs font-bold px-3 py-1 rounded-full border ${
                     hasFullAccess
                       ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
                       : 'bg-blue-50 text-blue-800 border-blue-200'

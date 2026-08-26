@@ -415,46 +415,46 @@ export default function DataVaksinasiPMKPage() {
         </div>
       )}
 
-      {/* ── TOP HEADER ── */}
-      <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+      {/* ── TOP HEADER (Tema Biru - Lega & Bernapas) ── */}
+      <header className="border-b border-blue-100 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between">
           
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3.5">
             <Link
               href="/keswan"
-              className="min-h-touch min-w-touch w-10 h-10 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors"
+              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-blue-200 bg-blue-50 hover:bg-blue-100 flex items-center justify-center text-blue-800 transition-colors"
               aria-label="Kembali ke Keswan"
             >
               <ArrowLeft size={18} />
             </Link>
 
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 mb-0.5">
                 <Link href="/keswan" className="text-xs font-semibold text-slate-500 hover:text-blue-700 transition-colors">
                   Keswan
                 </Link>
                 <span className="text-slate-300">/</span>
                 <span className="text-xs font-bold text-blue-700">Data Vaksinasi</span>
               </div>
-              <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
+              <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-tight">
                 Rekapitulasi & Pemantauan Vaksinasi PMK
               </h1>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <button
               onClick={handleExportExcel}
-              className="min-h-touch h-10 px-3.5 sm:px-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-sm cursor-pointer"
+              className="min-h-touch h-11 px-4 sm:px-5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold flex items-center gap-2 transition-colors shadow-xs cursor-pointer"
             >
-              <Download size={15} />
+              <Download size={16} />
               <span className="hidden sm:inline">Export Excel</span>
             </button>
             <button
               onClick={fetchAll}
-              className="min-h-touch h-10 px-3.5 sm:px-4 rounded-xl bg-blue-600 text-white text-xs font-bold flex items-center gap-1.5 hover:bg-blue-700 transition-all shadow-sm cursor-pointer"
+              className="min-h-touch h-11 px-4 sm:px-5 rounded-xl bg-blue-600 text-white text-xs sm:text-sm font-bold flex items-center gap-2 hover:bg-blue-700 transition-all shadow-xs cursor-pointer"
             >
-              <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+              <RefreshCw size={15} className={loading ? 'animate-spin' : ''} />
               <span className="hidden sm:inline">Muat Ulang</span>
             </button>
           </div>
@@ -463,10 +463,10 @@ export default function DataVaksinasiPMKPage() {
       </header>
 
       {/* ── MAIN WORKSPACE ── */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 space-y-8">
         
         {/* Navigation Tabs */}
-        <div className="flex gap-2 border-b border-slate-200 pb-px">
+        <div className="flex gap-2 border-b border-slate-200 pb-px overflow-x-auto no-scrollbar scroll-smooth -mx-4 px-4 sm:mx-0 sm:px-0">
           {[
             { key: 'bulanan', label: 'Rekapitulasi Bulanan' },
             { key: 'harian', label: 'Matriks Input Harian' },
@@ -477,7 +477,7 @@ export default function DataVaksinasiPMKPage() {
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key as any)}
-                className={`min-h-touch h-11 px-4 sm:px-5 rounded-t-xl text-xs sm:text-sm font-bold border-t border-x transition-all ${
+                className={`min-h-touch h-11 px-4 sm:px-5 rounded-t-xl text-xs sm:text-sm font-bold border-t border-x transition-all shrink-0 whitespace-nowrap cursor-pointer ${
                   active
                     ? 'bg-white border-slate-200 text-blue-600 border-b-white translate-y-px shadow-sm'
                     : 'border-transparent text-slate-500 hover:text-slate-900 bg-slate-100/60'
