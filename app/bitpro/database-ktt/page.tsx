@@ -237,38 +237,40 @@ export default function DatabaseKTTPage() {
       
       {/* ── TOP HEADER (Tema Hijau - Lega & Bernapas) ── */}
       <header className="border-b border-emerald-100 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between gap-3">
           
-          <div className="flex items-center gap-3.5">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
             <Link
               href="/bitpro"
-              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 flex items-center justify-center text-emerald-800 transition-colors"
+              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 flex items-center justify-center text-emerald-800 transition-colors shrink-0"
               aria-label="Kembali ke Bitpro"
             >
               <ArrowLeft size={18} />
             </Link>
 
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-2 mb-0.5">
-                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
+                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors truncate">
                   Bitpro
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-emerald-700">Database KTT</span>
+                <span className="text-xs font-bold text-emerald-700 whitespace-nowrap">Database KTT</span>
               </div>
-              <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-tight">
+              <h1 className="text-base sm:text-xl font-bold text-slate-900 tracking-tight leading-tight truncate">
                 Master Kelompok Tani Ternak
               </h1>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={openAddModal}
-              className="min-h-touch h-11 px-4 sm:px-5 rounded-xl bg-emerald-600 text-white text-xs sm:text-sm font-bold flex items-center gap-2 hover:bg-emerald-700 active:scale-95 transition-all shadow-xs"
+              title="Tambah KTT"
+              aria-label="Tambah KTT"
+              className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-5 rounded-xl bg-emerald-600 text-white text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 hover:bg-emerald-700 active:scale-95 transition-all shadow-xs cursor-pointer"
             >
               <Plus size={16} />
-              <span>Tambah KTT</span>
+              <span className="hidden sm:inline">Tambah KTT</span>
             </button>
           </div>
 

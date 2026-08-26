@@ -44,6 +44,20 @@ export default function KeswanPage() {
       badge: 'Vaksinasi PMK & LSD',
     },
     {
+      title: 'Lalu Lintas Ternak',
+      desc: 'Pencatatan dan pengawasan pergerakan ternak antar wilayah, penerbitan SKKH, dan rekapitulasi dokumen lalin',
+      icon: ShieldCheck,
+      path: '/keswan/data-vaksinasi',
+      badge: 'Lalu Lintas',
+    },
+    {
+      title: 'Laporan Penyakit Ternak',
+      desc: 'Rekapitulasi kasus penyakit hewan menular strategis, outbreak monitoring, dan tindakan pengendalian wabah',
+      icon: HeartPulse,
+      path: '/keswan/data-vaksinasi',
+      badge: 'Surveilans Penyakit',
+    },
+    {
       title: 'Kinerja Pelayanan Puskeswan',
       desc: 'Rekapitulasi diagnosa penyakit, pelayanan medis aktif/pasif, pusling keliling, dan penerimaan retribusi 8 Puskeswan',
       icon: Building2,
@@ -72,35 +86,37 @@ export default function KeswanPage() {
       
       {/* ── TOP APP BAR (Tema Biru - Lega & Bernapas) ── */}
       <header className="border-b border-blue-100 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between gap-3">
           
-          <div className="flex items-center gap-3.5">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
             <Link
               href="/beranda"
-              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-blue-200 bg-blue-50 hover:bg-blue-100 flex items-center justify-center text-blue-800 transition-colors"
+              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-blue-200 bg-blue-50 hover:bg-blue-100 flex items-center justify-center text-blue-800 transition-colors shrink-0"
               aria-label="Kembali ke Beranda"
             >
               <ArrowLeft size={18} />
             </Link>
 
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-2 mb-0.5">
-                <Link href="/beranda" className="text-xs font-semibold text-slate-500 hover:text-blue-700 transition-colors">
+                <Link href="/beranda" className="text-xs font-semibold text-slate-500 hover:text-blue-700 transition-colors truncate">
                   SiMantap
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-blue-700">Bidang Keswan</span>
+                <span className="text-xs font-bold text-blue-700 whitespace-nowrap">Bidang Keswan</span>
               </div>
-              <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-tight">
-                Kesehatan Hewan & Puskeswan
+              <h1 className="text-base sm:text-xl font-bold text-slate-900 tracking-tight leading-tight truncate">
+                Kesehatan Hewan &amp; Puskeswan
               </h1>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={handleLogout}
-              className="min-h-touch h-11 px-4 sm:px-5 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 text-xs sm:text-sm font-bold flex items-center gap-2 transition-colors cursor-pointer"
+              title="Keluar"
+              aria-label="Keluar"
+              className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-4 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 transition-colors cursor-pointer"
             >
               <LogOut size={16} />
               <span className="hidden sm:inline">Keluar</span>
@@ -125,8 +141,8 @@ export default function KeswanPage() {
                   Bidang Keswan
                 </h2>
               </div>
-              <p className="text-sm sm:text-base text-blue-50 max-w-2xl leading-relaxed">
-                Pusat data monitoring vaksinasi penyakit menular ternak strategis (PMK & LSD), pelayanan medis di 8 Puskeswan, rekapitulasi log dosis harian, dan pencegahan wabah.
+              <p className="text-sm sm:text-base text-blue-50 max-w-2xl leading-relaxed text-justify">
+                Pusat data monitoring vaksinasi penyakit menular ternak strategis (PMK &amp; LSD), pelayanan medis di 8 Puskeswan, rekapitulasi log dosis harian, dan pencegahan wabah.
               </p>
             </div>
           </div>

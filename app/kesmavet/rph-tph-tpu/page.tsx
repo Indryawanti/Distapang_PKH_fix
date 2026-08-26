@@ -1752,45 +1752,49 @@ export default function RphTphTpuPage() {
       
       {/* ── TOP HEADER (Tema Ungu - Lega & Bernapas) ── */}
       <header className="border-b border-purple-100 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between gap-3">
           
-          <div className="flex items-center gap-3.5">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
             <Link
               href="/kesmavet"
-              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-purple-200 bg-purple-50 hover:bg-purple-100 flex items-center justify-center text-purple-800 transition-colors"
+              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-purple-200 bg-purple-50 hover:bg-purple-100 flex items-center justify-center text-purple-800 transition-colors shrink-0"
               aria-label="Kembali ke Kesmavet"
             >
               <ArrowLeft size={18} />
             </Link>
 
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-2 mb-0.5">
-                <Link href="/kesmavet" className="text-xs font-semibold text-slate-500 hover:text-purple-700 transition-colors">
+                <Link href="/kesmavet" className="text-xs font-semibold text-slate-500 hover:text-purple-700 transition-colors truncate">
                   Kesmavet
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-purple-700">RPH, TPH & TPU</span>
+                <span className="text-xs font-bold text-purple-700 whitespace-nowrap">RPH &amp; TPU</span>
               </div>
-              <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-tight">
-                Database Rumah Potong & Tempat Pemotongan Hewan
+              <h1 className="text-base sm:text-xl font-bold text-slate-900 tracking-tight leading-tight truncate">
+                Database Rumah Potong &amp; Tempat Pemotongan Hewan
               </h1>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={handleExportExcel}
-              className="min-h-touch h-11 px-4 sm:px-5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold flex items-center gap-2 transition-colors shadow-xs cursor-pointer"
+              title="Export Excel"
+              aria-label="Export Excel"
+              className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 transition-colors shadow-xs cursor-pointer"
             >
               <Download size={16} />
               <span className="hidden sm:inline">Export Excel</span>
             </button>
             <button
               onClick={openAddModal}
-              className="min-h-touch h-11 px-4 sm:px-5 rounded-xl bg-purple-600 text-white text-xs sm:text-sm font-bold flex items-center gap-2 hover:bg-purple-700 transition-all shadow-xs cursor-pointer"
+              title="Tambah Unit"
+              aria-label="Tambah Unit"
+              className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-5 rounded-xl bg-purple-600 text-white text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 hover:bg-purple-700 transition-all shadow-xs cursor-pointer"
             >
               <Plus size={16} />
-              <span>Tambah Unit</span>
+              <span className="hidden sm:inline">Tambah Unit</span>
             </button>
           </div>
 

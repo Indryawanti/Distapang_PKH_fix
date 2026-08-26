@@ -33,33 +33,29 @@ export default function Produksi2025() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-600 selection:text-white pb-20">
       
-      {/* ── TOP HEADER ── */}
-      <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+      {/* ── TOP HEADER (Tema Hijau - Lega & Bernapas) ── */}
+      <header className="border-b border-emerald-100 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between gap-3">
           
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
             <Link
               href="/bitpro/populasi-dan-produksi"
-              className="min-h-touch min-w-touch w-10 h-10 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors"
+              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 flex items-center justify-center text-emerald-800 transition-colors shrink-0"
               aria-label="Kembali ke Menu Produksi"
             >
               <ArrowLeft size={18} />
             </Link>
 
-            <div>
-              <div className="flex items-center gap-2">
-                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 mb-0.5">
+                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors truncate">
                   Bitpro
                 </Link>
                 <span className="text-slate-300">/</span>
-                <Link href="/bitpro/populasi-dan-produksi" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
-                  Produksi
-                </Link>
-                <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-emerald-700">Tahun 2025</span>
+                <span className="text-xs font-bold text-emerald-700 whitespace-nowrap">Produksi 2025</span>
               </div>
-              <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-tight">
-                Laporan Produksi Daging & Telur Tahun 2025
+              <h1 className="text-base sm:text-xl font-bold text-slate-900 tracking-tight leading-tight truncate">
+                Laporan Produksi Daging &amp; Telur Tahun 2025
               </h1>
             </div>
           </div>

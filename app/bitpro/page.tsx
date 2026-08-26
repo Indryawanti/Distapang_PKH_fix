@@ -49,11 +49,18 @@ export default function BitproPage() {
       badge: 'Master Data',
     },
     {
-      title: 'Populasi & Produksi',
-      desc: 'Statistik sensus populasi 16 komoditas ternak serta laporan tonase produksi daging dan telur',
-      icon: BarChart3,
-      path: '/bitpro/populasi-dan-produksi',
-      badge: 'Statistik 2025/2026',
+      title: 'SapiTime Smart App',
+      desc: 'Aplikasi cerdas kalender reproduksi sapi, siklus estrus 21 hari, dan direktori indukan produktif',
+      icon: Smartphone,
+      path: '/bitpro/sapitime',
+      badge: 'Smart App',
+    },
+    {
+      title: 'Sertifikat SKLB',
+      desc: 'Penerbitan dan rekapitulasi Surat Keterangan Layak Bibit ternak sapi Tim Barat & Tim Timur Kebumen',
+      icon: Award,
+      path: '/bitpro/sklb',
+      badge: 'Sertifikasi Bibit',
     },
     {
       title: 'Database Inseminasi Buatan (IB)',
@@ -63,18 +70,25 @@ export default function BitproPage() {
       badge: 'Pelayanan IB',
     },
     {
-      title: 'SapiTime Smart App',
-      desc: 'Aplikasi cerdas kalender reproduksi sapi, siklus estrus 21 hari, dan direktori indukan',
-      icon: Smartphone,
-      path: '/bitpro/sapitime',
-      badge: 'Smart App',
+      title: 'Monev KTT',
+      desc: 'Monitoring dan evaluasi perkembangan ternak KTT: populasi, pendataan lapangan, dan berita acara kegiatan',
+      icon: Calendar,
+      path: '/bitpro/monev-ktt',
+      badge: 'Monitoring KTT',
     },
     {
-      title: 'Sertifikat SKLB',
-      desc: 'Penerbitan dan rekapitulasi Surat Keterangan Layak Bibit ternak sapi Tim Barat & Tim Timur',
-      icon: Award,
-      path: '/bitpro/sklb',
-      badge: 'Sertifikasi Bibit',
+      title: 'Kegiatan KTT',
+      desc: 'Rekap kegiatan pembinaan, pelatihan, dan pendampingan teknis Kelompok Tani Ternak per kecamatan',
+      icon: CheckCircle2,
+      path: '/bitpro/monev-ktt',
+      badge: 'Pembinaan KTT',
+    },
+    {
+      title: 'Populasi & Produksi',
+      desc: 'Statistik sensus populasi 16 komoditas ternak serta laporan tonase produksi daging dan telur',
+      icon: BarChart3,
+      path: '/bitpro/populasi-dan-produksi',
+      badge: 'Statistik 2025/2026',
     },
     {
       title: 'Database Sebaran Farm',
@@ -105,37 +119,39 @@ export default function BitproPage() {
       
       {/* ── TOP APP BAR (Tema Hijau - Lega & Bernapas) ── */}
       <header className="border-b border-emerald-100 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between gap-3">
           
           {/* Breadcrumb & Identity */}
-          <div className="flex items-center gap-3.5">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
             <Link
               href="/beranda"
-              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 flex items-center justify-center text-emerald-800 transition-colors"
+              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 flex items-center justify-center text-emerald-800 transition-colors shrink-0"
               aria-label="Kembali ke Beranda"
             >
               <ArrowLeft size={18} />
             </Link>
 
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-2 mb-0.5">
-                <Link href="/beranda" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
+                <Link href="/beranda" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors truncate">
                   SiMantap
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-emerald-700">Bidang Bitpro</span>
+                <span className="text-xs font-bold text-emerald-700 whitespace-nowrap">Bidang Bitpro</span>
               </div>
-              <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-tight">
-                Perbibitan & Produksi Ternak
+              <h1 className="text-base sm:text-xl font-bold text-slate-900 tracking-tight leading-tight truncate">
+                Perbibitan &amp; Produksi Ternak
               </h1>
             </div>
           </div>
 
           {/* Quick Actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={handleLogout}
-              className="min-h-touch h-11 px-4 sm:px-5 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 text-xs sm:text-sm font-bold flex items-center gap-2 transition-colors cursor-pointer"
+              title="Keluar"
+              aria-label="Keluar"
+              className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-4 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 transition-colors cursor-pointer"
             >
               <LogOut size={16} />
               <span className="hidden sm:inline">Keluar</span>
@@ -160,7 +176,7 @@ export default function BitproPage() {
                   Bidang Bitpro
                 </h2>
               </div>
-              <p className="text-sm sm:text-base text-emerald-50 max-w-2xl leading-relaxed">
+              <p className="text-sm sm:text-base text-emerald-50 max-w-2xl leading-relaxed text-justify">
                 Pusat data perbibitan, sensus populasi ternak, evaluasi inseminasi buatan, sertifikasi bibit unggul, dan rekapitulasi produksi daging/telur Kabupaten Kebumen.
               </p>
             </div>

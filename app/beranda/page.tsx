@@ -88,15 +88,13 @@ export default function BerandaPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-600 selection:text-white pb-20">
       
-      {/* ─────────────────────────────────────────────
-          1. TOP APP BAR (Lega & Bernapas)
-      ───────────────────────────────────────────── */}
+      {/* ── TOP APP BAR ── */}
       <header className="border-b border-slate-200 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between gap-3">
           
           {/* Logo & Portal Identity */}
-          <div className="flex items-center gap-3.5">
-            <Link href="/" className="flex items-center gap-3.5 group">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
+            <Link href="/" className="flex items-center gap-3 group min-w-0">
               <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-slate-50 border border-slate-200 p-1.5 flex items-center justify-center shadow-xs shrink-0 transition-transform group-hover:scale-105">
                 <img
                   src="/logo-simantap.png"
@@ -111,16 +109,16 @@ export default function BerandaPage() {
                   <Landmark size={22} />
                 </div>
               </div>
-              <div>
-                <div className="flex items-center gap-2.5">
-                  <span className="text-xl sm:text-2xl font-bold tracking-tight text-blue-600">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg sm:text-2xl font-bold tracking-tight text-blue-600">
                     SiMantap
                   </span>
-                  <span className="text-xs font-bold px-2.5 py-0.5 rounded-full border border-blue-200 bg-blue-50 text-blue-700">
-                    Dashboard Petugas
+                  <span className="text-[11px] sm:text-xs font-bold px-2 sm:px-2.5 py-0.5 rounded-full border border-blue-200 bg-blue-50 text-blue-700 whitespace-nowrap">
+                    Dashboard
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 hidden sm:block leading-none mt-1">
+                <p className="text-xs text-slate-500 hidden sm:block leading-none mt-1 truncate">
                   Dinas Pertanian dan Pangan Kabupaten Kebumen
                 </p>
               </div>
@@ -128,30 +126,32 @@ export default function BerandaPage() {
           </div>
 
           {/* Navigation Actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 shrink-0">
             <Link
               href="/"
-              className="min-h-touch h-11 px-4 sm:px-5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold flex items-center gap-2 transition-colors shadow-xs"
+              title="Portal Publik"
+              aria-label="Portal Publik"
+              className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 transition-colors shadow-xs"
             >
-              <span>Portal Publik</span>
-              <ExternalLink size={15} />
+              <ExternalLink size={16} />
+              <span className="hidden sm:inline">Portal Publik</span>
             </Link>
 
             <button
               onClick={handleLogout}
-              className="min-h-touch h-11 px-4 sm:px-5 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 text-xs sm:text-sm font-bold flex items-center gap-2 transition-all active:scale-95 shadow-xs cursor-pointer"
+              title="Keluar"
+              aria-label="Keluar"
+              className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-4 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 transition-all active:scale-95 shadow-xs cursor-pointer"
             >
               <LogOut size={16} />
-              <span>Keluar</span>
+              <span className="hidden sm:inline">Keluar</span>
             </button>
           </div>
 
         </div>
       </header>
 
-      {/* ─────────────────────────────────────────────
-          2. OFFICER PROFILE & TELEMETRY BANNER
-      ───────────────────────────────────────────── */}
+      {/* ── MAIN ── */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 space-y-10">
         
         {/* Officer Status Card */}
@@ -192,9 +192,7 @@ export default function BerandaPage() {
 
         </section>
 
-        {/* ─────────────────────────────────────────────
-            3. MODULE LAUNCHER CARDS (4 MODUL: BITPRO, KESMAVET, KESWAN, ASET)
-        ───────────────────────────────────────────── */}
+        {/* ── MODULE LAUNCHER CARDS ── */}
         <section className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
             <div>
@@ -202,11 +200,11 @@ export default function BerandaPage() {
                 Pintu Akses Modul
               </span>
               <h3 className="text-2xl sm:text-3xl font-bold text-slate-900">
-                Pilih Modul Pelayanan & Laporan
+                Pilih Modul Pelayanan &amp; Laporan
               </h3>
             </div>
             <p className="text-xs sm:text-sm text-slate-500">
-              Akses cepat modul Bitpro, Kesmavet, Keswan, dan Manajemen Aset.
+              Akses cepat modul Bitpro, Keswan, Kesmavet, dan Manajemen Aset.
             </p>
           </div>
 
@@ -230,22 +228,22 @@ export default function BerandaPage() {
                     Bitpro
                   </h4>
                   <p className="text-xs text-slate-500 font-medium mt-1">
-                    Perbibitan & Produksi Ternak
+                    Perbibitan &amp; Produksi Ternak
                   </p>
                 </div>
 
                 <ul className="text-xs text-slate-600 space-y-2 pt-3 border-t border-slate-100 font-sans">
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600 font-bold">✓</span> Sensus Populasi 2025/2026
+                    <span className="text-emerald-600 font-bold">✓</span> Database KTT &amp; Monev KTT
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600 font-bold">✓</span> Produksi Daging & Telur
+                    <span className="text-emerald-600 font-bold">✓</span> Populasi &amp; Produksi Ternak
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600 font-bold">✓</span> Database IB & Calving Interval
+                    <span className="text-emerald-600 font-bold">✓</span> SapiTime &amp; Sertifikat SKLB
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600 font-bold">✓</span> SapiTime & Sertifikat SKLB
+                    <span className="text-emerald-600 font-bold">✓</span> Database IB &amp; Data Farm
                   </li>
                 </ul>
               </div>
@@ -256,7 +254,76 @@ export default function BerandaPage() {
               </div>
             </Link>
 
-            {/* ── MODUL 02: KESMAVET (TEMA UNGU) ── */}
+            {/* ── MODUL 02: KESWAN (TEMA BIRU) ── */}
+            {isLoggedIn && !hasFullAccess ? (
+              <div className="rounded-3xl border border-slate-200 bg-slate-100/70 p-6 sm:p-7 flex flex-col justify-between min-h-[360px] relative opacity-85">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
+                      <Stethoscope size={24} />
+                    </div>
+                    <span className="text-xs px-2 py-0.5 rounded-full border border-red-200 bg-red-50 text-red-700 font-bold flex items-center gap-1">
+                      <Lock size={12} /> Terbatas
+                    </span>
+                  </div>
+                  <div>
+                    <h4 className="text-xl sm:text-2xl font-bold text-slate-900">Keswan</h4>
+                    <p className="text-xs text-slate-500 font-medium mt-1">Kesehatan Hewan &amp; Puskeswan</p>
+                  </div>
+                  <p className="text-xs text-slate-500 pt-3 border-t border-slate-200">
+                    Modul ini membutuhkan hak akses khusus admin bidang kesehatan hewan.
+                  </p>
+                </div>
+                <div className="pt-5 text-xs text-slate-500 flex items-center gap-1.5 font-semibold">
+                  <Lock size={14} /> Memerlukan Izin Admin
+                </div>
+              </div>
+            ) : (
+              <Link
+                href="/keswan"
+                className="group rounded-3xl border border-blue-200 bg-white p-6 sm:p-7 flex flex-col justify-between min-h-[360px] transition-all duration-200 hover:border-blue-500 hover:shadow-md hover:-translate-y-1 active:translate-y-0 relative overflow-hidden"
+              >
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                      <Stethoscope size={24} />
+                    </div>
+                    <ArrowUpRight size={20} className="text-slate-300 group-hover:text-blue-600 transition-colors" />
+                  </div>
+
+                  <div>
+                    <h4 className="text-xl sm:text-2xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors">
+                      Keswan
+                    </h4>
+                    <p className="text-xs text-slate-500 font-medium mt-1">
+                      Kesehatan Hewan &amp; Puskeswan
+                    </p>
+                  </div>
+
+                  <ul className="text-xs text-slate-600 space-y-2 pt-3 border-t border-slate-100 font-sans">
+                    <li className="flex items-center gap-2">
+                      <span className="text-blue-600 font-bold">✓</span> Data Vaksinasi PMK &amp; LSD
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="text-blue-600 font-bold">✓</span> Lalu Lintas Ternak
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="text-blue-600 font-bold">✓</span> Laporan Penyakit Ternak
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="text-blue-600 font-bold">✓</span> Kinerja 8 Unit Puskeswan
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="pt-5 flex items-center justify-between text-blue-700 font-bold text-xs sm:text-sm">
+                  <span>Buka Keswan</span>
+                  <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+                </div>
+              </Link>
+            )}
+
+            {/* ── MODUL 03: KESMAVET (TEMA UNGU) ── */}
             {isLoggedIn && !hasFullAccess ? (
               <div className="rounded-3xl border border-slate-200 bg-slate-100/70 p-6 sm:p-7 flex flex-col justify-between min-h-[360px] relative opacity-85">
                 <div className="space-y-4">
@@ -268,21 +335,14 @@ export default function BerandaPage() {
                       <Lock size={12} /> Terbatas
                     </span>
                   </div>
-
                   <div>
-                    <h4 className="text-xl sm:text-2xl font-bold text-slate-900">
-                      Kesmavet
-                    </h4>
-                    <p className="text-xs text-slate-500 font-medium mt-1">
-                      Kesehatan Masyarakat Veteriner
-                    </p>
+                    <h4 className="text-xl sm:text-2xl font-bold text-slate-900">Kesmavet</h4>
+                    <p className="text-xs text-slate-500 font-medium mt-1">Kesehatan Masyarakat Veteriner</p>
                   </div>
-
                   <p className="text-xs text-slate-500 pt-3 border-t border-slate-200">
                     Modul ini membutuhkan hak akses khusus admin bidang kesmavet.
                   </p>
                 </div>
-
                 <div className="pt-5 text-xs text-slate-500 flex items-center gap-1.5 font-semibold">
                   <Lock size={14} /> Memerlukan Izin Admin
                 </div>
@@ -311,16 +371,16 @@ export default function BerandaPage() {
 
                   <ul className="text-xs text-slate-600 space-y-2 pt-3 border-t border-slate-100 font-sans">
                     <li className="flex items-center gap-2">
-                      <span className="text-purple-600 font-bold">✓</span> 101 Unit RPH, TPU, dan TPH
+                      <span className="text-purple-600 font-bold">✓</span> Nomor Kontrol Veteriner (NKV)
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="text-purple-600 font-bold">✓</span> Sertifikasi Halal & NKV
+                      <span className="text-purple-600 font-bold">✓</span> Data RPH, TPH &amp; TPU
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="text-purple-600 font-bold">✓</span> Pengawasan Mutu & ASUH
+                      <span className="text-purple-600 font-bold">✓</span> Pakan Ternak &amp; Pasar Hewan
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="text-purple-600 font-bold">✓</span> Kapasitas Pemotongan Hewan
+                      <span className="text-purple-600 font-bold">✓</span> Sertifikasi Halal &amp; ASUH
                     </li>
                   </ul>
                 </div>
@@ -332,85 +392,9 @@ export default function BerandaPage() {
               </Link>
             )}
 
-            {/* ── MODUL 03: KESWAN (TEMA BIRU) ── */}
-            {isLoggedIn && !hasFullAccess ? (
-              <div className="rounded-3xl border border-slate-200 bg-slate-100/70 p-6 sm:p-7 flex flex-col justify-between min-h-[360px] relative opacity-85">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
-                      <Stethoscope size={24} />
-                    </div>
-                    <span className="text-xs px-2 py-0.5 rounded-full border border-red-200 bg-red-50 text-red-700 font-bold flex items-center gap-1">
-                      <Lock size={12} /> Terbatas
-                    </span>
-                  </div>
-
-                  <div>
-                    <h4 className="text-xl sm:text-2xl font-bold text-slate-900">
-                      Keswan
-                    </h4>
-                    <p className="text-xs text-slate-500 font-medium mt-1">
-                      Kesehatan Hewan & Puskeswan
-                    </p>
-                  </div>
-
-                  <p className="text-xs text-slate-500 pt-3 border-t border-slate-200">
-                    Modul ini membutuhkan hak akses khusus admin bidang kesehatan hewan.
-                  </p>
-                </div>
-
-                <div className="pt-5 text-xs text-slate-500 flex items-center gap-1.5 font-semibold">
-                  <Lock size={14} /> Memerlukan Izin Admin
-                </div>
-              </div>
-            ) : (
-              <Link
-                href="/keswan"
-                className="group rounded-3xl border border-blue-200 bg-white p-6 sm:p-7 flex flex-col justify-between min-h-[360px] transition-all duration-200 hover:border-blue-500 hover:shadow-md hover:-translate-y-1 active:translate-y-0 relative overflow-hidden"
-              >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                      <Stethoscope size={24} />
-                    </div>
-                    <ArrowUpRight size={20} className="text-slate-300 group-hover:text-blue-600 transition-colors" />
-                  </div>
-
-                  <div>
-                    <h4 className="text-xl sm:text-2xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors">
-                      Keswan
-                    </h4>
-                    <p className="text-xs text-slate-500 font-medium mt-1">
-                      Kesehatan Hewan & Puskeswan
-                    </p>
-                  </div>
-
-                  <ul className="text-xs text-slate-600 space-y-2 pt-3 border-t border-slate-100 font-sans">
-                    <li className="flex items-center gap-2">
-                      <span className="text-blue-600 font-bold">✓</span> Vaksinasi PMK & LSD
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-blue-600 font-bold">✓</span> Kinerja 8 Unit Puskeswan
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-blue-600 font-bold">✓</span> Pelayanan Pusling Keliling
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-blue-600 font-bold">✓</span> Droping Vaksin APBD Jateng
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="pt-5 flex items-center justify-between text-blue-700 font-bold text-xs sm:text-sm">
-                  <span>Buka Keswan</span>
-                  <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-                </div>
-              </Link>
-            )}
-
-            {/* ── MODUL 04: ASET (TEMA AMBER / EMAS WARM) ── */}
+            {/* ── MODUL 04: ASET (TEMA AMBER) ── */}
             <Link
-              href="/bitpro/monev-ktt"
+              href="/aset"
               className="group rounded-3xl border border-amber-200 bg-white p-6 sm:p-7 flex flex-col justify-between min-h-[360px] transition-all duration-200 hover:border-amber-500 hover:shadow-md hover:-translate-y-1 active:translate-y-0 relative overflow-hidden"
             >
               <div className="space-y-4">
@@ -426,7 +410,7 @@ export default function BerandaPage() {
                     Aset
                   </h4>
                   <p className="text-xs text-slate-500 font-medium mt-1">
-                    Manajemen Aset & Sarpras Ternak
+                    Manajemen Aset &amp; Sarpras Ternak
                   </p>
                 </div>
 
@@ -438,10 +422,10 @@ export default function BerandaPage() {
                     <span className="text-amber-600 font-bold">✓</span> Titik Koordinat GPS Kandang
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-amber-600 font-bold">✓</span> Mutasi Populasi & Berita Acara
+                    <span className="text-amber-600 font-bold">✓</span> Mutasi Populasi &amp; Berita Acara
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-amber-600 font-bold">✓</span> Rekapitulasi Excel & Foto Fisik
+                    <span className="text-amber-600 font-bold">✓</span> Rekapitulasi Excel &amp; Foto Fisik
                   </li>
                 </ul>
               </div>
@@ -457,9 +441,7 @@ export default function BerandaPage() {
 
       </main>
 
-      {/* ─────────────────────────────────────────────
-          4. FOOTER
-      ───────────────────────────────────────────── */}
+      {/* ── FOOTER ── */}
       <footer className="border-t border-slate-200 py-8 text-center text-xs text-slate-500 bg-white">
         &copy; {new Date().getFullYear()} SiMantap — Bidang Peternakan dan Kesehatan Hewan Kabupaten Kebumen
       </footer>

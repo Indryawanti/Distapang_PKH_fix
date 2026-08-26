@@ -275,35 +275,37 @@ export default function UnifiedSKLBPage() {
       
       {/* ── TOP HEADER (Tema Hijau - Lega & Bernapas) ── */}
       <header className="border-b border-emerald-100 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between gap-3">
           
-          <div className="flex items-center gap-3.5">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
             <Link
               href="/bitpro"
-              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 flex items-center justify-center text-emerald-800 transition-colors"
+              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 flex items-center justify-center text-emerald-800 transition-colors shrink-0"
               aria-label="Kembali ke Bitpro"
             >
               <ArrowLeft size={18} />
             </Link>
 
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-2 mb-0.5">
-                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
+                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors truncate">
                   Bitpro
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-emerald-700">Sertifikat SKLB</span>
+                <span className="text-xs font-bold text-emerald-700 whitespace-nowrap">Sertifikat SKLB</span>
               </div>
-              <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-tight">
+              <h1 className="text-base sm:text-xl font-bold text-slate-900 tracking-tight leading-tight truncate">
                 Surat Keterangan Layak Bibit (SKLB)
               </h1>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={handleExportExcel}
-              className="min-h-touch h-11 px-4 sm:px-5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold flex items-center gap-2 transition-colors shadow-xs cursor-pointer"
+              title="Export Excel"
+              aria-label="Export Excel"
+              className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 transition-colors shadow-xs cursor-pointer"
             >
               <Download size={16} />
               <span className="hidden sm:inline">Export Excel</span>
@@ -313,19 +315,23 @@ export default function UnifiedSKLBPage() {
               <button
                 onClick={handleSyncRekap}
                 disabled={isSyncingRekap}
-                className="min-h-touch h-11 px-4 sm:px-5 rounded-xl bg-emerald-600 text-white text-xs sm:text-sm font-bold flex items-center gap-2 hover:bg-emerald-700 disabled:opacity-50 transition-all shadow-xs cursor-pointer"
+                title="Tarik Data Rekap"
+                aria-label="Tarik Data Rekap"
+                className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-5 rounded-xl bg-emerald-600 text-white text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 hover:bg-emerald-700 disabled:opacity-50 transition-all shadow-xs cursor-pointer"
               >
                 <RefreshCw size={15} className={isSyncingRekap ? 'animate-spin' : ''} />
-                <span>{isSyncingRekap ? 'Menyinkronkan...' : 'Tarik Data Rekap'}</span>
+                <span className="hidden sm:inline">{isSyncingRekap ? 'Menyinkronkan...' : 'Tarik Data Rekap'}</span>
               </button>
             ) : (
               <button
                 onClick={handleSyncDetail}
                 disabled={isSyncingDetail}
-                className="min-h-touch h-11 px-4 sm:px-5 rounded-xl bg-emerald-600 text-white text-xs sm:text-sm font-bold flex items-center gap-2 hover:bg-emerald-700 disabled:opacity-50 transition-all shadow-xs cursor-pointer"
+                title="Tarik Data Detail"
+                aria-label="Tarik Data Detail"
+                className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-5 rounded-xl bg-emerald-600 text-white text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 hover:bg-emerald-700 disabled:opacity-50 transition-all shadow-xs cursor-pointer"
               >
                 <RefreshCw size={15} className={isSyncingDetail ? 'animate-spin' : ''} />
-                <span>{isSyncingDetail ? 'Menyinkronkan 29 Desa...' : 'Tarik Data Detail'}</span>
+                <span className="hidden sm:inline">{isSyncingDetail ? 'Menyinkronkan 29 Desa...' : 'Tarik Data Detail'}</span>
               </button>
             )}
           </div>

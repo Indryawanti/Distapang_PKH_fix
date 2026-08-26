@@ -146,7 +146,7 @@ function BarisTernak({ label, jantan, betina, onJantan, onBetina, showBA = false
           min={0}
           value={jantan}
           onChange={(e) => onJantan(Number(e.target.value))}
-          className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white font-sans font-bold text-center text-sm focus:border-amber-500 outline-none"
+          className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white font-sans font-bold text-center text-sm focus:border-emerald-500 outline-none"
         />
       </div>
       <div>
@@ -158,7 +158,7 @@ function BarisTernak({ label, jantan, betina, onJantan, onBetina, showBA = false
           min={0}
           value={betina}
           onChange={(e) => onBetina(Number(e.target.value))}
-          className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white font-sans font-bold text-center text-sm focus:border-amber-500 outline-none"
+          className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white font-sans font-bold text-center text-sm focus:border-emerald-500 outline-none"
         />
       </div>
       {showBA && (
@@ -169,7 +169,7 @@ function BarisTernak({ label, jantan, betina, onJantan, onBetina, showBA = false
           <select
             value={ba}
             onChange={(e) => onBA?.(e.target.value)}
-            className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs font-bold focus:border-amber-500 outline-none"
+            className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs font-bold focus:border-emerald-500 outline-none"
           >
             <option value="Tidak">Tidak Ada</option>
             <option value="Ada">Ada BA</option>
@@ -184,7 +184,7 @@ function KondisiSection({ nomor, title, children, total, totalLabel }: any) {
   return (
     <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/70 space-y-3">
       <div className="flex items-center gap-2.5 mb-2">
-        <span className="w-6 h-6 rounded-lg bg-amber-600 text-white font-bold font-sans text-xs flex items-center justify-center shrink-0">
+        <span className="w-6 h-6 rounded-lg bg-emerald-600 text-white font-bold font-sans text-xs flex items-center justify-center shrink-0">
           {nomor}
         </span>
         <h4 className="font-bold text-sm text-slate-900">{title}</h4>
@@ -193,7 +193,7 @@ function KondisiSection({ nomor, title, children, total, totalLabel }: any) {
       {total !== undefined && (
         <div className="mt-2 pt-2 border-t border-slate-200 flex items-center justify-between text-xs font-sans font-bold text-slate-700">
           <span>{totalLabel}:</span>
-          <span className="text-amber-600 text-sm font-bold">{total} Ekor</span>
+          <span className="text-emerald-600 text-sm font-bold">{total} Ekor</span>
         </div>
       )}
     </div>
@@ -640,39 +640,41 @@ export default function MonevKTT() {
   const kecamatanTerpakai = Array.from(new Set(dbLapangan.map((d) => d.kec))).sort();
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-amber-600 selection:text-white pb-20">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-600 selection:text-white pb-20">
       
-      {/* ── TOP HEADER (Tema Aset - Lega & Bernapas) ── */}
-      <header className="border-b border-amber-100 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between">
+      {/* ── TOP HEADER (Tema Hijau Bitpro - Lega & Bernapas) ── */}
+      <header className="border-b border-emerald-100 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between gap-3">
           
-          <div className="flex items-center gap-3.5">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
             <Link
-              href="/beranda"
-              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-amber-200 bg-amber-50 hover:bg-amber-100 flex items-center justify-center text-amber-800 transition-colors"
-              aria-label="Kembali ke Beranda"
+              href="/bitpro"
+              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 flex items-center justify-center text-emerald-800 transition-colors shrink-0"
+              aria-label="Kembali ke Bitpro"
             >
               <ArrowLeft size={18} />
             </Link>
 
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-2 mb-0.5">
-                <Link href="/beranda" className="text-xs font-semibold text-slate-500 hover:text-amber-700 transition-colors">
-                  SiMantap
+                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors truncate">
+                  Bitpro
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-amber-700">Aset</span>
+                <span className="text-xs font-bold text-emerald-700 whitespace-nowrap">Monev KTT</span>
               </div>
-              <h1 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-tight">
-                Manajemen & Monitoring Aset Ternak
+              <h1 className="text-base sm:text-xl font-bold text-slate-900 tracking-tight leading-tight truncate">
+                Monitoring &amp; Evaluasi Kelompok Tani Ternak
               </h1>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={handleDownloadDashboard}
-              className="min-h-touch h-11 px-4 sm:px-5 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs sm:text-sm font-bold flex items-center gap-2 transition-colors shadow-xs cursor-pointer"
+              title="Export Excel"
+              aria-label="Export Excel"
+              className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-5 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 transition-colors shadow-xs cursor-pointer"
             >
               <Download size={16} />
               <span className="hidden sm:inline">Export Excel</span>
@@ -700,7 +702,7 @@ export default function MonevKTT() {
             <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
               Total Aset Ternak
             </p>
-            <p className="font-sans text-2xl sm:text-3xl font-bold text-amber-600">
+            <p className="font-sans text-2xl sm:text-3xl font-bold text-emerald-600">
               {dbLapangan.reduce((acc, curr) => acc + hitungKondisi(curr.kondisi).i, 0)} <span className="text-xs font-normal text-slate-500">Ekor</span>
             </p>
           </div>
@@ -739,7 +741,7 @@ export default function MonevKTT() {
                 onClick={() => setActiveTab(tab.key as any)}
                 className={`min-h-touch h-11 px-4 sm:px-5 rounded-t-xl text-xs sm:text-sm font-bold flex items-center gap-2 border-t border-x transition-all shrink-0 whitespace-nowrap cursor-pointer ${
                   active
-                    ? 'bg-white border-slate-200 text-amber-600 border-b-white translate-y-px shadow-sm'
+                    ? 'bg-white border-slate-200 text-emerald-600 border-b-white translate-y-px shadow-sm'
                     : 'border-transparent text-slate-500 hover:text-slate-900 bg-slate-100/60'
                 }`}
               >
@@ -758,7 +760,7 @@ export default function MonevKTT() {
             <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden p-4">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-bold text-sm text-slate-800 flex items-center gap-2">
-                  <MapPin size={16} className="text-amber-600" />
+                  <MapPin size={16} className="text-emerald-600" />
                   <span>Peta Sebaran Bantuan Ternak KTT</span>
                 </h3>
                 <span className="text-xs font-sans text-slate-500">
@@ -822,7 +824,7 @@ export default function MonevKTT() {
                                 </td>
                                 <td className="p-3.5 text-right font-sans text-xs">{h.a}</td>
                                 <td className="p-3.5 text-right font-sans text-xs font-semibold text-slate-700">{h.e}</td>
-                                <td className="p-3.5 text-right font-sans text-xs font-bold text-amber-600">{h.i} Ekor</td>
+                                <td className="p-3.5 text-right font-sans text-xs font-bold text-emerald-600">{h.i} Ekor</td>
                                 <td className="p-3.5">
                                   <div className="flex flex-wrap items-center gap-2 text-xs">
                                     {d.lat ? (
@@ -836,7 +838,7 @@ export default function MonevKTT() {
                                       <a
                                         href={d.photo}
                                         download={buatNamaFileFoto(d.namaKtt, d.id)}
-                                        className="text-amber-700 hover:underline font-semibold"
+                                        className="text-emerald-700 hover:underline font-semibold"
                                       >
                                         Foto
                                       </a>
@@ -925,7 +927,7 @@ export default function MonevKTT() {
                     <select
                       value={formTahun}
                       onChange={(e) => setFormTahun(e.target.value)}
-                      className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-sm focus:border-amber-500 outline-none"
+                      className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-sm focus:border-emerald-500 outline-none"
                     >
                       {DAFTAR_TAHUN.map((th) => (
                         <option key={th} value={th}>Tahun {th}</option>
@@ -943,7 +945,7 @@ export default function MonevKTT() {
                         setFormKec(e.target.value);
                         setFormDesa('');
                       }}
-                      className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-sm focus:border-amber-500 outline-none"
+                      className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-sm focus:border-emerald-500 outline-none"
                     >
                       <option value="">Pilih Kecamatan</option>
                       {Object.keys(DATA_WILAYAH).map((k) => (
@@ -960,7 +962,7 @@ export default function MonevKTT() {
                       value={formDesa}
                       onChange={(e) => setFormDesa(e.target.value)}
                       disabled={!formKec}
-                      className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-sm focus:border-amber-500 outline-none disabled:opacity-50"
+                      className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-sm focus:border-emerald-500 outline-none disabled:opacity-50"
                     >
                       <option value="">Pilih Desa</option>
                       {formKec && DATA_WILAYAH[formKec as keyof typeof DATA_WILAYAH].map((d) => (
@@ -981,7 +983,7 @@ export default function MonevKTT() {
                       placeholder="Nama kelompok tani ternak"
                       value={formKtt}
                       onChange={(e) => setFormKtt(e.target.value)}
-                      className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-white text-sm focus:border-amber-500 outline-none"
+                      className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-white text-sm focus:border-emerald-500 outline-none"
                     />
                   </div>
 
@@ -992,7 +994,7 @@ export default function MonevKTT() {
                     <select
                       value={formJenis}
                       onChange={(e) => setFormJenis(e.target.value)}
-                      className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-sm focus:border-amber-500 outline-none"
+                      className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-sm focus:border-emerald-500 outline-none"
                     >
                       {DAFTAR_JENIS_TERNAK.map((j) => (
                         <option key={j} value={j}>{j}</option>
@@ -1008,7 +1010,7 @@ export default function MonevKTT() {
                       type="date"
                       value={formWaktuMonev}
                       onChange={(e) => setFormWaktuMonev(e.target.value)}
-                      className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-sm focus:border-amber-500 outline-none"
+                      className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-sm focus:border-emerald-500 outline-none"
                     />
                   </div>
                 </div>
@@ -1017,7 +1019,7 @@ export default function MonevKTT() {
               {/* Rincian Perkembangan Ternak */}
               <div className="space-y-4">
                 <h4 className="font-sans text-xs font-bold uppercase tracking-wider text-slate-600">
-                  2. Rincian Mutasi & Kondisi Ternak
+                  2. Rincian Mutasi &amp; Kondisi Ternak
                 </h4>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1089,9 +1091,9 @@ export default function MonevKTT() {
                 </div>
 
                 {/* Total Summary Callout */}
-                <div className="p-6 rounded-2xl border border-amber-600/30 bg-amber-600/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="p-6 rounded-2xl border border-emerald-600/30 bg-emerald-600/5 flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div>
-                    <span className="text-xs font-sans font-bold uppercase tracking-wider text-amber-600 block">
+                    <span className="text-xs font-sans font-bold uppercase tracking-wider text-emerald-600 block">
                       Hasil Kalkulasi Sistem
                     </span>
                     <p className="text-sm text-slate-700 font-medium">
@@ -1102,7 +1104,7 @@ export default function MonevKTT() {
                     <p className="text-xs font-sans uppercase tracking-wider text-slate-500 font-semibold">
                       Total Aset Ternak Saat Ini (i)
                     </p>
-                    <p className="font-sans text-3xl font-bold text-amber-600">
+                    <p className="font-sans text-3xl font-bold text-emerald-600">
                       {kalkulasi.i} <span className="text-sm font-normal text-slate-500">Ekor</span>
                     </p>
                   </div>
@@ -1144,7 +1146,7 @@ export default function MonevKTT() {
 
                 {formLat && formLng && (
                   <div className="p-3 rounded-xl bg-white border border-slate-200 inline-block font-sans text-xs text-slate-700">
-                    📍 Koordinat GPS: <span className="font-bold text-amber-600">{formLat}, {formLng}</span>
+                    📍 Koordinat GPS: <span className="font-bold text-emerald-600">{formLat}, {formLng}</span>
                   </div>
                 )}
 
@@ -1156,15 +1158,15 @@ export default function MonevKTT() {
               </div>
 
               {/* 4. Dokumen Berita Acara (PDF) */}
-              <div className="p-5 rounded-2xl border border-amber-200 bg-amber-50/50 space-y-4">
+              <div className="p-5 rounded-2xl border border-emerald-200 bg-emerald-50/50 space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <FileText className="text-amber-700" size={18} />
-                    <h4 className="font-bold text-sm text-amber-950">
+                    <FileText className="text-emerald-700" size={18} />
+                    <h4 className="font-bold text-sm text-emerald-950">
                       4. Unggah Dokumen Berita Acara (PDF)
                     </h4>
                   </div>
-                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-white text-amber-800 border border-amber-200 font-semibold">
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-white text-emerald-800 border border-emerald-200 font-semibold">
                     Opsional / Berita Acara
                   </span>
                 </div>
@@ -1174,8 +1176,8 @@ export default function MonevKTT() {
                 </p>
 
                 <div className="flex flex-wrap items-center gap-3">
-                  <label className="min-h-touch h-10 px-4 rounded-xl border border-amber-300 bg-white hover:bg-amber-100 text-amber-900 text-xs font-bold flex items-center gap-2 shadow-xs cursor-pointer transition-colors">
-                    <FileText size={16} className="text-amber-700" />
+                  <label className="min-h-touch h-10 px-4 rounded-xl border border-emerald-300 bg-white hover:bg-emerald-100 text-emerald-900 text-xs font-bold flex items-center gap-2 shadow-xs cursor-pointer transition-colors">
+                    <FileText size={16} className="text-emerald-700" />
                     <span>{formPdfBA ? 'Ganti File PDF Berita Acara' : 'Pilih File Dokumen PDF'}</span>
                     <input
                       type="file"
@@ -1198,7 +1200,7 @@ export default function MonevKTT() {
                 </div>
 
                 {formPdfBA && (
-                  <div className="p-4 rounded-xl bg-white border border-amber-200 flex items-center justify-between gap-3 shadow-xs">
+                  <div className="p-4 rounded-xl bg-white border border-emerald-200 flex items-center justify-between gap-3 shadow-xs">
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="w-9 h-9 rounded-lg bg-red-50 text-red-600 flex items-center justify-center shrink-0 border border-red-200">
                         <FileText size={18} />
@@ -1237,7 +1239,7 @@ export default function MonevKTT() {
                   placeholder="Kondisi kesehatan kandang, kendala pakan, atau keterangan lain..."
                   value={formCatatan}
                   onChange={(e) => setFormCatatan(e.target.value)}
-                  className="w-full p-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-amber-500 focus:bg-white outline-none"
+                  className="w-full p-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 focus:bg-white outline-none"
                 />
               </div>
 
@@ -1252,7 +1254,7 @@ export default function MonevKTT() {
                 </button>
                 <button
                   type="submit"
-                  className="min-h-touch h-11 px-6 rounded-xl bg-amber-600 text-white text-xs font-bold hover:bg-amber-600/90 shadow-sm transition-all"
+                  className="min-h-touch h-11 px-6 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 shadow-sm transition-all"
                 >
                   {editingId ? 'Perbarui Data Lapangan' : 'Simpan Data Lapangan'}
                 </button>
@@ -1279,7 +1281,7 @@ export default function MonevKTT() {
                 <select
                   value={tahunExcel}
                   onChange={(e) => setTahunExcel(e.target.value)}
-                  className="min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold focus:border-amber-500 outline-none"
+                  className="min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold focus:border-emerald-500 outline-none"
                 >
                   {DAFTAR_TAHUN.map((th) => (
                     <option key={th} value={th}>Tahun {th}</option>
@@ -1298,7 +1300,7 @@ export default function MonevKTT() {
                 onChange={handleExcelUpload}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               />
-              <FileSpreadsheet className="w-10 h-10 text-amber-600 mx-auto mb-2" />
+              <FileSpreadsheet className="w-10 h-10 text-emerald-600 mx-auto mb-2" />
               <h4 className="font-bold text-sm text-slate-800">
                 {activeExcel ? `File Tersimpan: ${activeExcel.fileName}` : `Unggah File Excel Tahun ${tahunExcel}`}
               </h4>
@@ -1346,7 +1348,7 @@ export default function MonevKTT() {
               <button
                 type="button"
                 onClick={takePhoto}
-                className="flex-1 min-h-touch h-11 bg-amber-600 text-white rounded-xl font-bold text-xs hover:bg-amber-600/90"
+                className="flex-1 min-h-touch h-11 bg-emerald-600 text-white rounded-xl font-bold text-xs hover:bg-emerald-700"
               >
                 📸 Ambil Foto
               </button>

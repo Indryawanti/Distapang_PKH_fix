@@ -290,8 +290,8 @@ export default function LandingPage() {
             <span className="text-azure">Peternakan Kebumen</span>
           </h1>
 
-          <p className="text-sm sm:text-base lg:text-lg leading-relaxed max-w-3xl mx-auto font-normal text-slate-600">
-            Sistem Informasi Manajemen Terpadu yang mengintegrasikan data Perbibitan & Produksi (Bitpro), Kesehatan Hewan (Keswan), dan Kesehatan Masyarakat Veteriner (Kesmavet) secara akurat, transparan, dan terbuka.
+          <p className="text-sm sm:text-base lg:text-lg leading-relaxed max-w-3xl mx-auto font-normal text-slate-600 text-justify sm:text-center">
+            Sistem Informasi Manajemen Terpadu yang mengintegrasikan data Perbibitan &amp; Produksi (Bitpro), Kesehatan Hewan (Keswan), dan Kesehatan Masyarakat Veteriner (Kesmavet) secara akurat, transparan, dan terbuka.
           </p>
         </div>
 
