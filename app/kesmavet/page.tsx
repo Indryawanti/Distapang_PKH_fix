@@ -171,9 +171,9 @@ export default function KesmavetPage() {
                 <Link
                   key={menu.title}
                   href={menu.path}
-                  className="group rounded-2xl border border-slate-200 bg-white p-6 sm:p-7 flex flex-col justify-between min-h-[220px] shadow-xs hover:border-purple-500 hover:shadow-md transition-all duration-200"
+                  className="group rounded-2xl border border-slate-200 bg-white p-6 sm:p-7 flex flex-col justify-between min-h-[160px] shadow-xs hover:border-purple-500 hover:shadow-md transition-all duration-200"
                 >
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="w-12 h-12 rounded-xl bg-purple-50 text-purple-700 group-hover:bg-purple-600 group-hover:text-white flex items-center justify-center transition-colors">
                         <IconComp size={24} />
@@ -184,16 +184,13 @@ export default function KesmavetPage() {
                     </div>
 
                     <div>
-                      <h4 className="text-lg font-bold text-slate-900 group-hover:text-purple-700 transition-colors">
+                      <h4 className="text-lg sm:text-xl font-extrabold text-slate-900 group-hover:text-purple-700 transition-colors leading-snug">
                         {menu.title}
                       </h4>
-                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mt-1">
-                        {menu.desc}
-                      </p>
                     </div>
                   </div>
 
-                  <div className="pt-4 mt-2 border-t border-slate-100 flex items-center justify-between text-xs sm:text-sm font-bold text-purple-700 group-hover:text-purple-800">
+                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs sm:text-sm font-bold text-purple-700 group-hover:text-purple-800">
                     <span>Buka Layanan</span>
                     <ChevronRight size={18} className="transition-transform group-hover:translate-x-1" />
                   </div>
