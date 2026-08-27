@@ -213,26 +213,35 @@ export default function BerandaPage() {
             {/* ── MODUL 01: BITPRO (TEMA HIJAU) ── */}
             <Link
               href="/bitpro"
-              className="group rounded-3xl border border-emerald-200 bg-white p-6 sm:p-7 flex flex-col justify-between min-h-[360px] transition-all duration-200 hover:border-emerald-500 hover:shadow-md hover:-translate-y-1 active:translate-y-0 relative overflow-hidden"
+              className="group rounded-3xl border border-emerald-200 bg-white p-5 sm:p-6 flex flex-col justify-between min-h-[430px] transition-all duration-200 hover:border-emerald-500 hover:shadow-md hover:-translate-y-1 active:translate-y-0 relative overflow-hidden"
             >
-              <div className="space-y-4">
+              <div className="space-y-3.5">
+                {/* Visual Cover Banner */}
+                <div className="w-full h-36 rounded-2xl overflow-hidden border border-emerald-100 bg-emerald-50 relative group-hover:scale-[1.02] transition-transform">
+                  <img
+                    src="/images/modules/bitpro.jpg"
+                    alt="Ilustrasi Bitpro"
+                    className="w-full h-full object-cover object-center"
+                  />
+                </div>
+
                 <div className="flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                    <Activity size={24} />
+                  <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                    <Activity size={20} />
                   </div>
                   <ArrowUpRight size={20} className="text-slate-300 group-hover:text-emerald-600 transition-colors" />
                 </div>
 
                 <div>
-                  <h4 className="text-xl sm:text-2xl font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
+                  <h4 className="text-xl font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
                     Bitpro
                   </h4>
-                  <p className="text-xs text-slate-500 font-medium mt-1">
+                  <p className="text-xs text-slate-500 font-medium mt-0.5">
                     Perbibitan &amp; Produksi Ternak
                   </p>
                 </div>
 
-                <ul className="text-xs text-slate-600 space-y-2 pt-3 border-t border-slate-100 font-sans">
+                <ul className="text-xs text-slate-600 space-y-1.5 pt-3 border-t border-slate-100 font-sans">
                   <li className="flex items-center gap-2">
                     <span className="text-emerald-600 font-bold">✓</span> Database KTT &amp; Monev KTT
                   </li>
@@ -248,7 +257,7 @@ export default function BerandaPage() {
                 </ul>
               </div>
 
-              <div className="pt-5 flex items-center justify-between text-emerald-700 font-bold text-xs sm:text-sm">
+              <div className="pt-4 flex items-center justify-between text-emerald-700 font-bold text-xs sm:text-sm">
                 <span>Buka Bitpro</span>
                 <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
               </div>
@@ -256,51 +265,67 @@ export default function BerandaPage() {
 
             {/* ── MODUL 02: KESWAN (TEMA BIRU) ── */}
             {isLoggedIn && !hasFullAccess ? (
-              <div className="rounded-3xl border border-slate-200 bg-slate-100/70 p-6 sm:p-7 flex flex-col justify-between min-h-[360px] relative opacity-85">
-                <div className="space-y-4">
+              <div className="rounded-3xl border border-slate-200 bg-slate-100/70 p-5 sm:p-6 flex flex-col justify-between min-h-[430px] relative opacity-85">
+                <div className="space-y-3.5">
+                  <div className="w-full h-36 rounded-2xl overflow-hidden border border-slate-200 bg-slate-200 grayscale relative">
+                    <img
+                      src="/images/modules/keswan.jpg"
+                      alt="Ilustrasi Keswan"
+                      className="w-full h-full object-cover object-center"
+                    />
+                  </div>
                   <div className="flex items-center justify-between">
-                    <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
-                      <Stethoscope size={24} />
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
+                      <Stethoscope size={20} />
                     </div>
                     <span className="text-xs px-2 py-0.5 rounded-full border border-red-200 bg-red-50 text-red-700 font-bold flex items-center gap-1">
                       <Lock size={12} /> Terbatas
                     </span>
                   </div>
                   <div>
-                    <h4 className="text-xl sm:text-2xl font-bold text-slate-900">Keswan</h4>
-                    <p className="text-xs text-slate-500 font-medium mt-1">Kesehatan Hewan &amp; Puskeswan</p>
+                    <h4 className="text-xl font-bold text-slate-900">Keswan</h4>
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">Kesehatan Hewan &amp; Puskeswan</p>
                   </div>
                   <p className="text-xs text-slate-500 pt-3 border-t border-slate-200">
                     Modul ini membutuhkan hak akses khusus admin bidang kesehatan hewan.
                   </p>
                 </div>
-                <div className="pt-5 text-xs text-slate-500 flex items-center gap-1.5 font-semibold">
+                <div className="pt-4 text-xs text-slate-500 flex items-center gap-1.5 font-semibold">
                   <Lock size={14} /> Memerlukan Izin Admin
                 </div>
               </div>
             ) : (
               <Link
                 href="/keswan"
-                className="group rounded-3xl border border-blue-200 bg-white p-6 sm:p-7 flex flex-col justify-between min-h-[360px] transition-all duration-200 hover:border-blue-500 hover:shadow-md hover:-translate-y-1 active:translate-y-0 relative overflow-hidden"
+                className="group rounded-3xl border border-blue-200 bg-white p-5 sm:p-6 flex flex-col justify-between min-h-[430px] transition-all duration-200 hover:border-blue-500 hover:shadow-md hover:-translate-y-1 active:translate-y-0 relative overflow-hidden"
               >
-                <div className="space-y-4">
+                <div className="space-y-3.5">
+                  {/* Visual Cover Banner */}
+                  <div className="w-full h-36 rounded-2xl overflow-hidden border border-blue-100 bg-blue-50 relative group-hover:scale-[1.02] transition-transform">
+                    <img
+                      src="/images/modules/keswan.jpg"
+                      alt="Ilustrasi Keswan"
+                      className="w-full h-full object-cover object-center"
+                    />
+                  </div>
+
                   <div className="flex items-center justify-between">
-                    <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                      <Stethoscope size={24} />
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                      <Stethoscope size={20} />
                     </div>
                     <ArrowUpRight size={20} className="text-slate-300 group-hover:text-blue-600 transition-colors" />
                   </div>
 
                   <div>
-                    <h4 className="text-xl sm:text-2xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors">
+                    <h4 className="text-xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors">
                       Keswan
                     </h4>
-                    <p className="text-xs text-slate-500 font-medium mt-1">
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">
                       Kesehatan Hewan &amp; Puskeswan
                     </p>
                   </div>
 
-                  <ul className="text-xs text-slate-600 space-y-2 pt-3 border-t border-slate-100 font-sans">
+                  <ul className="text-xs text-slate-600 space-y-1.5 pt-3 border-t border-slate-100 font-sans">
                     <li className="flex items-center gap-2">
                       <span className="text-blue-600 font-bold">✓</span> Data Vaksinasi PMK &amp; LSD
                     </li>
@@ -316,7 +341,7 @@ export default function BerandaPage() {
                   </ul>
                 </div>
 
-                <div className="pt-5 flex items-center justify-between text-blue-700 font-bold text-xs sm:text-sm">
+                <div className="pt-4 flex items-center justify-between text-blue-700 font-bold text-xs sm:text-sm">
                   <span>Buka Keswan</span>
                   <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
                 </div>
@@ -325,51 +350,67 @@ export default function BerandaPage() {
 
             {/* ── MODUL 03: KESMAVET (TEMA UNGU) ── */}
             {isLoggedIn && !hasFullAccess ? (
-              <div className="rounded-3xl border border-slate-200 bg-slate-100/70 p-6 sm:p-7 flex flex-col justify-between min-h-[360px] relative opacity-85">
-                <div className="space-y-4">
+              <div className="rounded-3xl border border-slate-200 bg-slate-100/70 p-5 sm:p-6 flex flex-col justify-between min-h-[430px] relative opacity-85">
+                <div className="space-y-3.5">
+                  <div className="w-full h-36 rounded-2xl overflow-hidden border border-slate-200 bg-slate-200 grayscale relative">
+                    <img
+                      src="/images/modules/kesmavet.jpg"
+                      alt="Ilustrasi Kesmavet"
+                      className="w-full h-full object-cover object-center"
+                    />
+                  </div>
                   <div className="flex items-center justify-between">
-                    <div className="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-600">
-                      <FlaskConical size={24} />
+                    <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-600">
+                      <FlaskConical size={20} />
                     </div>
                     <span className="text-xs px-2 py-0.5 rounded-full border border-red-200 bg-red-50 text-red-700 font-bold flex items-center gap-1">
                       <Lock size={12} /> Terbatas
                     </span>
                   </div>
                   <div>
-                    <h4 className="text-xl sm:text-2xl font-bold text-slate-900">Kesmavet</h4>
-                    <p className="text-xs text-slate-500 font-medium mt-1">Kesehatan Masyarakat Veteriner</p>
+                    <h4 className="text-xl font-bold text-slate-900">Kesmavet</h4>
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">Kesehatan Masyarakat Veteriner</p>
                   </div>
                   <p className="text-xs text-slate-500 pt-3 border-t border-slate-200">
                     Modul ini membutuhkan hak akses khusus admin bidang kesmavet.
                   </p>
                 </div>
-                <div className="pt-5 text-xs text-slate-500 flex items-center gap-1.5 font-semibold">
+                <div className="pt-4 text-xs text-slate-500 flex items-center gap-1.5 font-semibold">
                   <Lock size={14} /> Memerlukan Izin Admin
                 </div>
               </div>
             ) : (
               <Link
                 href="/kesmavet"
-                className="group rounded-3xl border border-purple-200 bg-white p-6 sm:p-7 flex flex-col justify-between min-h-[360px] transition-all duration-200 hover:border-purple-500 hover:shadow-md hover:-translate-y-1 active:translate-y-0 relative overflow-hidden"
+                className="group rounded-3xl border border-purple-200 bg-white p-5 sm:p-6 flex flex-col justify-between min-h-[430px] transition-all duration-200 hover:border-purple-500 hover:shadow-md hover:-translate-y-1 active:translate-y-0 relative overflow-hidden"
               >
-                <div className="space-y-4">
+                <div className="space-y-3.5">
+                  {/* Visual Cover Banner */}
+                  <div className="w-full h-36 rounded-2xl overflow-hidden border border-purple-100 bg-purple-50 relative group-hover:scale-[1.02] transition-transform">
+                    <img
+                      src="/images/modules/kesmavet.jpg"
+                      alt="Ilustrasi Kesmavet"
+                      className="w-full h-full object-cover object-center"
+                    />
+                  </div>
+
                   <div className="flex items-center justify-between">
-                    <div className="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-700 group-hover:bg-purple-600 group-hover:text-white transition-colors">
-                      <FlaskConical size={24} />
+                    <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-700 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                      <FlaskConical size={20} />
                     </div>
                     <ArrowUpRight size={20} className="text-slate-300 group-hover:text-purple-600 transition-colors" />
                   </div>
 
                   <div>
-                    <h4 className="text-xl sm:text-2xl font-bold text-slate-900 group-hover:text-purple-700 transition-colors">
+                    <h4 className="text-xl font-bold text-slate-900 group-hover:text-purple-700 transition-colors">
                       Kesmavet
                     </h4>
-                    <p className="text-xs text-slate-500 font-medium mt-1">
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">
                       Kesehatan Masyarakat Veteriner
                     </p>
                   </div>
 
-                  <ul className="text-xs text-slate-600 space-y-2 pt-3 border-t border-slate-100 font-sans">
+                  <ul className="text-xs text-slate-600 space-y-1.5 pt-3 border-t border-slate-100 font-sans">
                     <li className="flex items-center gap-2">
                       <span className="text-purple-600 font-bold">✓</span> Nomor Kontrol Veteriner (NKV)
                     </li>
@@ -385,7 +426,7 @@ export default function BerandaPage() {
                   </ul>
                 </div>
 
-                <div className="pt-5 flex items-center justify-between text-purple-700 font-bold text-xs sm:text-sm">
+                <div className="pt-4 flex items-center justify-between text-purple-700 font-bold text-xs sm:text-sm">
                   <span>Buka Kesmavet</span>
                   <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
                 </div>
@@ -395,43 +436,52 @@ export default function BerandaPage() {
             {/* ── MODUL 04: ASET (TEMA AMBER) ── */}
             <Link
               href="/aset"
-              className="group rounded-3xl border border-amber-200 bg-white p-6 sm:p-7 flex flex-col justify-between min-h-[360px] transition-all duration-200 hover:border-amber-500 hover:shadow-md hover:-translate-y-1 active:translate-y-0 relative overflow-hidden"
+              className="group rounded-3xl border border-amber-200 bg-white p-5 sm:p-6 flex flex-col justify-between min-h-[430px] transition-all duration-200 hover:border-amber-500 hover:shadow-md hover:-translate-y-1 active:translate-y-0 relative overflow-hidden"
             >
-              <div className="space-y-4">
+              <div className="space-y-3.5">
+                {/* Visual Cover Banner */}
+                <div className="w-full h-36 rounded-2xl overflow-hidden border border-amber-100 bg-amber-50 relative group-hover:scale-[1.02] transition-transform">
+                  <img
+                    src="/images/modules/aset.jpg"
+                    alt="Ilustrasi Aset Sarpras"
+                    className="w-full h-full object-cover object-center"
+                  />
+                </div>
+
                 <div className="flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 group-hover:bg-amber-600 group-hover:text-white transition-colors">
-                    <Boxes size={24} />
+                  <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 group-hover:bg-amber-600 group-hover:text-white transition-colors">
+                    <Boxes size={20} />
                   </div>
                   <ArrowUpRight size={20} className="text-slate-300 group-hover:text-amber-600 transition-colors" />
                 </div>
 
                 <div>
-                  <h4 className="text-xl sm:text-2xl font-bold text-slate-900 group-hover:text-amber-700 transition-colors">
+                  <h4 className="text-xl font-bold text-slate-900 group-hover:text-amber-700 transition-colors">
                     Aset
                   </h4>
-                  <p className="text-xs text-slate-500 font-medium mt-1">
-                    Manajemen Aset &amp; Sarpras Ternak
+                  <p className="text-xs text-slate-500 font-medium mt-0.5">
+                    Manajemen Aset &amp; Sarpras
                   </p>
                 </div>
 
-                <ul className="text-xs text-slate-600 space-y-2 pt-3 border-t border-slate-100 font-sans">
+                <ul className="text-xs text-slate-600 space-y-1.5 pt-3 border-t border-slate-100 font-sans">
                   <li className="flex items-center gap-2">
-                    <span className="text-amber-600 font-bold">✓</span> Monitoring Aset Ternak Hibah
+                    <span className="text-amber-600 font-bold">✓</span> Inventaris Sarpras &amp; Hibah
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="text-amber-600 font-bold">✓</span> Titik Koordinat GPS Kandang
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-amber-600 font-bold">✓</span> Mutasi Populasi &amp; Berita Acara
+                    <span className="text-amber-600 font-bold">✓</span> Berita Acara &amp; Mutasi Aset
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-amber-600 font-bold">✓</span> Rekapitulasi Excel &amp; Foto Fisik
+                    <span className="text-amber-600 font-bold">✓</span> Katalog Sarana Prasarana
                   </li>
                 </ul>
               </div>
 
-              <div className="pt-5 flex items-center justify-between text-amber-700 font-bold text-xs sm:text-sm">
-                <span>Buka Manajemen Aset</span>
+              <div className="pt-4 flex items-center justify-between text-amber-700 font-bold text-xs sm:text-sm">
+                <span>Buka Aset</span>
                 <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
               </div>
             </Link>

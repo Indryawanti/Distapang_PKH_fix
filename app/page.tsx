@@ -423,7 +423,6 @@ export default function LandingPage() {
         <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6">
           {MODULES.map((mod) => {
             const isActive = activeModule === mod.key;
-            const IconComponent = mod.icon;
             return (
               <button
                 key={mod.key}
@@ -431,14 +430,18 @@ export default function LandingPage() {
                   setActiveModule(mod.key as any);
                   setDetailView(null);
                 }}
-                className={`min-h-touch-lg h-14 sm:h-16 px-3 sm:px-6 rounded-2xl border text-left flex items-center gap-3 transition-all ${
+                className={`min-h-touch-lg h-14 sm:h-16 px-3 sm:px-5 rounded-2xl border text-left flex items-center gap-3 transition-all ${
                   isActive
                     ? 'bg-white border-azure text-slate-900 shadow-sm ring-2 ring-azure/20'
                     : 'bg-slate-100/80 border-slate-200 text-slate-600 hover:bg-white hover:text-slate-900'
                 }`}
               >
-                <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 ${isActive ? 'bg-azure text-white' : 'bg-slate-200 text-slate-600'}`}>
-                  <IconComponent size={20} />
+                <div className={`w-9 h-9 sm:w-11 sm:h-11 rounded-xl overflow-hidden border shrink-0 ${isActive ? 'border-azure ring-2 ring-azure/30 shadow-xs' : 'border-slate-200'}`}>
+                  <img
+                    src={`/images/modules/${mod.key}.jpg`}
+                    alt={mod.label}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="min-w-0 flex-1 hidden sm:block">
                   <p className="font-bold text-sm leading-tight truncate">{mod.label}</p>
@@ -458,7 +461,13 @@ export default function LandingPage() {
           {/* Header Bar */}
           <div className="flex flex-wrap items-center justify-between gap-3 pb-5 mb-6 border-b border-slate-200">
             <div className="flex items-center gap-3">
-              <span className="w-3 h-3 rounded-full" style={{ backgroundColor: activeMod.accent }} />
+              <div className="w-8 h-8 rounded-lg overflow-hidden border border-slate-200 shrink-0">
+                <img
+                  src={`/images/modules/${activeMod.key}.jpg`}
+                  alt={activeMod.label}
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <h3 className="font-sans text-lg sm:text-xl font-bold text-slate-900">
                 {activeMod.label} — {activeMod.caption}
               </h3>

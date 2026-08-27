@@ -19,10 +19,15 @@ import {
   FileSpreadsheet,
   ChevronRight,
   Smartphone,
+  User,
+  Sparkles,
+  RefreshCw,
+  Info,
+  TrendingUp,
 } from 'lucide-react';
 
 // ─────────────────────────────────────────────
-// KONSTANTA & TIPE
+// KONSTANTA & TIPE DATA
 // ─────────────────────────────────────────────
 const GESTASI_SAPI_HARI = 283;
 
@@ -71,6 +76,9 @@ type CalvingIntervalRow = {
   kategori: string;
 };
 
+// ─────────────────────────────────────────────
+// HELPER PERHITUNGAN REPRODUKSI
+// ─────────────────────────────────────────────
 const fmtDate = (d?: string | null) =>
   d ? new Date(d).toLocaleDateString('id-ID') : '-';
 
@@ -133,7 +141,6 @@ function calculateCalvingIntervals(list: IBRecord[]): CalvingIntervalRow[] {
 export default function DatabaseIBPage() {
   const [ibList, setIbList] = useState<IBRecord[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
 
   const [showPkbModal, setShowPkbModal] = useState(false);
   const [selectedIbForPkb, setSelectedIbForPkb] = useState<IBRecord | null>(null);
@@ -152,7 +159,7 @@ export default function DatabaseIBPage() {
     try {
       const res = await fetch('/api/sapitime');
       const json = await res.json();
-      if (json.success) {
+      if (json.success && json.cattle) {
         const allIBs: IBRecord[] = [];
         json.cattle.forEach((cattle: any) => {
           if (cattle.inseminations && cattle.inseminations.length > 0) {
@@ -171,8 +178,6 @@ export default function DatabaseIBPage() {
       }
     } catch (e) {
       console.error('Gagal mengambil data IB dari database', e);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -182,6 +187,7 @@ export default function DatabaseIBPage() {
     return () => window.removeEventListener('cattleDataUpdated', loadData);
   }, []);
 
+  // 2. Fungsi Tembak Eksekusi ke MySQL
   const executeApi = async (action: string, payload: any, historyObj?: any) => {
     try {
       await fetch('/api/sapitime', {
@@ -196,6 +202,7 @@ export default function DatabaseIBPage() {
     }
   };
 
+  // Simpan Hasil PKB
   const handleSavePkb = async () => {
     if (!selectedIbForPkb) return;
 
@@ -219,11 +226,13 @@ export default function DatabaseIBPage() {
     };
 
     await executeApi('record_pkb', payload, historyObj);
+
     setShowPkbModal(false);
     setPkbFormData({ date: '', result: 'Bunting', officer: '', notes: '' });
     setSelectedIbForPkb(null);
   };
 
+  // Tandai Tidak PKB
   const handleSkipPkb = async () => {
     if (!selectedIbForSkip) return;
 
@@ -242,11 +251,13 @@ export default function DatabaseIBPage() {
     };
 
     await executeApi('skip_pkb', payload, historyObj);
+
     setShowSkipPkbModal(false);
     setSkipFormData({ date: '', reason: '' });
     setSelectedIbForSkip(null);
   };
 
+  // Simpan Kelahiran
   const handleSaveBirth = async () => {
     if (!selectedIbForBirth) return;
 
@@ -267,6 +278,7 @@ export default function DatabaseIBPage() {
     };
 
     await executeApi('record_birth', payload, historyObj);
+
     setShowBirthModal(false);
     setBirthFormData({ date: '', gender: 'Jantan', notes: '' });
     setSelectedIbForBirth(null);
@@ -280,6 +292,7 @@ export default function DatabaseIBPage() {
     return Math.round(total / calvingIntervals.length);
   }, [calvingIntervals]);
 
+  // Export ke Excel Multi-Sheet
   const handleExportExcel = () => {
     const dataSheet = ibList.map((ib) => {
       const birthInfo = ib.pkbResult === 'Bunting' && !ib.birthDate ? estimateBirthInfo(ib) : null;
@@ -296,7 +309,11 @@ export default function DatabaseIBPage() {
         'Nama Pejantan': ib.bullName,
         'Ras Pejantan': ib.bullBreed,
         'Rekomendasi PKB': ib.rekomendasiPkb,
-        'Status PKB': ib.pkbResult ? 'Sudah Diperiksa' : ib.pkbStatus === 'Tidak Diperiksa' ? 'Tidak Diperiksa' : 'Menunggu',
+        'Status PKB': ib.pkbResult
+          ? 'Sudah Diperiksa'
+          : ib.pkbStatus === 'Tidak Diperiksa'
+          ? 'Tidak Diperiksa'
+          : 'Menunggu',
         'Tanggal PKB Aktual': fmtDate(ib.pkbDateActual),
         'Hasil PKB': ib.pkbResult || '-',
         'Petugas PKB': ib.pkbOfficer || '-',
@@ -348,11 +365,9 @@ export default function DatabaseIBPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-600 selection:text-white pb-20">
-      
-      {/* ── TOP HEADER (Tema Hijau - Lega & Bernapas) ── */}
+      {/* ── TOP APP BAR (Tema Hijau Bitpro) ── */}
       <header className="border-b border-emerald-100 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between gap-3">
-          
           <div className="flex items-center gap-3 min-w-0 flex-1">
             <Link
               href="/bitpro"
@@ -364,7 +379,10 @@ export default function DatabaseIBPage() {
 
             <div className="min-w-0">
               <div className="flex items-center gap-2 mb-0.5">
-                <Link href="/bitpro" className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors truncate">
+                <Link
+                  href="/bitpro"
+                  className="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors truncate"
+                >
                   Bitpro
                 </Link>
                 <span className="text-slate-300">/</span>
@@ -398,339 +416,382 @@ export default function DatabaseIBPage() {
               <ChevronRight size={16} className="hidden sm:inline" />
             </Link>
           </div>
-
         </div>
       </header>
 
-      {/* ── MAIN CONTENT ── */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        
-        {/* KPI Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
-              Total Riwayat IB
-            </p>
-            <p className="font-sans text-2xl sm:text-3xl font-bold text-slate-900">
-              {ibList.length} <span className="text-xs font-normal text-slate-500">Siklus</span>
-            </p>
-          </div>
-
-          <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
-              Status Kebuntingan
-            </p>
-            <p className="font-sans text-2xl sm:text-3xl font-bold text-vitality">
-              {ibList.filter((d) => d.pkbResult === 'Bunting').length} <span className="text-xs font-normal text-slate-500">Bunting</span>
-            </p>
-          </div>
-
-          <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
-              Pedet Lahir
-            </p>
-            <p className="font-sans text-2xl sm:text-3xl font-bold text-emerald-600">
-              {ibList.filter((d) => d.birthDate).length} <span className="text-xs font-normal text-slate-500">Ekor</span>
-            </p>
-          </div>
-
-          <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-1">
-              Rata-rata Calving Interval
-            </p>
-            <p className="font-sans text-2xl sm:text-3xl font-bold text-amber-600">
-              {avgCalvingIntervalDays ? `${avgCalvingIntervalDays} Hari` : '-'}
-            </p>
-          </div>
-        </div>
-
-        {/* Table Container */}
-        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-          
-          {/* Table Header Bar */}
-          <div className="p-5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
+      {/* ── MAIN WORKSPACE ── */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
+        {/* 1. TABEL UTAMA DATABASE IB */}
+        <div className="bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden">
+          <div className="p-4 sm:p-6 border-b border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white">
             <div>
-              <h2 className="font-bold text-base text-slate-900 flex items-center gap-2">
-                <span>Data Pelacakan Siklus Reproduksi</span>
-                <span className="font-sans text-xs px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-semibold">
-                  {filteredIB.length}
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2.5">
+                <span>Pelacakan Siklus Reproduksi Inseminasi Buatan</span>
+                <span className="bg-emerald-50 border border-emerald-200 text-emerald-700 px-2.5 py-0.5 rounded-full text-xs font-bold">
+                  {filteredIB.length} Record
                 </span>
               </h2>
               <p className="text-xs text-slate-500 mt-0.5">
-                Pencatatan riwayat kawin suntik, jadwal PKB, estimasi kelahiran, dan data pedet
+                Monitoring pelaksanaan IB, verifikasi PKB 90 hari, dan estimasi kelahiran
               </p>
             </div>
 
-            <div className="relative w-full sm:w-80">
+            <div className="relative w-full md:w-80">
               <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
-                placeholder="Cari sapi, peternak, petugas..."
+                placeholder="Cari sapi, peternak, petugas, straw..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full min-h-touch h-10 pl-9 pr-4 rounded-xl border border-slate-200 bg-white text-xs text-slate-900 focus:outline-none focus:border-emerald-500 transition-colors"
+                className="w-full min-h-touch h-11 pl-10 pr-4 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:bg-white focus:border-emerald-600 text-xs text-slate-900 transition-colors"
               />
             </div>
           </div>
 
-          {/* Data Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm whitespace-nowrap">
-              <thead className="bg-slate-50 text-slate-600 text-xs font-semibold uppercase tracking-wider border-b border-slate-200">
+          <div className="overflow-x-auto w-full">
+            <table className="w-full text-xs sm:text-sm text-left whitespace-nowrap">
+              <thead className="bg-slate-50 text-slate-700 border-b border-slate-200 text-[11px] uppercase tracking-wider font-bold">
                 <tr>
-                  <th className="p-4">Identitas Peternak & Sapi</th>
-                  <th className="p-4">Data IB (Awal)</th>
-                  <th className="p-4">Pejantan / Straw</th>
-                  <th className="p-4">Status PKB (90 Hari)</th>
-                  <th className="p-4">Status Kelahiran</th>
-                  <th className="p-4 text-center">Tindakan Petugas</th>
+                  <th className="px-5 py-4">Identitas Peternak & Sapi</th>
+                  <th className="px-5 py-4">Data IB (Awal)</th>
+                  <th className="px-5 py-4">Pejantan / Straw</th>
+                  <th className="px-5 py-4">Status PKB (90 Hari)</th>
+                  <th className="px-5 py-4">Status Kelahiran</th>
+                  <th className="px-5 py-4 text-center">Tindakan Petugas</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200 text-slate-800">
-                {filteredIB.length > 0 ? (
-                  filteredIB.map((ib) => {
-                    const birthInfo = ib.pkbResult === 'Bunting' && !ib.birthDate ? estimateBirthInfo(ib) : null;
+              <tbody className="divide-y divide-slate-100">
+                {filteredIB.map((ib) => {
+                  const birthInfo = ib.pkbResult === 'Bunting' && !ib.birthDate ? estimateBirthInfo(ib) : null;
 
-                    return (
-                      <tr key={ib.id} className="hover:bg-slate-50/80 transition-colors">
-                        
-                        {/* 1. Sapi & Peternak */}
-                        <td className="p-4">
-                          <span className="font-bold text-slate-900 block text-sm">
-                            {ib.ownerName || 'Peternak Tidak Diketahui'}
-                          </span>
-                          <span className="text-xs text-emerald-600 font-medium block mt-0.5">
-                            Sapi: {ib.cattleName} <span className="font-sans text-slate-400">({ib.cattleId})</span>
-                          </span>
-                          <span className="text-xs text-slate-500 block mt-0.5">
-                            📍 {ib.kecamatan || '-'}, {ib.desa || '-'}
-                          </span>
-                        </td>
+                  return (
+                    <tr key={ib.id} className="hover:bg-slate-50/80 transition-colors">
+                      {/* 1. Sapi & Peternak */}
+                      <td className="px-5 py-4">
+                        <span className="font-bold text-slate-900 text-sm block mb-0.5 flex items-center gap-1.5">
+                          <User size={15} className="text-slate-400" />
+                          {ib.ownerName || 'Peternak Tidak Diketahui'}
+                        </span>
+                        <span className="font-semibold text-emerald-700 block text-xs ml-5">
+                          Sapi: {ib.cattleName} <span className="text-slate-400 font-normal">({ib.cattleId})</span>
+                        </span>
+                        <span className="block text-[11px] text-slate-500 mt-1 ml-5">
+                          {ib.kecamatan || '-'}, {ib.desa || '-'}
+                        </span>
+                      </td>
 
-                        {/* 2. IB Info */}
-                        <td className="p-4">
-                          <span className="font-sans font-semibold text-slate-900 block text-xs">
-                            {fmtDate(ib.date)}
-                          </span>
-                          <span className="text-xs text-slate-500 block mt-0.5">
-                            Petugas: {ib.inseminatorName || '-'}
-                          </span>
-                        </td>
+                      {/* 2. IB */}
+                      <td className="px-5 py-4">
+                        <span className="font-bold text-slate-900 block">{fmtDate(ib.date)}</span>
+                        <span className="block text-xs text-slate-500 mt-0.5">Petugas: {ib.inseminatorName}</span>
+                      </td>
 
-                        {/* 3. Pejantan */}
-                        <td className="p-4">
-                          <span className="font-semibold text-slate-800 block text-xs">
-                            {ib.bullName || '-'} <span className="text-slate-500 font-normal">({ib.bullBreed || '-'})</span>
-                          </span>
-                          <span className="font-sans text-[11px] text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 inline-block mt-1">
-                            🧬 {ib.strawCode || '-'}
-                          </span>
-                        </td>
+                      {/* 3. Pejantan */}
+                      <td className="px-5 py-4">
+                        <span className="font-bold text-slate-900 block">
+                          {ib.bullName} <span className="text-slate-500 font-normal text-xs">({ib.bullBreed})</span>
+                        </span>
+                        <span className="block text-[11px] font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md inline-block mt-1">
+                          Straw: {ib.strawCode}
+                        </span>
+                      </td>
 
-                        {/* 4. PKB Status */}
-                        <td className="p-4">
-                          {!ib.pkbResult && ib.pkbStatus !== 'Tidak Diperiksa' && (
-                            <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200 inline-block">
-                              ⏳ Menunggu PKB
+                      {/* 4. PKB Status */}
+                      <td className="px-5 py-4">
+                        {!ib.pkbResult && ib.pkbStatus !== 'Tidak Diperiksa' && (
+                          <div className="bg-amber-50 border border-amber-200 p-2.5 rounded-xl">
+                            <span className="block text-[10px] font-bold uppercase tracking-wider text-amber-700">
+                              Jadwal PKB
                             </span>
-                          )}
-                          {ib.pkbResult === 'Bunting' && (
-                            <div>
-                              <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 inline-block">
-                                ✓ Positif Bunting
-                              </span>
-                              <span className="block text-xs text-slate-500 mt-1 font-sans">
-                                Tgl: {fmtDate(ib.pkbDateActual)}
-                              </span>
-                            </div>
-                          )}
-                          {ib.pkbResult === 'Tidak Bunting' && (
-                            <div>
-                              <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200 inline-block">
-                                ✕ Tidak Bunting
-                              </span>
-                              <span className="block text-xs text-slate-500 mt-1 font-sans">
-                                Tgl: {fmtDate(ib.pkbDateActual)}
-                              </span>
-                            </div>
-                          )}
-                          {ib.pkbStatus === 'Tidak Diperiksa' && (
-                            <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200 inline-block">
-                              Dilewati ({ib.pkbSkipReason || '-'})
+                            <span className="block text-xs font-bold text-amber-900 mt-0.5">
+                              {ib.rekomendasiPkb}
                             </span>
-                          )}
-                        </td>
+                          </div>
+                        )}
 
-                        {/* 5. Status Kelahiran */}
-                        <td className="p-4">
-                          {ib.birthDate ? (
-                            <div>
-                              <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 inline-block">
-                                Lahir: Pedet {ib.calfGender}
-                              </span>
-                              <span className="block text-xs text-slate-500 mt-1 font-sans">
-                                Tgl: {fmtDate(ib.birthDate)}
-                              </span>
-                            </div>
-                          ) : birthInfo ? (
-                            <div>
-                              <span className="text-xs text-slate-600 block">
-                                Estimasi: <span className="font-sans font-bold text-slate-900">{birthInfo.estimatedDateLabel}</span>
-                              </span>
-                              <span className={`text-[11px] font-sans font-semibold ${birthInfo.isOverdue ? 'text-red-600' : 'text-slate-500'}`}>
-                                {birthInfo.isOverdue ? `Lewat ${Math.abs(birthInfo.daysRemaining)} hari` : `${birthInfo.daysRemaining} hari lagi`}
-                              </span>
-                            </div>
-                          ) : (
-                            <span className="text-xs text-slate-400">-</span>
-                          )}
-                        </td>
+                        {!ib.pkbResult && ib.pkbStatus === 'Tidak Diperiksa' && (
+                          <div className="bg-slate-100 border border-slate-200 p-2.5 rounded-xl">
+                            <span className="block text-xs font-bold text-slate-700">PKB Dilewati</span>
+                            <span className="block text-[11px] text-slate-500 mt-0.5">Tgl: {fmtDate(ib.pkbSkipDate)}</span>
+                            {ib.pkbSkipReason && (
+                              <span className="block text-[10px] text-slate-400 mt-0.5">Alasan: {ib.pkbSkipReason}</span>
+                            )}
+                          </div>
+                        )}
 
-                        {/* 6. Aksi Petugas */}
-                        <td className="p-4 text-center">
-                          <div className="flex items-center justify-center gap-1.5">
-                            {!ib.pkbResult && ib.pkbStatus !== 'Tidak Diperiksa' && (
-                              <>
-                                <button
-                                  onClick={() => {
-                                    setSelectedIbForPkb(ib);
-                                    setPkbFormData({ date: '', result: 'Bunting', officer: '', notes: '' });
-                                    setShowPkbModal(true);
-                                  }}
-                                  className="min-h-touch h-8 px-2.5 rounded-lg bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-600/90 transition-colors"
-                                >
-                                  Catat PKB
-                                </button>
+                        {ib.pkbResult && (
+                          <div
+                            className={`p-2.5 rounded-xl border ${
+                              ib.pkbResult === 'Bunting'
+                                ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
+                                : 'bg-red-50 border-red-200 text-red-900'
+                            }`}
+                          >
+                            <span
+                              className={`block font-bold text-xs ${
+                                ib.pkbResult === 'Bunting' ? 'text-emerald-700' : 'text-red-700'
+                              }`}
+                            >
+                              {ib.pkbResult === 'Bunting' ? '✓ Positif Bunting' : '✕ Tidak Bunting (Kosong)'}
+                            </span>
+                            <span className="block text-[11px] text-slate-600 mt-0.5">
+                              Tgl: {fmtDate(ib.pkbDateActual)}
+                            </span>
+                            <span className="block text-[10px] text-slate-500">Oleh: {ib.pkbOfficer}</span>
+                          </div>
+                        )}
+                      </td>
+
+                      {/* 5. Kelahiran Status */}
+                      <td className="px-5 py-4">
+                        {!ib.pkbResult && (
+                          <span className="text-xs text-slate-400 italic">Menunggu hasil PKB</span>
+                        )}
+                        {ib.pkbResult === 'Tidak Bunting' && (
+                          <span className="text-xs text-red-500 font-medium">Siklus selesai (Bisa IB ulang)</span>
+                        )}
+                        {ib.pkbResult === 'Bunting' && !ib.birthDate && birthInfo && (
+                          <div
+                            className={`p-2.5 rounded-xl border ${
+                              birthInfo.isOverdue ? 'bg-red-50 border-red-200' : 'bg-purple-50 border-purple-200'
+                            }`}
+                          >
+                            <span
+                              className={`block font-bold text-xs ${
+                                birthInfo.isOverdue ? 'text-red-700' : 'text-purple-700'
+                              }`}
+                            >
+                              {birthInfo.isOverdue ? '⚠ Lewat Estimasi' : 'Sedang Bunting'}
+                            </span>
+                            <span className="block text-xs text-slate-700 mt-0.5">
+                              Estimasi Lahir: <b>{birthInfo.estimatedDateLabel}</b>
+                            </span>
+                            <span
+                              className={`block text-[11px] font-bold mt-0.5 ${
+                                birthInfo.isOverdue ? 'text-red-600' : 'text-purple-600'
+                              }`}
+                            >
+                              {birthInfo.isOverdue
+                                ? `Sudah lewat ${Math.abs(birthInfo.daysRemaining)} hari`
+                                : `± ${birthInfo.daysRemaining} hari lagi`}
+                            </span>
+                          </div>
+                        )}
+                        {ib.birthDate && (
+                          <div className="bg-blue-50 border border-blue-200 p-2.5 rounded-xl">
+                            <span className="block font-bold text-xs text-blue-700">✓ Partus / Lahir</span>
+                            <span className="block text-[11px] text-slate-700 mt-0.5">Tgl: {fmtDate(ib.birthDate)}</span>
+                            <span className="block text-[11px] font-bold text-blue-600 mt-0.5">
+                              Pedet: {ib.calfGender}
+                            </span>
+                          </div>
+                        )}
+                      </td>
+
+                      {/* 6. Action Buttons */}
+                      <td className="px-5 py-4 text-center align-middle">
+                        <div className="flex flex-col gap-1.5 min-w-[120px]">
+                          {!ib.pkbResult && (
+                            <>
+                              <button
+                                onClick={() => {
+                                  setSelectedIbForPkb(ib);
+                                  setShowPkbModal(true);
+                                }}
+                                className="min-h-touch h-9 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer flex items-center justify-center gap-1.5"
+                              >
+                                <Stethoscope size={13} />
+                                <span>Catat PKB</span>
+                              </button>
+                              {ib.pkbStatus !== 'Tidak Diperiksa' && (
                                 <button
                                   onClick={() => {
                                     setSelectedIbForSkip(ib);
-                                    setSkipFormData({ date: '', reason: '' });
                                     setShowSkipPkbModal(true);
                                   }}
-                                  className="min-h-touch h-8 px-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-600 text-xs font-semibold hover:bg-slate-100 transition-colors"
+                                  className="min-h-touch h-9 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all border border-slate-200 cursor-pointer"
                                 >
-                                  Lewati
+                                  Tidak PKB
                                 </button>
-                              </>
-                            )}
-
-                            {ib.pkbResult === 'Bunting' && !ib.birthDate && (
-                              <button
-                                onClick={() => {
-                                  setSelectedIbForBirth(ib);
-                                  setBirthFormData({ date: '', gender: 'Jantan', notes: '' });
-                                  setShowBirthModal(true);
-                                }}
-                                className="min-h-touch h-8 px-2.5 rounded-lg bg-vitality text-white text-xs font-bold hover:bg-vitality/90 transition-colors"
-                              >
-                                Catat Lahir
-                              </button>
-                            )}
-                          </div>
-                        </td>
-
-                      </tr>
-                    );
-                  })
-                ) : (
+                              )}
+                            </>
+                          )}
+                          {ib.pkbResult === 'Bunting' && !ib.birthDate && (
+                            <button
+                              onClick={() => {
+                                setSelectedIbForBirth(ib);
+                                setShowBirthModal(true);
+                              }}
+                              className="min-h-touch h-9 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer flex items-center justify-center gap-1.5"
+                            >
+                              <Baby size={13} />
+                              <span>Catat Kelahiran</span>
+                            </button>
+                          )}
+                          {ib.pkbResult === 'Tidak Bunting' && (
+                            <span className="text-xs text-slate-400 font-medium">Siklus Selesai</span>
+                          )}
+                          {ib.birthDate && (
+                            <span className="text-xs text-emerald-700 font-bold bg-emerald-50 border border-emerald-200 px-2 py-1 rounded-lg">
+                              Siklus Sukses
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+                {filteredIB.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="p-12 text-center text-slate-400 font-medium text-sm">
-                      {isLoading ? 'Memuat data reproduksi...' : 'Belum ada data siklus IB yang tercatat.'}
+                    <td colSpan={6} className="px-5 py-12 text-center text-slate-400">
+                      Belum ada data riwayat IB di database.
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
-
         </div>
 
+        {/* 2. ANALISIS CALVING INTERVAL (JARAK BERANAK) */}
+        <div className="bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden">
+          <div className="p-4 sm:p-6 border-b border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white">
+            <div>
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                <TrendingUp size={18} className="text-emerald-700" />
+                <span>Analisis Calving Interval (Jarak Beranak Indukan)</span>
+              </h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Evaluasi efisiensi reproduksi ternak berdasarkan interval kelahiran berturut-turut
+              </p>
+            </div>
+            {avgCalvingIntervalDays !== null && (
+              <div className="bg-emerald-50 border border-emerald-200 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-emerald-900">
+                Rata-rata Interval: <span className="text-emerald-700">{avgCalvingIntervalDays} Hari</span>{' '}
+                <span className="font-normal text-slate-500">(± {(avgCalvingIntervalDays / 30.44).toFixed(1)} Bulan)</span>
+              </div>
+            )}
+          </div>
+
+          <div className="overflow-x-auto w-full">
+            <table className="w-full text-xs sm:text-sm text-left whitespace-nowrap">
+              <thead className="bg-slate-50 text-slate-700 border-b border-slate-200 text-[11px] uppercase tracking-wider font-bold">
+                <tr>
+                  <th className="px-5 py-4">Identitas Peternak & Sapi</th>
+                  <th className="px-5 py-4">Kelahiran Ke-</th>
+                  <th className="px-5 py-4">Kelahiran Sebelumnya</th>
+                  <th className="px-5 py-4">Kelahiran Sekarang</th>
+                  <th className="px-5 py-4">Interval Waktu</th>
+                  <th className="px-5 py-4">Kategori Efisiensi</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {calvingIntervals.map((row, idx) => (
+                  <tr key={`${row.cattleId}-${idx}`} className="hover:bg-slate-50/80 transition-colors">
+                    <td className="px-5 py-4">
+                      <span className="font-bold text-slate-900 block">{row.ownerName || 'Tanpa Nama'}</span>
+                      <span className="text-emerald-700 font-semibold text-xs ml-4">Sapi: {row.cattleName}</span>
+                    </td>
+                    <td className="px-5 py-4 font-bold text-slate-700">{row.calvingKe + 1}</td>
+                    <td className="px-5 py-4 text-slate-600">{row.kelahiranSebelumnya}</td>
+                    <td className="px-5 py-4 font-bold text-slate-900">{row.kelahiranSekarang}</td>
+                    <td className="px-5 py-4 font-bold text-slate-900">
+                      {row.intervalHari} hari <span className="text-slate-500 font-normal text-xs">({row.intervalBulan} bln)</span>
+                    </td>
+                    <td className="px-5 py-4">
+                      <span
+                        className={`px-2.5 py-1 rounded-full text-xs font-bold ${
+                          row.kategori === 'Sangat Baik'
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : row.kategori === 'Ideal / Baik'
+                            ? 'bg-blue-100 text-blue-800'
+                            : row.kategori === 'Cukup'
+                            ? 'bg-amber-100 text-amber-800'
+                            : 'bg-red-100 text-red-800'
+                        }`}
+                      >
+                        {row.kategori}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+                {calvingIntervals.length === 0 && (
+                  <tr>
+                    <td colSpan={6} className="px-5 py-10 text-center text-slate-400">
+                      Belum ada sapi dengan riwayat kelahiran ke-2 atau lebih untuk dihitung intervalnya.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </main>
 
-      {/* ── MODAL CATAT PKB ── */}
+      {/* ── MODAL CATAT HASIL PKB ── */}
       {showPkbModal && selectedIbForPkb && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-lg bg-white rounded-2xl border border-slate-200 shadow-2xl p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-              <h3 className="font-bold text-base text-slate-900">
-                Pencatatan Hasil PKB (Pemeriksaan Kebuntingan)
-              </h3>
-              <button onClick={() => setShowPkbModal(false)} className="text-slate-400 hover:text-slate-700">
-                <X size={18} />
-              </button>
-            </div>
-
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1">
-              <p className="font-bold text-slate-800">Sapi: {selectedIbForPkb.cattleName} ({selectedIbForPkb.cattleId})</p>
-              <p className="text-slate-600">Peternak: {selectedIbForPkb.ownerName} · Tgl IB: {fmtDate(selectedIbForPkb.date)}</p>
-            </div>
-
-            <div className="space-y-3">
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl w-full max-w-lg p-6 sm:p-8 shadow-2xl">
+            <h3 className="text-lg font-bold mb-4 text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
+              <Stethoscope size={20} className="text-emerald-700" />
+              <span>Catat Hasil PKB - Sapi {selectedIbForPkb.cattleName}</span>
+            </h3>
+            <div className="space-y-4">
               <div>
-                <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
-                  Tanggal Pemeriksaan PKB
-                </label>
+                <label className="block text-xs font-bold mb-1 text-slate-700">Tanggal Pemeriksaan Kebuntingan</label>
                 <input
                   type="date"
+                  className="w-full min-h-touch h-11 px-3.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-600 text-xs text-slate-900"
                   value={pkbFormData.date}
                   onChange={(e) => setPkbFormData({ ...pkbFormData, date: e.target.value })}
-                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none"
                 />
               </div>
-
               <div>
-                <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
-                  Hasil Diagnosa PKB
-                </label>
-                <select
-                  value={pkbFormData.result}
-                  onChange={(e) => setPkbFormData({ ...pkbFormData, result: e.target.value as any })}
-                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none"
-                >
-                  <option value="Bunting">Positif Bunting 🤰</option>
-                  <option value="Tidak Bunting">Tidak Bunting / Kosong ❌</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
-                  Petugas Pemeriksa
-                </label>
+                <label className="block text-xs font-bold mb-1 text-slate-700">Nama Petugas Pemeriksa PKB</label>
                 <input
                   type="text"
-                  placeholder="Nama petugas medis / pemeriksa"
+                  className="w-full min-h-touch h-11 px-3.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-600 text-xs text-slate-900"
+                  placeholder="Nama dokter hewan / paramedik pemeriksa"
                   value={pkbFormData.officer}
                   onChange={(e) => setPkbFormData({ ...pkbFormData, officer: e.target.value })}
-                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none"
                 />
               </div>
-
               <div>
-                <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
-                  Catatan Tambahan
-                </label>
-                <input
-                  type="text"
-                  placeholder="Catatan kondisi rahim / saran penanganan"
+                <label className="block text-xs font-bold mb-1 text-slate-700">Hasil Pemeriksaan</label>
+                <select
+                  className="w-full min-h-touch h-11 px-3.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-600 text-xs text-slate-900 font-bold"
+                  value={pkbFormData.result}
+                  onChange={(e) => setPkbFormData({ ...pkbFormData, result: e.target.value as any })}
+                >
+                  <option value="Bunting">✓ Positif Bunting</option>
+                  <option value="Tidak Bunting">✕ Kosong / Tidak Bunting</option>
+                </select>
+                <p className="text-[11px] text-slate-500 mt-1.5">
+                  *Jika Positif Bunting, status sapi otomatis berubah menjadi Bunting dan estimasi kelahiran akan dihitung.
+                </p>
+              </div>
+              <div>
+                <label className="block text-xs font-bold mb-1 text-slate-700">Catatan Medis</label>
+                <textarea
+                  className="w-full p-3 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-600 text-xs text-slate-900"
+                  rows={2}
+                  placeholder="Catatan kondisi uterus/ovarium..."
                   value={pkbFormData.notes}
                   onChange={(e) => setPkbFormData({ ...pkbFormData, notes: e.target.value })}
-                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none"
                 />
               </div>
             </div>
-
-            <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+            <div className="flex gap-3 mt-6 pt-4 border-t border-slate-100">
               <button
-                type="button"
                 onClick={() => setShowPkbModal(false)}
-                className="min-h-touch h-10 px-4 rounded-xl border border-slate-200 bg-slate-100 text-xs font-bold text-slate-700"
+                className="flex-1 min-h-touch h-11 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs sm:text-sm hover:bg-slate-50 cursor-pointer"
               >
                 Batal
               </button>
               <button
-                type="button"
                 onClick={handleSavePkb}
-                className="min-h-touch h-10 px-5 rounded-xl bg-emerald-600 text-white text-xs font-bold shadow-sm hover:bg-emerald-600/90"
+                disabled={!pkbFormData.date || !pkbFormData.officer}
+                className="flex-1 min-h-touch h-11 rounded-xl bg-emerald-600 text-white font-bold text-xs sm:text-sm hover:bg-emerald-700 disabled:opacity-50 shadow-xs cursor-pointer"
               >
                 Simpan Hasil PKB
               </button>
@@ -739,137 +800,48 @@ export default function DatabaseIBPage() {
         </div>
       )}
 
-      {/* ── MODAL CATAT LAHIR ── */}
-      {showBirthModal && selectedIbForBirth && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-lg bg-white rounded-2xl border border-slate-200 shadow-2xl p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-              <h3 className="font-bold text-base text-slate-900">
-                Pencatatan Kelahiran Pedet Baru
-              </h3>
-              <button onClick={() => setShowBirthModal(false)} className="text-slate-400 hover:text-slate-700">
-                <X size={18} />
-              </button>
-            </div>
-
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1">
-              <p className="font-bold text-slate-800">Indukan: {selectedIbForBirth.cattleName} ({selectedIbForBirth.cattleId})</p>
-              <p className="text-slate-600">Pejantan Straw: {selectedIbForBirth.bullName} ({selectedIbForBirth.strawCode})</p>
-            </div>
-
-            <div className="space-y-3">
-              <div>
-                <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
-                  Tanggal Kelahiran
-                </label>
-                <input
-                  type="date"
-                  value={birthFormData.date}
-                  onChange={(e) => setBirthFormData({ ...birthFormData, date: e.target.value })}
-                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
-                  Jenis Kelamin Pedet
-                </label>
-                <select
-                  value={birthFormData.gender}
-                  onChange={(e) => setBirthFormData({ ...birthFormData, gender: e.target.value as any })}
-                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none"
-                >
-                  <option value="Jantan">Pedet Jantan 🐂</option>
-                  <option value="Betina">Pedet Betina 🐄</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
-                  Catatan Kondisi Pedet
-                </label>
-                <input
-                  type="text"
-                  placeholder="Kondisi sehat, bobot perkiraan, dll"
-                  value={birthFormData.notes}
-                  onChange={(e) => setBirthFormData({ ...birthFormData, notes: e.target.value })}
-                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none"
-                />
-              </div>
-            </div>
-
-            <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => setShowBirthModal(false)}
-                className="min-h-touch h-10 px-4 rounded-xl border border-slate-200 bg-slate-100 text-xs font-bold text-slate-700"
-              >
-                Batal
-              </button>
-              <button
-                type="button"
-                onClick={handleSaveBirth}
-                className="min-h-touch h-10 px-5 rounded-xl bg-vitality text-white text-xs font-bold shadow-sm hover:bg-vitality/90"
-              >
-                Simpan Kelahiran
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ── MODAL LEWATI PKB ── */}
+      {/* ── MODAL TIDAK PKB ── */}
       {showSkipPkbModal && selectedIbForSkip && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-md bg-white rounded-2xl border border-slate-200 shadow-2xl p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-              <h3 className="font-bold text-base text-slate-900">
-                Lewati Jadwal PKB
-              </h3>
-              <button onClick={() => setShowSkipPkbModal(false)} className="text-slate-400 hover:text-slate-700">
-                <X size={18} />
-              </button>
-            </div>
-
-            <div className="space-y-3">
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl w-full max-w-lg p-6 sm:p-8 shadow-2xl">
+            <h3 className="text-lg font-bold mb-2 text-slate-900 border-b border-slate-100 pb-3">
+              Tandai PKB Tidak Dilaksanakan
+            </h3>
+            <p className="text-xs text-slate-500 mb-4">
+              Gunakan opsi ini jika pemeriksaan kebuntingan belum/tidak dilakukan untuk sapi ini. Sapi tetap dapat diperiksa ulang sewaktu-waktu.
+            </p>
+            <div className="space-y-4">
               <div>
-                <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
-                  Tanggal
-                </label>
+                <label className="block text-xs font-bold mb-1 text-slate-700">Tanggal Pencatatan</label>
                 <input
                   type="date"
+                  className="w-full min-h-touch h-11 px-3.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:border-slate-500 text-xs text-slate-900"
                   value={skipFormData.date}
                   onChange={(e) => setSkipFormData({ ...skipFormData, date: e.target.value })}
-                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none"
                 />
               </div>
-
               <div>
-                <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
-                  Alasan Tidak Dilakukan PKB
-                </label>
-                <input
-                  type="text"
-                  placeholder="Sapi dijual, birahi kembali, peternak pindah, dll"
+                <label className="block text-xs font-bold mb-1 text-slate-700">Alasan (Opsional)</label>
+                <textarea
+                  className="w-full p-3 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:border-slate-500 text-xs text-slate-900"
+                  rows={2}
+                  placeholder="Contoh: Sapi sedang dijual/di luar kandang"
                   value={skipFormData.reason}
                   onChange={(e) => setSkipFormData({ ...skipFormData, reason: e.target.value })}
-                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:border-emerald-500 outline-none"
                 />
               </div>
             </div>
-
-            <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+            <div className="flex gap-3 mt-6 pt-4 border-t border-slate-100">
               <button
-                type="button"
                 onClick={() => setShowSkipPkbModal(false)}
-                className="min-h-touch h-10 px-4 rounded-xl border border-slate-200 bg-slate-100 text-xs font-bold text-slate-700"
+                className="flex-1 min-h-touch h-11 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs sm:text-sm hover:bg-slate-50 cursor-pointer"
               >
                 Batal
               </button>
               <button
-                type="button"
                 onClick={handleSkipPkb}
-                className="min-h-touch h-10 px-5 rounded-xl bg-slate-800 text-white text-xs font-bold shadow-sm hover:bg-slate-900"
+                disabled={!skipFormData.date}
+                className="flex-1 min-h-touch h-11 rounded-xl bg-slate-700 text-white font-bold text-xs sm:text-sm hover:bg-slate-800 disabled:opacity-50 cursor-pointer"
               >
                 Simpan
               </button>
@@ -878,6 +850,64 @@ export default function DatabaseIBPage() {
         </div>
       )}
 
+      {/* ── MODAL CATAT KELAHIRAN ── */}
+      {showBirthModal && selectedIbForBirth && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl w-full max-w-lg p-6 sm:p-8 shadow-2xl">
+            <h3 className="text-lg font-bold mb-4 text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
+              <Baby size={20} className="text-blue-600" />
+              <span>Catat Kelahiran Pedet - Sapi {selectedIbForBirth.cattleName}</span>
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold mb-1 text-slate-700">Tanggal Kelahiran (Partus)</label>
+                <input
+                  type="date"
+                  className="w-full min-h-touch h-11 px-3.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-600 text-xs text-slate-900"
+                  value={birthFormData.date}
+                  onChange={(e) => setBirthFormData({ ...birthFormData, date: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold mb-1 text-slate-700">Jenis Kelamin Pedet</label>
+                <select
+                  className="w-full min-h-touch h-11 px-3.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-600 text-xs text-slate-900 font-bold"
+                  value={birthFormData.gender}
+                  onChange={(e) => setBirthFormData({ ...birthFormData, gender: e.target.value as any })}
+                >
+                  <option value="Jantan">Jantan</option>
+                  <option value="Betina">Betina</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-bold mb-1 text-slate-700">Catatan Kelahiran</label>
+                <textarea
+                  className="w-full p-3 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-600 text-xs text-slate-900"
+                  rows={2}
+                  placeholder="Kondisi pedet, berat lahir, proses persalinan..."
+                  value={birthFormData.notes}
+                  onChange={(e) => setBirthFormData({ ...birthFormData, notes: e.target.value })}
+                />
+              </div>
+            </div>
+            <div className="flex gap-3 mt-6 pt-4 border-t border-slate-100">
+              <button
+                onClick={() => setShowBirthModal(false)}
+                className="flex-1 min-h-touch h-11 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs sm:text-sm hover:bg-slate-50 cursor-pointer"
+              >
+                Batal
+              </button>
+              <button
+                onClick={handleSaveBirth}
+                disabled={!birthFormData.date}
+                className="flex-1 min-h-touch h-11 rounded-xl bg-blue-600 text-white font-bold text-xs sm:text-sm hover:bg-blue-700 disabled:opacity-50 shadow-xs cursor-pointer"
+              >
+                Simpan Kelahiran
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
