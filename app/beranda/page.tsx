@@ -99,18 +99,18 @@ export default function BerandaPage() {
             <Link
               href="/"
               title="Portal Publik"
-              className="min-h-touch h-10 px-3.5 rounded-xl border border-white/30 bg-white/20 hover:bg-white/30 text-white text-xs font-bold flex items-center gap-1.5 backdrop-blur-md transition-all shadow-xs"
+              className="min-h-touch h-10 px-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-xs"
             >
-              <ExternalLink size={14} />
+              <ExternalLink size={14} strokeWidth={2.5} />
               <span className="hidden sm:inline">Portal Publik</span>
             </Link>
 
             <button
               onClick={handleLogout}
               title="Keluar"
-              className="min-h-touch h-10 px-3.5 rounded-xl border border-red-400/40 bg-red-500/30 hover:bg-red-500/50 text-white text-xs font-bold flex items-center gap-1.5 backdrop-blur-md transition-all active:scale-95 shadow-xs cursor-pointer"
+              className="min-h-touch h-10 px-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 shadow-xs cursor-pointer"
             >
-              <LogOut size={14} />
+              <LogOut size={14} strokeWidth={2.5} />
               <span className="hidden sm:inline">Keluar</span>
             </button>
           </div>

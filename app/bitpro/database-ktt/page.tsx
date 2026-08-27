@@ -242,10 +242,10 @@ export default function DatabaseKTTPage() {
           <div className="flex items-center gap-3 min-w-0 flex-1">
             <Link
               href="/bitpro"
-              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 flex items-center justify-center text-emerald-800 transition-colors shrink-0"
+              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center transition-all shadow-xs shrink-0"
               aria-label="Kembali ke Bitpro"
             >
-              <ArrowLeft size={18} />
+              <ArrowLeft size={18} strokeWidth={2.5} />
             </Link>
 
             <div className="min-w-0">
@@ -269,7 +269,7 @@ export default function DatabaseKTTPage() {
               aria-label="Tambah KTT"
               className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-5 rounded-xl bg-emerald-600 text-white text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 hover:bg-emerald-700 active:scale-95 transition-all shadow-xs cursor-pointer"
             >
-              <Plus size={16} />
+              <Plus size={16} strokeWidth={2.5} />
               <span className="hidden sm:inline">Tambah KTT</span>
             </button>
           </div>

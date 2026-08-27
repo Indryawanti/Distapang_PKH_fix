@@ -1757,10 +1757,10 @@ export default function RphTphTpuPage() {
           <div className="flex items-center gap-3 min-w-0 flex-1">
             <Link
               href="/kesmavet"
-              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-purple-200 bg-purple-50 hover:bg-purple-100 flex items-center justify-center text-purple-800 transition-colors shrink-0"
+              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center transition-all shadow-xs shrink-0"
               aria-label="Kembali ke Kesmavet"
             >
-              <ArrowLeft size={18} />
+              <ArrowLeft size={18} strokeWidth={2.5} />
             </Link>
 
             <div className="min-w-0">

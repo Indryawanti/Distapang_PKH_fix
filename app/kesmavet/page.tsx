@@ -90,10 +90,10 @@ export default function KesmavetPage() {
           <div className="flex items-center gap-3 min-w-0 flex-1">
             <Link
               href="/beranda"
-              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-purple-200 bg-purple-50 hover:bg-purple-100 flex items-center justify-center text-purple-800 transition-colors shrink-0"
+              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center transition-all shadow-xs shrink-0"
               aria-label="Kembali ke Beranda"
             >
-              <ArrowLeft size={18} />
+              <ArrowLeft size={18} strokeWidth={2.5} />
             </Link>
 
             <div className="min-w-0">
@@ -115,9 +115,9 @@ export default function KesmavetPage() {
               onClick={handleLogout}
               title="Keluar"
               aria-label="Keluar"
-              className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-4 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 transition-colors cursor-pointer"
+              className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-4 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 transition-all shadow-xs cursor-pointer"
             >
-              <LogOut size={16} />
+              <LogOut size={16} strokeWidth={2.5} />
               <span className="hidden sm:inline">Keluar</span>
             </button>
           </div>
@@ -130,7 +130,7 @@ export default function KesmavetPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 pb-12 sm:pb-16 flex flex-col md:flex-row md:items-center justify-between gap-6 sm:gap-8 relative z-10">
           <div className="flex items-start gap-4 sm:gap-5">
             <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/20 border border-white/30 text-white flex items-center justify-center shrink-0 shadow-inner">
-              <FlaskConical size={30} />
+              <FlaskConical size={30} strokeWidth={2.5} />
             </div>
             <div className="space-y-1.5 sm:space-y-2 min-w-0">
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white">
@@ -158,25 +158,25 @@ export default function KesmavetPage() {
         <section className="space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold uppercase tracking-wider text-purple-900 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-purple-600" />
+              <span className="w-2.5 h-2.5 rounded-full bg-purple-600" />
               Menu & Pelayanan Data Kesmavet
             </h3>
             <span className="text-xs text-slate-500 font-medium">Pilih menu untuk melihat database</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {menus.map((menu) => {
               const IconComp = menu.icon;
               return (
                 <Link
                   key={menu.title}
                   href={menu.path}
-                  className="group rounded-2xl border border-slate-200 bg-white p-6 sm:p-7 flex flex-col justify-between min-h-[160px] shadow-xs hover:border-purple-500 hover:shadow-md transition-all duration-200"
+                  className="group rounded-2xl border border-slate-200 bg-white p-6 flex flex-col justify-between min-h-[160px] shadow-xs hover:border-purple-500 hover:shadow-md transition-all duration-200"
                 >
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="w-12 h-12 rounded-xl bg-purple-600 text-white flex items-center justify-center shadow-xs transition-transform group-hover:scale-105">
-                        <IconComp size={24} />
+                        <IconComp size={24} strokeWidth={2.5} />
                       </div>
                       <span className="text-xs font-semibold px-3 py-1 rounded-full bg-purple-50 text-purple-800 border border-purple-200">
                         {menu.badge}

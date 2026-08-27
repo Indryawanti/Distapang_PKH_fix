@@ -34,9 +34,10 @@ export default function Populasi2025() {
       try {
         const response = await fetch('/api/get-populasi');
         const data = await response.json();
-        setDataPopulasi(data);
+        setDataPopulasi(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error('Gagal menyedot data populasi 2025:', error);
+        setDataPopulasi([]);
       } finally {
         setIsLoading(false);
       }
@@ -44,11 +45,13 @@ export default function Populasi2025() {
     fetchData();
   }, []);
 
-  const filteredData = dataPopulasi.filter(
-    (row) =>
-      row.kec.toLowerCase().includes(search.toLowerCase()) ||
-      row.desa.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredData = Array.isArray(dataPopulasi)
+    ? dataPopulasi.filter(
+        (row) =>
+          (row.kec || '').toLowerCase().includes(search.toLowerCase()) ||
+          (row.desa || '').toLowerCase().includes(search.toLowerCase())
+      )
+    : [];
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-600 selection:text-white pb-20">
@@ -60,10 +63,10 @@ export default function Populasi2025() {
           <div className="flex items-center gap-3 min-w-0 flex-1">
             <Link
               href="/bitpro/populasi-dan-produksi"
-              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 flex items-center justify-center text-emerald-800 transition-colors shrink-0"
+              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center transition-all shadow-xs shrink-0"
               aria-label="Kembali ke Menu Populasi"
             >
-              <ArrowLeft size={18} />
+              <ArrowLeft size={18} strokeWidth={2.5} />
             </Link>
 
             <div className="min-w-0">
@@ -82,7 +85,7 @@ export default function Populasi2025() {
 
           <div className="flex items-center gap-2 shrink-0">
             <div className="relative w-36 sm:w-64">
-              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Search size={16} strokeWidth={2.5} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
                 placeholder="Cari desa/kecamatan..."
