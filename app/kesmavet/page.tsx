@@ -125,35 +125,35 @@ export default function KesmavetPage() {
         </div>
       </header>
 
-      {/* ── MAIN CONTENT ── */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 space-y-10">
-        
-        {/* Module Header Banner (Tema Ungu) */}
-        <section className="rounded-3xl border border-purple-200 bg-gradient-to-r from-purple-700 to-violet-800 text-white p-8 sm:p-10 lg:p-12 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-8 relative overflow-hidden">
-          <div className="relative z-10 flex items-start gap-5">
-            <div className="w-16 h-16 rounded-2xl bg-white/20 border border-white/30 text-white flex items-center justify-center shrink-0 shadow-inner">
-              <FlaskConical size={32} />
+      {/* ── FULL-WIDTH TOP ARC BANNER (Tema Ungu) ── */}
+      <section className="w-full bg-gradient-to-br from-purple-700 via-purple-800 to-violet-900 text-white [border-bottom-left-radius:50%_25px] [border-bottom-right-radius:50%_25px] sm:[border-bottom-left-radius:50%_50px] sm:[border-bottom-right-radius:50%_50px] shadow-lg relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 pb-12 sm:pb-16 flex flex-col md:flex-row md:items-center justify-between gap-6 sm:gap-8 relative z-10">
+          <div className="flex items-start gap-4 sm:gap-5">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/20 border border-white/30 text-white flex items-center justify-center shrink-0 shadow-inner">
+              <FlaskConical size={30} />
             </div>
-            <div className="space-y-2">
-              <div>
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white">
-                  Bidang Kesmavet
-                </h2>
-              </div>
-              <p className="text-sm sm:text-base text-purple-50 max-w-2xl leading-relaxed text-justify">
+            <div className="space-y-1.5 sm:space-y-2 min-w-0">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white">
+                Bidang Kesmavet
+              </h2>
+              <p className="text-xs sm:text-sm md:text-base text-purple-50 max-w-2xl leading-relaxed text-justify">
                 Pengawasan keamanan pangan asal hewan (ASUH: Aman, Sehat, Utuh, Halal), sertifikasi Nomor Kontrol Veteriner (NKV), pengawasan RPH/TPH/TPU, dan pengujian mutu laboratorium.
               </p>
             </div>
           </div>
 
-          <div className="relative z-10 flex items-center gap-3 self-start md:self-auto shrink-0">
-            <div className="p-4 rounded-2xl bg-white/10 border border-white/20 text-xs sm:text-sm text-purple-100">
+          <div className="flex items-center gap-3 self-start md:self-auto shrink-0">
+            <div className="p-3.5 sm:p-4 rounded-2xl bg-white/10 border border-white/20 text-xs sm:text-sm text-purple-100">
               <span className="font-bold text-white block text-sm sm:text-base">{menus.length} Layanan Data</span>
               Tersinkronisasi Realtime
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
+      {/* ── MAIN CONTENT (MENU GRID) ── */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-6">
+        
         {/* Module Cards Grid */}
         <section className="space-y-4">
           <div className="flex items-center justify-between">
@@ -175,7 +175,7 @@ export default function KesmavetPage() {
                 >
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <div className="w-12 h-12 rounded-xl bg-purple-50 text-purple-700 group-hover:bg-purple-600 group-hover:text-white flex items-center justify-center transition-colors">
+                      <div className="w-12 h-12 rounded-xl bg-purple-600 text-white flex items-center justify-center shadow-xs transition-transform group-hover:scale-105">
                         <IconComp size={24} />
                       </div>
                       <span className="text-xs font-semibold px-3 py-1 rounded-full bg-purple-50 text-purple-800 border border-purple-200">
