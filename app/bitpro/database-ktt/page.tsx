@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
+import * as XLSX from "xlsx";
 import {
   ArrowLeft,
   Search,
@@ -17,6 +18,7 @@ import {
   Filter,
   CheckCircle2,
   AlertTriangle,
+  Download,
 } from "lucide-react";
 
 /* =========================================================
@@ -217,6 +219,29 @@ export default function DatabaseKTTPage() {
     }
   }
 
+  const handleExportExcel = () => {
+    if (data.length === 0) return alert("Belum ada data KTT untuk diekspor!");
+    const exportData = filtered.map((row, idx) => ({
+      No: idx + 1,
+      "Nomor Register": row.nomorRegister || "-",
+      "Nama Kelompok": row.namaKelompok || "-",
+      "Ketua Kelompok": row.namaKetuaKelompok || "-",
+      Kecamatan: row.kecamatan || "-",
+      Desa: row.desa || "-",
+      "Jenis Kelompok": row.jenisKelompok || "-",
+      "Kelas Kelompok": row.kelasKelompok || "-",
+      "Luas Lahan (Ha)": row.luasLahanHa || 0,
+      "Anggota Laki-laki": row.anggotaLaki || 0,
+      "Anggota Perempuan": row.anggotaPerempuan || 0,
+      "Total Anggota": (Number(row.anggotaLaki) || 0) + (Number(row.anggotaPerempuan) || 0),
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(exportData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Master_KTT");
+    XLSX.writeFile(wb, `Database_Master_KTT_${new Date().toISOString().split("T")[0]}.xlsx`);
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center font-sans">
@@ -263,6 +288,16 @@ export default function DatabaseKTTPage() {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={handleExportExcel}
+              title="Export Excel"
+              aria-label="Export Excel"
+              className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 transition-all shadow-xs cursor-pointer"
+            >
+              <Download size={16} strokeWidth={2.5} />
+              <span className="hidden sm:inline">Export Excel</span>
+            </button>
+
             <button
               onClick={openAddModal}
               title="Tambah KTT"

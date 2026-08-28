@@ -1782,9 +1782,9 @@ export default function RphTphTpuPage() {
               onClick={handleExportExcel}
               title="Export Excel"
               aria-label="Export Excel"
-              className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 transition-colors shadow-xs cursor-pointer"
+              className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 transition-colors shadow-xs cursor-pointer"
             >
-              <Download size={16} />
+              <Download size={16} strokeWidth={2.5} />
               <span className="hidden sm:inline">Export Excel</span>
             </button>
             <button
@@ -1793,7 +1793,7 @@ export default function RphTphTpuPage() {
               aria-label="Tambah Unit"
               className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-5 rounded-xl bg-purple-600 text-white text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 hover:bg-purple-700 transition-all shadow-xs cursor-pointer"
             >
-              <Plus size={16} />
+              <Plus size={16} strokeWidth={2.5} />
               <span className="hidden sm:inline">Tambah Unit</span>
             </button>
           </div>
@@ -1910,37 +1910,37 @@ export default function RphTphTpuPage() {
 
                     return (
                       <tr key={item.no} className="hover:bg-slate-50/80 transition-colors">
-                        <td className="p-3.5 text-center font-sans text-slate-400">{item.no}</td>
-                        <td className="p-3.5 font-bold text-slate-900">{item.nama_tph_r_u || '-'}</td>
+                        <td className="p-3.5 text-center font-sans font-bold text-slate-600">{item.no}</td>
+                        <td className="p-3.5 font-extrabold text-slate-950 text-sm">{item.nama_tph_r_u || '-'}</td>
                         <td className="p-3.5">
-                          <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                          <span className="px-2.5 py-1 rounded-lg text-xs font-extrabold bg-slate-100 text-slate-800 border border-slate-300">
                             {item.jenis_unit_usaha || '-'}
                           </span>
                         </td>
-                        <td className="p-3.5 text-slate-700">{item.pemilik || '-'}</td>
-                        <td className="p-3.5 font-sans text-slate-600">{item.no_telp || '-'}</td>
-                        <td className="p-3.5 text-slate-600 max-w-xs truncate" title={item.lokasi_rpu || item.lokasi_desa_kecamatan_alamat_pemilik}>
+                        <td className="p-3.5 font-bold text-slate-900">{item.pemilik || '-'}</td>
+                        <td className="p-3.5 font-sans font-bold text-slate-800">{item.no_telp || '-'}</td>
+                        <td className="p-3.5 font-semibold text-slate-800 max-w-xs truncate" title={item.lokasi_rpu || item.lokasi_desa_kecamatan_alamat_pemilik}>
                           {item.lokasi_rpu || item.lokasi_desa_kecamatan_alamat_pemilik || '-'}
                         </td>
-                        <td className="p-3.5 text-center font-sans font-bold text-purple-600">
+                        <td className="p-3.5 text-center font-sans font-extrabold text-sm text-purple-700">
                           {item.pemotongan_per_hari_ekor || '-'}
                         </td>
                         <td className="p-3.5 text-center">
                           {isHalal ? (
-                            <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                            <span className="px-2.5 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300">
                               ✓ Halal
                             </span>
                           ) : (
-                            <span className="text-slate-400 text-[11px]">Belum</span>
+                            <span className="text-slate-500 font-bold text-xs">Belum</span>
                           )}
                         </td>
                         <td className="p-3.5 text-center">
                           {isNKV ? (
-                            <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                            <span className="px-2.5 py-1 rounded-full text-xs font-extrabold bg-blue-100 text-blue-800 border border-blue-300">
                               {item.sertifikat_nkv && !item.sertifikat_nkv.toLowerCase().includes('belum') ? item.sertifikat_nkv : 'Ada NKV'}
                             </span>
                           ) : (
-                            <span className="text-slate-400 text-[11px]">Belum</span>
+                            <span className="text-slate-500 font-bold text-xs">Belum</span>
                           )}
                         </td>
                         <td className="p-3.5 text-center">

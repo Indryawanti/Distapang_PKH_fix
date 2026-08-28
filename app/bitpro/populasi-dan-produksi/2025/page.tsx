@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import * as XLSX from 'xlsx';
 import { ArrowLeft, Search, Download } from 'lucide-react';
 
 const TOTAL_ROW = [
@@ -53,6 +54,28 @@ export default function Populasi2025() {
       )
     : [];
 
+  const handleExportExcel = () => {
+    if (!dataPopulasi || dataPopulasi.length === 0) return alert('Belum ada data populasi untuk diekspor!');
+    const rows = filteredData.map((row, idx) => {
+      const obj: any = {
+        No: idx + 1,
+        Kecamatan: row.kec,
+        Desa: row.desa,
+      };
+      if (Array.isArray(row.v)) {
+        HEADERS.forEach((h, hIdx) => {
+          obj[h] = row.v[hIdx] ?? 0;
+        });
+      }
+      return obj;
+    });
+
+    const ws = XLSX.utils.json_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Populasi_2025');
+    XLSX.writeFile(wb, `Sensus_Populasi_Ternak_2025_${new Date().toISOString().split('T')[0]}.xlsx`);
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-600 selection:text-white pb-20">
       
@@ -84,6 +107,16 @@ export default function Populasi2025() {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={handleExportExcel}
+              title="Export Excel"
+              aria-label="Export Excel"
+              className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 transition-all shadow-xs cursor-pointer"
+            >
+              <Download size={16} strokeWidth={2.5} />
+              <span className="hidden sm:inline">Export Excel</span>
+            </button>
+
             <div className="relative w-36 sm:w-64">
               <Search size={16} strokeWidth={2.5} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input

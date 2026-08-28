@@ -17,9 +17,21 @@ export async function GET() {
         tim_pelaksana VARCHAR(255),
         nama_kegiatan VARCHAR(255),
         hasil_kegiatan TEXT,
+        lat DECIMAL(10, 8) NULL,
+        lng DECIMAL(11, 8) NULL,
+        photo LONGTEXT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
+
+    // Pastikan kolom lat, lng, photo ada jika tabel lama belum punya
+    try {
+      await pool.query('ALTER TABLE kegiatan_ktt ADD COLUMN IF NOT EXISTS lat DECIMAL(10, 8) NULL');
+      await pool.query('ALTER TABLE kegiatan_ktt ADD COLUMN IF NOT EXISTS lng DECIMAL(11, 8) NULL');
+      await pool.query('ALTER TABLE kegiatan_ktt ADD COLUMN IF NOT EXISTS photo LONGTEXT NULL');
+    } catch {
+      // Abaikan jika MySQL versi lama tidak support IF NOT EXISTS di ALTER
+    }
 
     const [rows]: any = await pool.query('SELECT * FROM kegiatan_ktt ORDER BY tanggal DESC, id DESC');
     return NextResponse.json(rows);
@@ -33,23 +45,23 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { id, tanggal, ktt_id, nama_ktt, kecamatan, desa, tim_pelaksana, nama_kegiatan, hasil_kegiatan, isEdit } = body;
+    const { id, tanggal, ktt_id, nama_ktt, kecamatan, desa, tim_pelaksana, nama_kegiatan, hasil_kegiatan, lat, lng, photo, isEdit } = body;
 
     const finalId = id || `ACT-${Date.now()}`;
 
     if (isEdit) {
       await pool.query(
         `UPDATE kegiatan_ktt 
-         SET tanggal=?, ktt_id=?, nama_ktt=?, kecamatan=?, desa=?, tim_pelaksana=?, nama_kegiatan=?, hasil_kegiatan=? 
+         SET tanggal=?, ktt_id=?, nama_ktt=?, kecamatan=?, desa=?, tim_pelaksana=?, nama_kegiatan=?, hasil_kegiatan=?, lat=?, lng=?, photo=? 
          WHERE id=?`,
-        [tanggal, ktt_id || '', nama_ktt, kecamatan || '', desa || '', tim_pelaksana, nama_kegiatan, hasil_kegiatan, finalId]
+        [tanggal, ktt_id || '', nama_ktt, kecamatan || '', desa || '', tim_pelaksana, nama_kegiatan, hasil_kegiatan, lat || null, lng || null, photo || null, finalId]
       );
     } else {
       await pool.query(
         `INSERT INTO kegiatan_ktt 
-         (id, tanggal, ktt_id, nama_ktt, kecamatan, desa, tim_pelaksana, nama_kegiatan, hasil_kegiatan) 
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [finalId, tanggal, ktt_id || '', nama_ktt, kecamatan || '', desa || '', tim_pelaksana, nama_kegiatan, hasil_kegiatan]
+         (id, tanggal, ktt_id, nama_ktt, kecamatan, desa, tim_pelaksana, nama_kegiatan, hasil_kegiatan, lat, lng, photo) 
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [finalId, tanggal, ktt_id || '', nama_ktt, kecamatan || '', desa || '', tim_pelaksana, nama_kegiatan, hasil_kegiatan, lat || null, lng || null, photo || null]
       );
     }
 

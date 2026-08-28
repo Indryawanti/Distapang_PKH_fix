@@ -378,10 +378,10 @@ export default function InputPopulasi2026() {
           <div className="flex items-center gap-3 min-w-0 flex-1">
             <Link
               href="/bitpro/populasi-dan-produksi"
-              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 flex items-center justify-center text-emerald-800 transition-colors shrink-0"
+              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center transition-all shadow-xs shrink-0"
               aria-label="Kembali ke Menu Populasi"
             >
-              <ArrowLeft size={18} />
+              <ArrowLeft size={18} strokeWidth={2.5} />
             </Link>
 
             <div className="min-w-0">
@@ -393,7 +393,7 @@ export default function InputPopulasi2026() {
                 <span className="text-xs font-bold text-emerald-700 whitespace-nowrap">Populasi 2026</span>
               </div>
               <h1 className="text-base sm:text-xl font-bold text-slate-900 tracking-tight leading-tight truncate">
-                Sensus &amp; Populasi Ternak 2026
+                Data Populasi Ternak 2026
               </h1>
             </div>
           </div>
@@ -746,7 +746,7 @@ export default function InputPopulasi2026() {
                 disabled={savedData.length === 0}
                 className="min-h-touch h-10 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 text-white text-xs font-bold flex items-center gap-1.5 transition-colors shadow-xs cursor-pointer"
               >
-                <Download size={15} />
+                <Download size={15} strokeWidth={2.5} />
                 <span>Unduh Excel ({savedData.length})</span>
               </button>
             </div>
@@ -760,7 +760,6 @@ export default function InputPopulasi2026() {
                   <th className="p-3.5">TRIWULAN</th>
                   <th className="p-3.5">KECAMATAN</th>
                   <th className="p-3.5">DESA</th>
-                  <th className="p-3.5 text-center">TOTAL POPULASI</th>
                   <th className="p-3.5">RINGKASAN TERNAK TERISI</th>
                   <th className="p-3.5 text-center w-24">AKSI</th>
                 </tr>
@@ -773,32 +772,39 @@ export default function InputPopulasi2026() {
                       <td className="p-3.5 font-bold text-emerald-800">{d.tw}</td>
                       <td className="p-3.5 font-bold text-slate-900">{d.kec}</td>
                       <td className="p-3.5 text-slate-700 font-semibold">{d.desa}</td>
-                      <td className="p-3.5 text-center font-bold text-emerald-700 font-sans">
-                        {(d.grandTotal || 0).toLocaleString('id-ID')} Ekor
-                      </td>
-                      <td className="p-3.5 text-xs text-slate-600 max-w-xs truncate">
-                        {Object.entries(d.values)
-                          .filter(([k, v]) => v && v !== '0' && !k.startsWith('Total'))
-                          .slice(0, 5)
-                          .map(([k, v]) => `${k}: ${v}`)
-                          .join(', ') || 'Semua 0'}
-                        {Object.entries(d.values).filter(([k, v]) => v && v !== '0' && !k.startsWith('Total')).length > 5 && ' ...'}
+                      <td className="p-3.5">
+                        <div className="flex flex-wrap gap-1.5 max-w-xl py-1">
+                          {Object.entries(d.values)
+                            .filter(([k, v]) => v && v !== '0' && !k.startsWith('Total'))
+                            .map(([k, v]) => (
+                              <span
+                                key={k}
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl border border-slate-300 bg-white text-slate-800 text-xs font-medium shadow-2xs hover:border-emerald-400 transition-colors"
+                              >
+                                <span className="text-slate-500 font-semibold">{k}:</span>
+                                <span className="font-extrabold text-emerald-700">{String(v)}</span>
+                              </span>
+                            ))}
+                          {Object.entries(d.values).filter(([k, v]) => v && v !== '0' && !k.startsWith('Total')).length === 0 && (
+                            <span className="text-xs text-slate-400 italic">Semua 0 / Belum terisi</span>
+                          )}
+                        </div>
                       </td>
                       <td className="p-3.5 text-center">
                         <div className="flex items-center justify-center gap-1.5">
                           <button
                             onClick={() => handleEdit(i)}
-                            className="min-h-touch h-8 w-8 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 flex items-center justify-center transition-colors"
+                            className="min-h-touch h-8 w-8 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 flex items-center justify-center transition-colors cursor-pointer"
                             title="Edit Data Desa"
                           >
-                            <Edit2 size={13} />
+                            <Edit2 size={13} strokeWidth={2.5} />
                           </button>
                           <button
                             onClick={() => handleDelete(i)}
-                            className="min-h-touch h-8 w-8 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-red-600 flex items-center justify-center transition-colors"
+                            className="min-h-touch h-8 w-8 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-red-600 flex items-center justify-center transition-colors cursor-pointer"
                             title="Hapus Data Desa"
                           >
-                            <Trash2 size={13} />
+                            <Trash2 size={13} strokeWidth={2.5} />
                           </button>
                         </div>
                       </td>
@@ -806,7 +812,7 @@ export default function InputPopulasi2026() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={7} className="p-12 text-center text-slate-400 text-sm font-medium">
+                    <td colSpan={6} className="p-12 text-center text-slate-400 text-sm font-medium">
                       Belum ada data desa yang diinput pada sesi tahun 2026.
                     </td>
                   </tr>
@@ -913,89 +919,95 @@ function RuminantInputCard({
       {/* Matriks Input: Jantan & Betina */}
       <div className="grid grid-cols-2 gap-3">
         
-        {/* Kolom Jantan */}
-        <div className="p-3 rounded-2xl bg-blue-50/50 border border-blue-100 space-y-2.5">
-          <div className="flex items-center gap-1.5 pb-1 border-b border-blue-100 text-blue-800 font-bold text-xs">
-            <span>♂️</span>
-            <span>Jantan</span>
+        {/* Kolom Jantan (Solid Blue) */}
+        <div className="p-3.5 rounded-2xl bg-blue-50 border-2 border-blue-300 space-y-2.5 shadow-2xs">
+          <div className="flex items-center justify-between pb-1.5 border-b border-blue-200 text-blue-900 font-extrabold text-xs">
+            <span className="flex items-center gap-1">
+              <span>♂️</span>
+              <span>JANTAN</span>
+            </span>
+            <span className="px-1.5 py-0.5 rounded bg-blue-600 text-white text-[10px] font-bold">Solid</span>
           </div>
 
           <div className="space-y-2">
             <div>
-              <label className="block text-[11px] font-bold text-slate-600 mb-0.5">Anak Jantan</label>
+              <label className="block text-[11px] font-bold text-blue-950 mb-0.5">Anak Jantan</label>
               <input
                 type="text"
                 inputMode="numeric"
                 placeholder="0"
                 value={values[`AJ ${prefix}`] || ''}
                 onChange={(e) => onChange(`AJ ${prefix}`, e.target.value)}
-                className="w-full min-h-touch h-10 px-2.5 rounded-xl border border-slate-200 bg-white text-sm font-bold text-slate-900 text-center sm:text-right focus:border-blue-500 outline-none shadow-2xs"
+                className="w-full min-h-touch h-10 px-2.5 rounded-xl border border-blue-200 bg-white text-sm font-bold text-slate-900 text-center sm:text-right focus:border-blue-600 focus:ring-1 focus:ring-blue-500 outline-none shadow-2xs"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-slate-600 mb-0.5">Muda Jantan</label>
+              <label className="block text-[11px] font-bold text-blue-950 mb-0.5">Muda Jantan</label>
               <input
                 type="text"
                 inputMode="numeric"
                 placeholder="0"
                 value={values[`MJ ${prefix}`] || ''}
                 onChange={(e) => onChange(`MJ ${prefix}`, e.target.value)}
-                className="w-full min-h-touch h-10 px-2.5 rounded-xl border border-slate-200 bg-white text-sm font-bold text-slate-900 text-center sm:text-right focus:border-blue-500 outline-none shadow-2xs"
+                className="w-full min-h-touch h-10 px-2.5 rounded-xl border border-blue-200 bg-white text-sm font-bold text-slate-900 text-center sm:text-right focus:border-blue-600 focus:ring-1 focus:ring-blue-500 outline-none shadow-2xs"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-slate-600 mb-0.5">Dewasa Jantan</label>
+              <label className="block text-[11px] font-bold text-blue-950 mb-0.5">Dewasa Jantan</label>
               <input
                 type="text"
                 inputMode="numeric"
                 placeholder="0"
                 value={values[`DJ ${prefix}`] || ''}
                 onChange={(e) => onChange(`DJ ${prefix}`, e.target.value)}
-                className="w-full min-h-touch h-10 px-2.5 rounded-xl border border-slate-200 bg-white text-sm font-bold text-slate-900 text-center sm:text-right focus:border-blue-500 outline-none shadow-2xs"
+                className="w-full min-h-touch h-10 px-2.5 rounded-xl border border-blue-200 bg-white text-sm font-bold text-slate-900 text-center sm:text-right focus:border-blue-600 focus:ring-1 focus:ring-blue-500 outline-none shadow-2xs"
               />
             </div>
           </div>
         </div>
 
-        {/* Kolom Betina */}
-        <div className="p-3 rounded-2xl bg-pink-50/50 border border-pink-100 space-y-2.5">
-          <div className="flex items-center gap-1.5 pb-1 border-b border-pink-100 text-pink-800 font-bold text-xs">
-            <span>♀️</span>
-            <span>Betina</span>
+        {/* Kolom Betina (Solid Rose/Pink) */}
+        <div className="p-3.5 rounded-2xl bg-rose-50 border-2 border-rose-300 space-y-2.5 shadow-2xs">
+          <div className="flex items-center justify-between pb-1.5 border-b border-rose-200 text-rose-900 font-extrabold text-xs">
+            <span className="flex items-center gap-1">
+              <span>♀️</span>
+              <span>BETINA</span>
+            </span>
+            <span className="px-1.5 py-0.5 rounded bg-rose-600 text-white text-[10px] font-bold">Solid</span>
           </div>
 
           <div className="space-y-2">
             <div>
-              <label className="block text-[11px] font-bold text-slate-600 mb-0.5">Anak Betina</label>
+              <label className="block text-[11px] font-bold text-rose-950 mb-0.5">Anak Betina</label>
               <input
                 type="text"
                 inputMode="numeric"
                 placeholder="0"
                 value={values[`AB ${prefix}`] || ''}
                 onChange={(e) => onChange(`AB ${prefix}`, e.target.value)}
-                className="w-full min-h-touch h-10 px-2.5 rounded-xl border border-slate-200 bg-white text-sm font-bold text-slate-900 text-center sm:text-right focus:border-pink-500 outline-none shadow-2xs"
+                className="w-full min-h-touch h-10 px-2.5 rounded-xl border border-rose-200 bg-white text-sm font-bold text-slate-900 text-center sm:text-right focus:border-rose-600 focus:ring-1 focus:ring-rose-500 outline-none shadow-2xs"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-slate-600 mb-0.5">Muda Betina</label>
+              <label className="block text-[11px] font-bold text-rose-950 mb-0.5">Muda Betina</label>
               <input
                 type="text"
                 inputMode="numeric"
                 placeholder="0"
                 value={values[`MB ${prefix}`] || ''}
                 onChange={(e) => onChange(`MB ${prefix}`, e.target.value)}
-                className="w-full min-h-touch h-10 px-2.5 rounded-xl border border-slate-200 bg-white text-sm font-bold text-slate-900 text-center sm:text-right focus:border-pink-500 outline-none shadow-2xs"
+                className="w-full min-h-touch h-10 px-2.5 rounded-xl border border-rose-200 bg-white text-sm font-bold text-slate-900 text-center sm:text-right focus:border-rose-600 focus:ring-1 focus:ring-rose-500 outline-none shadow-2xs"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-slate-600 mb-0.5">Dewasa Betina</label>
+              <label className="block text-[11px] font-bold text-rose-950 mb-0.5">Dewasa Betina</label>
               <input
                 type="text"
                 inputMode="numeric"
                 placeholder="0"
                 value={values[`DB ${prefix}`] || ''}
                 onChange={(e) => onChange(`DB ${prefix}`, e.target.value)}
-                className="w-full min-h-touch h-10 px-2.5 rounded-xl border border-slate-200 bg-white text-sm font-bold text-slate-900 text-center sm:text-right focus:border-pink-500 outline-none shadow-2xs"
+                className="w-full min-h-touch h-10 px-2.5 rounded-xl border border-rose-200 bg-white text-sm font-bold text-slate-900 text-center sm:text-right focus:border-rose-600 focus:ring-1 focus:ring-rose-500 outline-none shadow-2xs"
               />
             </div>
           </div>

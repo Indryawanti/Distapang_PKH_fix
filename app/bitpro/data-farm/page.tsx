@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import * as XLSX from 'xlsx';
 import {
   ArrowLeft,
   Search,
@@ -15,6 +16,7 @@ import {
   Activity,
   Layers,
   TrendingUp,
+  Download,
 } from 'lucide-react';
 
 /* ======================= TIPE DATA & KONFIGURASI ======================= */
@@ -219,6 +221,28 @@ export default function DataFarmPage() {
     closeModal();
   };
 
+  const handleExportExcel = () => {
+    const wb = XLSX.utils.book_new();
+
+    // 1. Broiler
+    if (dataBroiler.length > 0) {
+      const wsBroiler = XLSX.utils.json_to_sheet(dataBroiler);
+      XLSX.utils.book_append_sheet(wb, wsBroiler, 'Ayam_Broiler');
+    }
+    // 2. Petelur
+    if (dataPetelur.length > 0) {
+      const wsPetelur = XLSX.utils.json_to_sheet(dataPetelur);
+      XLSX.utils.book_append_sheet(wb, wsPetelur, 'Ayam_Petelur');
+    }
+    // 3. General (Babi, Sapi, Domba)
+    if (dataGeneral.length > 0) {
+      const wsGeneral = XLSX.utils.json_to_sheet(dataGeneral);
+      XLSX.utils.book_append_sheet(wb, wsGeneral, 'Ternak_Lainnya');
+    }
+
+    XLSX.writeFile(wb, `Data_Farm_Peternakan_${new Date().toISOString().split('T')[0]}.xlsx`);
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center font-sans">
@@ -265,6 +289,16 @@ export default function DataFarmPage() {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={handleExportExcel}
+              title="Export Excel"
+              aria-label="Export Excel"
+              className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 transition-all shadow-xs cursor-pointer"
+            >
+              <Download size={16} strokeWidth={2.5} />
+              <span className="hidden sm:inline">Export Excel</span>
+            </button>
+
             {activeCommodity && (
               <button
                 onClick={() => {

@@ -62,12 +62,18 @@ const KONDISI_KOSONG = {
   matiBangkaiJantan: 0,
   matiBangkaiBetina: 0,
   matiBangkaiBA: 'Tidak' as StatusBA,
+  matiBangkaiBAPdf: null as string | null,
+  matiBangkaiBAName: null as string | null,
   matiPotongJantan: 0,
   matiPotongBetina: 0,
   matiPotongBA: 'Tidak' as StatusBA,
+  matiPotongBAPdf: null as string | null,
+  matiPotongBAName: null as string | null,
   jualJantan: 0,
   jualBetina: 0,
   jualBA: 'Tidak' as StatusBA,
+  jualBAPdf: null as string | null,
+  jualBAName: null as string | null,
   beliJantan: 0,
   beliBetina: 0,
   lahirJantan: 0,
@@ -133,46 +139,94 @@ const FORM_KOSONG = {
   catatan: '',
 };
 
-function BarisTernak({ label, jantan, betina, onJantan, onBetina, showBA = false, ba, onBA }: any) {
+function BarisTernak({
+  label,
+  jantan,
+  betina,
+  onJantan,
+  onBetina,
+  showBA = false,
+  ba,
+  onBA,
+  baPdf,
+  baPdfName,
+  onUploadBAPdf,
+  onRemoveBAPdf,
+}: any) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-      <div>
-        <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
-          {label} — Jantan
-        </label>
-        <input
-          type="number"
-          min={0}
-          value={jantan}
-          onChange={(e) => onJantan(Number(e.target.value))}
-          className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white font-sans font-bold text-center text-sm focus:border-emerald-500 outline-none"
-        />
-      </div>
-      <div>
-        <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
-          {label} — Betina
-        </label>
-        <input
-          type="number"
-          min={0}
-          value={betina}
-          onChange={(e) => onBetina(Number(e.target.value))}
-          className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white font-sans font-bold text-center text-sm focus:border-emerald-500 outline-none"
-        />
-      </div>
-      {showBA && (
+    <div className="space-y-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div>
           <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
-            Status Berita Acara
+            {label} — Jantan
           </label>
-          <select
-            value={ba}
-            onChange={(e) => onBA(e.target.value as StatusBA)}
-            className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white font-sans font-bold text-sm focus:border-emerald-500 outline-none"
-          >
-            <option value="Tidak">Tidak Ada BA</option>
-            <option value="Ada">Ada BA Resmi</option>
-          </select>
+          <input
+            type="number"
+            min={0}
+            value={jantan}
+            onChange={(e) => onJantan(Number(e.target.value))}
+            className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white font-sans font-bold text-center text-sm focus:border-emerald-500 outline-none"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
+            {label} — Betina
+          </label>
+          <input
+            type="number"
+            min={0}
+            value={betina}
+            onChange={(e) => onBetina(Number(e.target.value))}
+            className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white font-sans font-bold text-center text-sm focus:border-emerald-500 outline-none"
+          />
+        </div>
+        {showBA && (
+          <div>
+            <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600 mb-1">
+              Status Berita Acara
+            </label>
+            <select
+              value={ba}
+              onChange={(e) => onBA(e.target.value as StatusBA)}
+              className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white font-sans font-bold text-sm focus:border-emerald-500 outline-none"
+            >
+              <option value="Tidak">Tidak Ada BA</option>
+              <option value="Ada">Ada BA Resmi</option>
+            </select>
+          </div>
+        )}
+      </div>
+
+      {/* Upload Berkas BA Terpisah Menempel di Masing-masing Form */}
+      {showBA && ba === 'Ada' && (
+        <div className="p-3.5 bg-emerald-50/70 rounded-xl border border-emerald-200/80 space-y-2 animate-in fade-in duration-200">
+          <label className="block text-[11px] font-bold uppercase tracking-wider text-emerald-900 flex items-center gap-1.5">
+            <FileText size={14} className="text-red-600 shrink-0" />
+            <span>Upload Berkas Berita Acara (PDF) — {label}</span>
+          </label>
+
+          {baPdf ? (
+            <div className="flex items-center justify-between bg-white p-2.5 rounded-lg border border-emerald-300 shadow-2xs">
+              <div className="flex items-center gap-2 min-w-0">
+                <FileText size={16} className="text-red-600 shrink-0" />
+                <span className="text-xs font-bold text-slate-800 truncate">{baPdfName || 'Dokumen_BA.pdf'}</span>
+              </div>
+              <button
+                type="button"
+                onClick={onRemoveBAPdf}
+                className="text-xs text-red-600 hover:text-red-800 font-bold px-2 py-0.5 hover:bg-red-50 rounded transition-colors"
+              >
+                Hapus / Ganti
+              </button>
+            </div>
+          ) : (
+            <input
+              type="file"
+              accept=".pdf"
+              onChange={onUploadBAPdf}
+              className="w-full text-xs text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-emerald-600 file:text-white hover:file:bg-emerald-700 cursor-pointer"
+            />
+          )}
         </div>
       )}
     </div>
@@ -181,7 +235,7 @@ function BarisTernak({ label, jantan, betina, onJantan, onBetina, showBA = false
 
 function KondisiSection({ nomor, title, total, totalLabel, children }: any) {
   return (
-    <div className="p-4 sm:p-5 rounded-2xl border border-slate-200 bg-white space-y-3">
+    <div className="p-4 sm:p-5 rounded-2xl border border-slate-200 bg-white space-y-3 shadow-2xs">
       <div className="flex items-center justify-between pb-2 border-b border-slate-100">
         <h5 className="font-bold text-xs sm:text-sm text-slate-800 flex items-center gap-2">
           <span className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 font-sans font-bold text-xs flex items-center justify-center">
@@ -211,6 +265,9 @@ export default function MonevKTT() {
   const [showAddTahunModal, setShowAddTahunModal] = useState(false);
   const [inputTahunBaru, setInputTahunBaru] = useState('');
 
+  // Filter Dropdown Peta & Laporan Lapangan
+  const [filterPetaKecamatan, setFilterPetaKecamatan] = useState('Semua');
+
   const [dbLapangan, setDbLapangan] = useState<FieldData[]>([]);
 
   // Form State
@@ -223,14 +280,19 @@ export default function MonevKTT() {
   const [formJenis, setFormJenis] = useState(FORM_KOSONG.jenis);
   const [formWaktuMonev, setFormWaktuMonev] = useState(FORM_KOSONG.waktuMonev);
   const [formPhoto, setFormPhoto] = useState<string | null>(FORM_KOSONG.photo);
-  const [formPdfBA, setFormPdfBA] = useState<string | null>(null);
-  const [formPdfBAName, setFormPdfBAName] = useState<string | null>(null);
   const [formLat, setFormLat] = useState<number | null>(FORM_KOSONG.lat);
   const [formLng, setFormLng] = useState<number | null>(FORM_KOSONG.lng);
   const [formCatatan, setFormCatatan] = useState(FORM_KOSONG.catatan);
   const [isGettingLocation, setIsGettingLocation] = useState(false);
 
-  const handlePdfBAUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [formKondisi, setFormKondisi] = useState<KondisiTernak>({ ...KONDISI_KOSONG });
+  const updateKondisi = (field: keyof KondisiTernak, value: any) => {
+    setFormKondisi((prev) => ({ ...prev, [field]: value }));
+  };
+  const kalkulasi = hitungKondisi(formKondisi);
+
+  // Helper File Upload PDF BA
+  const handlePdfUploadGeneric = (e: React.ChangeEvent<HTMLInputElement>, fieldPdf: keyof KondisiTernak, fieldName: keyof KondisiTernak) => {
     const file = e.target.files?.[0];
     if (!file) return;
     if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
@@ -243,22 +305,22 @@ export default function MonevKTT() {
     }
     const reader = new FileReader();
     reader.onload = () => {
-      setFormPdfBA(reader.result as string);
-      setFormPdfBAName(file.name);
+      setFormKondisi((prev) => ({
+        ...prev,
+        [fieldPdf]: reader.result as string,
+        [fieldName]: file.name,
+      }));
     };
     reader.readAsDataURL(file);
   };
 
-  const removePdfBA = () => {
-    setFormPdfBA(null);
-    setFormPdfBAName(null);
+  const removePdfGeneric = (fieldPdf: keyof KondisiTernak, fieldName: keyof KondisiTernak) => {
+    setFormKondisi((prev) => ({
+      ...prev,
+      [fieldPdf]: null,
+      [fieldName]: null,
+    }));
   };
-
-  const [formKondisi, setFormKondisi] = useState<KondisiTernak>({ ...KONDISI_KOSONG });
-  const updateKondisi = (field: keyof KondisiTernak, value: any) => {
-    setFormKondisi((prev) => ({ ...prev, [field]: value }));
-  };
-  const kalkulasi = hitungKondisi(formKondisi);
 
   const [editingId, setEditingId] = useState<string | null>(null);
   const formSectionRef = useRef<HTMLDivElement>(null);
@@ -368,7 +430,13 @@ export default function MonevKTT() {
     };
   }, []);
 
-  // Peta Leaflet
+  // Filter Data untuk Peta Sesuai Dropdown Kecamatan
+  const dbLapanganUntukPeta = useMemo(() => {
+    if (filterPetaKecamatan === 'Semua') return dbLapangan;
+    return dbLapangan.filter((d) => d.kec === filterPetaKecamatan);
+  }, [dbLapangan, filterPetaKecamatan]);
+
+  // Inisialisasi Peta Leaflet
   useEffect(() => {
     if (!leafletLoaded || !isClient || activeTab !== 'dashboard') return;
     const L = (window as any).L;
@@ -383,17 +451,18 @@ export default function MonevKTT() {
     }
   }, [leafletLoaded, isClient, activeTab]);
 
+  // Update Titik Marker Sesuai Filter Dropdown Kecamatan
   useEffect(() => {
     if (!mapInstanceRef.current || !markersLayerRef.current) return;
     const L = (window as any).L;
     markersLayerRef.current.clearLayers();
     const bounds: [number, number][] = [];
 
-    dbLapangan.forEach((data) => {
+    dbLapanganUntukPeta.forEach((data) => {
       if (data.lat && data.lng) {
         const totalAset = hitungKondisi(data.kondisi).i;
         const icon = L.divIcon({
-          html: `<div style="background:#059669;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.25);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>`,
+          html: `<div style="background:#059669;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.25);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>`,
           className: '',
           iconSize: [32, 32],
           iconAnchor: [16, 16],
@@ -412,8 +481,13 @@ export default function MonevKTT() {
         bounds.push([data.lat, data.lng]);
       }
     });
-    if (bounds.length > 0) mapInstanceRef.current.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
-  }, [dbLapangan, leafletLoaded, activeTab]);
+
+    if (bounds.length > 0) {
+      mapInstanceRef.current.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+    } else {
+      mapInstanceRef.current.setView([-7.668, 109.651], 10);
+    }
+  }, [dbLapanganUntukPeta, leafletLoaded, activeTab]);
 
   const handleDownloadDashboard = () => {
     if (dbLapangan.length === 0) return alert('Belum ada data lapangan untuk diekspor!');
@@ -429,7 +503,9 @@ export default function MonevKTT() {
         'Waktu Monev': d.waktuMonev || '-',
         'Awal (a)': h.a,
         'Mati (b)': h.b,
+        'BA Mati': d.kondisi.matiBangkaiBA === 'Ada' ? 'Ada BA' : '-',
         'Jual (c)': h.c,
+        'BA Jual': d.kondisi.jualBA === 'Ada' ? 'Ada BA' : '-',
         'Beli (d)': h.d,
         'Sisa Pokok (e)': h.e,
         'Lahir (f)': h.f,
@@ -530,8 +606,6 @@ export default function MonevKTT() {
     setFormJenis(FORM_KOSONG.jenis);
     setFormWaktuMonev(FORM_KOSONG.waktuMonev);
     setFormPhoto(FORM_KOSONG.photo);
-    setFormPdfBA(null);
-    setFormPdfBAName(null);
     setFormLat(FORM_KOSONG.lat);
     setFormLng(FORM_KOSONG.lng);
     setFormCatatan(FORM_KOSONG.catatan);
@@ -545,12 +619,6 @@ export default function MonevKTT() {
     const isEdit = !!editingId;
     const finalId = isEdit ? editingId : Date.now().toString();
 
-    const kondisiWithPdf = {
-      ...formKondisi,
-      pdfBA: formPdfBA,
-      pdfBAName: formPdfBAName,
-    };
-
     const payload = {
       id: finalId,
       tahun: formTahun,
@@ -561,7 +629,7 @@ export default function MonevKTT() {
       kegiatan: formKegiatan,
       jenis: formJenis,
       waktuMonev: formWaktuMonev,
-      kondisi: kondisiWithPdf,
+      kondisi: formKondisi,
       lat: formLat,
       lng: formLng,
       photo: formPhoto,
@@ -594,8 +662,6 @@ export default function MonevKTT() {
     setFormJenis(data.jenis);
     setFormWaktuMonev(data.waktuMonev || '');
     setFormKondisi(migrasiKondisi(data.kondisi));
-    setFormPdfBA((data.kondisi as any)?.pdfBA || null);
-    setFormPdfBAName((data.kondisi as any)?.pdfBAName || null);
     setFormLat(data.lat);
     setFormLng(data.lng);
     setFormPhoto(data.photo);
@@ -637,17 +703,17 @@ export default function MonevKTT() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-600 selection:text-white pb-20">
       
-      {/* ── TOP HEADER (Tema Hijau Bitpro - Lega & Bernapas) ── */}
+      {/* ── TOP HEADER (Tema Hijau Bitpro - Solid Icons) ── */}
       <header className="border-b border-emerald-100 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[80px] sm:min-h-[88px] flex items-center justify-between gap-3">
           
           <div className="flex items-center gap-3 min-w-0 flex-1">
             <Link
               href="/bitpro"
-              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 flex items-center justify-center text-emerald-800 transition-colors shrink-0"
+              className="min-h-touch min-w-touch w-11 h-11 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center transition-all shadow-xs shrink-0"
               aria-label="Kembali ke Bitpro"
             >
-              <ArrowLeft size={18} />
+              <ArrowLeft size={18} strokeWidth={2.5} />
             </Link>
 
             <div className="min-w-0">
@@ -671,7 +737,7 @@ export default function MonevKTT() {
               aria-label="Export Excel"
               className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 transition-all active:scale-95 shadow-xs cursor-pointer"
             >
-              <Download size={16} />
+              <Download size={16} strokeWidth={2.5} />
               <span className="hidden sm:inline">Export Excel</span>
             </button>
           </div>
@@ -686,7 +752,7 @@ export default function MonevKTT() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-              <Calendar size={22} />
+              <Calendar size={22} strokeWidth={2.5} />
             </div>
             <div>
               <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-0.5">
@@ -700,7 +766,7 @@ export default function MonevKTT() {
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-              <Layers size={22} />
+              <Layers size={22} strokeWidth={2.5} />
             </div>
             <div>
               <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-0.5">
@@ -714,7 +780,7 @@ export default function MonevKTT() {
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-              <MapPin size={22} />
+              <MapPin size={22} strokeWidth={2.5} />
             </div>
             <div>
               <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-0.5">
@@ -728,7 +794,7 @@ export default function MonevKTT() {
 
           <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-sm flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-              <CheckCircle2 size={22} />
+              <CheckCircle2 size={22} strokeWidth={2.5} />
             </div>
             <div>
               <p className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-500 mb-0.5">
@@ -759,7 +825,7 @@ export default function MonevKTT() {
                     : 'border-transparent text-slate-500 hover:text-slate-900 bg-slate-100/60'
                 }`}
               >
-                <Icon size={16} />
+                <Icon size={16} strokeWidth={2.5} />
                 <span>{tab.label}</span>
               </button>
             );
@@ -775,7 +841,7 @@ export default function MonevKTT() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
                   <h3 className="font-bold text-sm text-slate-900 flex items-center gap-2">
-                    <Filter size={16} className="text-emerald-600" />
+                    <Filter size={16} strokeWidth={2.5} className="text-emerald-600" />
                     <span>Pilih Tahun Bantuan Database</span>
                   </h3>
                   <p className="text-xs text-slate-500">
@@ -810,7 +876,7 @@ export default function MonevKTT() {
                   className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1 transition-all cursor-pointer shadow-xs"
                   title="Tambah Tahun Bantuan Baru"
                 >
-                  <Plus size={13} /> Tambah Tahun
+                  <Plus size={13} strokeWidth={2.5} /> Tambah Tahun
                 </button>
               </div>
             </div>
@@ -941,10 +1007,10 @@ export default function MonevKTT() {
                   </div>
                 </div>
 
-                {/* 2. Rincian Mutasi & Kondisi Ternak */}
+                {/* 2. Rincian Mutasi & Kondisi Ternak (Dengan Berkas Berita Acara Terpisah Menempel di Setiap Form) */}
                 <div className="space-y-4">
                   <h4 className="font-sans text-xs font-bold uppercase tracking-wider text-slate-700">
-                    2. Rincian Mutasi &amp; Kondisi Ternak
+                    2. Rincian Mutasi &amp; Kondisi Ternak (Beserta Berita Acara Terkait)
                   </h4>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -965,9 +1031,13 @@ export default function MonevKTT() {
                         jantan={formKondisi.matiBangkaiJantan}
                         betina={formKondisi.matiBangkaiBetina}
                         ba={formKondisi.matiBangkaiBA}
+                        baPdf={formKondisi.matiBangkaiBAPdf}
+                        baPdfName={formKondisi.matiBangkaiBAName}
                         onJantan={(v: any) => updateKondisi('matiBangkaiJantan', v)}
                         onBetina={(v: any) => updateKondisi('matiBangkaiBetina', v)}
                         onBA={(v: any) => updateKondisi('matiBangkaiBA', v)}
+                        onUploadBAPdf={(e: any) => handlePdfUploadGeneric(e, 'matiBangkaiBAPdf', 'matiBangkaiBAName')}
+                        onRemoveBAPdf={() => removePdfGeneric('matiBangkaiBAPdf', 'matiBangkaiBAName')}
                       />
                     </KondisiSection>
 
@@ -978,9 +1048,13 @@ export default function MonevKTT() {
                         jantan={formKondisi.jualJantan}
                         betina={formKondisi.jualBetina}
                         ba={formKondisi.jualBA}
+                        baPdf={formKondisi.jualBAPdf}
+                        baPdfName={formKondisi.jualBAName}
                         onJantan={(v: any) => updateKondisi('jualJantan', v)}
                         onBetina={(v: any) => updateKondisi('jualBetina', v)}
                         onBA={(v: any) => updateKondisi('jualBA', v)}
+                        onUploadBAPdf={(e: any) => handlePdfUploadGeneric(e, 'jualBAPdf', 'jualBAName')}
+                        onRemoveBAPdf={() => removePdfGeneric('jualBAPdf', 'jualBAName')}
                       />
                     </KondisiSection>
 
@@ -1032,49 +1106,18 @@ export default function MonevKTT() {
                   </div>
                 </div>
 
-                {/* 3. Upload Berita Acara (PDF) */}
-                <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/70 space-y-3">
-                  <h4 className="font-sans text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                    <FileText size={16} className="text-red-500" />
-                    <span>3. Berkas Berita Acara Lapangan (PDF)</span>
-                  </h4>
-                  
-                  {formPdfBA ? (
-                    <div className="flex items-center justify-between bg-white p-3 rounded-xl border border-emerald-200">
-                      <div className="flex items-center gap-2 min-w-0">
-                        <FileText size={20} className="text-red-600 shrink-0" />
-                        <span className="text-xs font-bold text-slate-800 truncate">{formPdfBAName || 'Dokumen_BA.pdf'}</span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={removePdfBA}
-                        className="text-xs text-red-600 hover:underline font-bold px-2"
-                      >
-                        Hapus / Ganti
-                      </button>
-                    </div>
-                  ) : (
-                    <input
-                      type="file"
-                      accept=".pdf"
-                      onChange={handlePdfBAUpload}
-                      className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-100 file:text-emerald-800 hover:file:bg-emerald-200 cursor-pointer"
-                    />
-                  )}
-                </div>
-
-                {/* 4. GPS & Foto */}
+                {/* 3. GPS & Foto Dokumentasi */}
                 <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/70 space-y-4">
                   <h4 className="font-sans text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                    <MapPin size={16} className="text-emerald-600" />
-                    <span>4. Lokasi Koordinat GPS &amp; Foto Dokumentasi</span>
+                    <MapPin size={16} strokeWidth={2.5} className="text-emerald-600" />
+                    <span>3. Lokasi Koordinat GPS &amp; Foto Dokumentasi</span>
                   </h4>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <div className="flex items-center justify-between mb-1">
                         <label className="block text-xs font-sans font-bold uppercase tracking-wider text-slate-600">
-                          Titik Koordinat
+                          Titik Koordinat (Tersimpan ke Peta)
                         </label>
                         <button
                           type="button"
@@ -1089,18 +1132,18 @@ export default function MonevKTT() {
                         <input
                           type="number"
                           step="any"
-                          placeholder="Latitude"
+                          placeholder="Latitude (cth: -7.668)"
                           value={formLat ?? ''}
                           onChange={(e) => setFormLat(e.target.value ? Number(e.target.value) : null)}
-                          className="min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs"
+                          className="min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs font-medium"
                         />
                         <input
                           type="number"
                           step="any"
-                          placeholder="Longitude"
+                          placeholder="Longitude (cth: 109.651)"
                           value={formLng ?? ''}
                           onChange={(e) => setFormLng(e.target.value ? Number(e.target.value) : null)}
-                          className="min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs"
+                          className="min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs font-medium"
                         />
                       </div>
                     </div>
@@ -1115,15 +1158,15 @@ export default function MonevKTT() {
                           onClick={openCamera}
                           className="min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs font-bold flex items-center gap-1.5 hover:bg-slate-50"
                         >
-                          <Camera size={14} /> Kamera
+                          <Camera size={14} strokeWidth={2.5} /> Kamera
                         </button>
                         <label className="min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs font-bold flex items-center gap-1.5 hover:bg-slate-50 cursor-pointer">
-                          <ImageIcon size={14} /> Galeri
+                          <ImageIcon size={14} strokeWidth={2.5} /> Galeri
                           <input type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" />
                         </label>
                         {formPhoto && (
                           <span className="text-xs font-bold text-emerald-700 flex items-center gap-1">
-                            <CheckCircle2 size={14} /> Foto Siap
+                            <CheckCircle2 size={14} strokeWidth={2.5} /> Foto Siap
                           </span>
                         )}
                       </div>
@@ -1192,13 +1235,17 @@ export default function MonevKTT() {
                       <th className="px-4 py-3.5 text-right">Awal</th>
                       <th className="px-4 py-3.5 text-right">Sisa Pokok</th>
                       <th className="px-4 py-3.5 text-right">Total Aset</th>
-                      <th className="px-4 py-3.5 text-center">GPS / Berkas</th>
+                      <th className="px-4 py-3.5 text-center">GPS &amp; Berkas BA</th>
                       <th className="px-4 py-3.5 text-center">Aksi</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {dbLapanganFiltered.map((d, idx) => {
                       const h = hitungKondisi(d.kondisi);
+                      const baMati = d.kondisi.matiBangkaiBAPdf;
+                      const baJual = d.kondisi.jualBAPdf;
+                      const baLegacy = (d.kondisi as any)?.pdfBA;
+
                       return (
                         <tr key={d.id} className="hover:bg-slate-50/80 transition-colors">
                           <td className="px-4 py-3.5 text-center font-bold text-emerald-700 text-xs">{idx + 1}</td>
@@ -1220,32 +1267,62 @@ export default function MonevKTT() {
                           <td className="px-4 py-3.5 text-right font-bold text-slate-700">{h.e}</td>
                           <td className="px-4 py-3.5 text-right font-extrabold text-emerald-700">{h.i} Ekor</td>
                           <td className="px-4 py-3.5 text-center">
-                            <div className="flex items-center justify-center gap-1.5 text-xs">
+                            <div className="flex flex-wrap items-center justify-center gap-1.5 text-xs">
                               {d.lat ? (
-                                <span className="text-emerald-700 font-bold flex items-center gap-0.5" title={`${d.lat}, ${d.lng}`}>
-                                  <CheckCircle2 size={13} /> GPS
+                                <span className="text-emerald-700 font-bold flex items-center gap-0.5" title={`Lat: ${d.lat}, Lng: ${d.lng}`}>
+                                  <CheckCircle2 size={13} strokeWidth={2.5} /> GPS
                                 </span>
                               ) : (
                                 <span className="text-slate-400 text-[11px]">-</span>
                               )}
+
                               {d.photo && (
                                 <a
                                   href={d.photo}
                                   download={buatNamaFileFoto(d.namaKtt, d.id)}
-                                  className="text-emerald-700 hover:underline font-semibold ml-1"
+                                  className="text-emerald-700 hover:underline font-bold ml-0.5"
                                 >
                                   Foto
                                 </a>
                               )}
-                              {(d.kondisi as any)?.pdfBA && (
+
+                              {baMati && (
                                 <a
-                                  href={(d.kondisi as any).pdfBA}
+                                  href={baMati}
+                                  download={d.kondisi.matiBangkaiBAName || 'BA_Kematian.pdf'}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="text-red-700 hover:text-red-800 bg-red-50 hover:bg-red-100 border border-red-200 px-1.5 py-0.5 rounded font-bold flex items-center gap-0.5"
+                                  title="Berita Acara Kematian"
+                                >
+                                  <FileText size={11} strokeWidth={2.5} className="text-red-600" />
+                                  <span>BA Mati</span>
+                                </a>
+                              )}
+
+                              {baJual && (
+                                <a
+                                  href={baJual}
+                                  download={d.kondisi.jualBAName || 'BA_Penjualan.pdf'}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="text-amber-800 hover:text-amber-900 bg-amber-50 hover:bg-amber-100 border border-amber-200 px-1.5 py-0.5 rounded font-bold flex items-center gap-0.5"
+                                  title="Berita Acara Penjualan"
+                                >
+                                  <FileText size={11} strokeWidth={2.5} className="text-amber-700" />
+                                  <span>BA Jual</span>
+                                </a>
+                              )}
+
+                              {!baMati && !baJual && baLegacy && (
+                                <a
+                                  href={baLegacy}
                                   download={(d.kondisi as any).pdfBAName || 'Berita_Acara.pdf'}
                                   target="_blank"
                                   rel="noreferrer"
-                                  className="text-red-700 hover:text-red-800 bg-red-50 hover:bg-red-100 border border-red-200 px-2 py-0.5 rounded-md font-bold flex items-center gap-1 ml-1"
+                                  className="text-red-700 hover:text-red-800 bg-red-50 hover:bg-red-100 border border-red-200 px-1.5 py-0.5 rounded font-bold flex items-center gap-0.5"
                                 >
-                                  <FileText size={11} className="text-red-600" />
+                                  <FileText size={11} strokeWidth={2.5} className="text-red-600" />
                                   <span>BA</span>
                                 </a>
                               )}
@@ -1258,14 +1335,14 @@ export default function MonevKTT() {
                                 className="w-8 h-8 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 flex items-center justify-center transition-colors cursor-pointer"
                                 title="Edit"
                               >
-                                <Edit2 size={13} />
+                                <Edit2 size={13} strokeWidth={2.5} />
                               </button>
                               <button
                                 onClick={() => handleDeleteClick(d.id)}
                                 className="w-8 h-8 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-red-700 flex items-center justify-center transition-colors cursor-pointer"
                                 title="Hapus"
                               >
-                                <Trash2 size={13} />
+                                <Trash2 size={13} strokeWidth={2.5} />
                               </button>
                             </div>
                           </td>
@@ -1292,139 +1369,193 @@ export default function MonevKTT() {
         {activeTab === 'dashboard' && (
           <div className="space-y-6 animate-in fade-in duration-200">
             
-            {/* Interactive Leaflet Map */}
-            <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden p-4">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-sm text-slate-800 flex items-center gap-2">
-                  <MapPin size={16} className="text-emerald-600" />
-                  <span>Peta Sebaran Bantuan Ternak KTT</span>
-                </h3>
-                <span className="text-xs font-sans text-slate-500">
-                  {dbLapangan.filter((d) => d.lat !== null).length} Titik Koordinat Terverifikasi
-                </span>
+            {/* Interactive Leaflet Map dengan Filter Dropdown Kecamatan */}
+            <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden p-4 sm:p-5 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="font-bold text-sm sm:text-base text-slate-900 flex items-center gap-2">
+                    <MapPin size={18} strokeWidth={2.5} className="text-emerald-600" />
+                    <span>Peta Sebaran Titik Bantuan Ternak KTT</span>
+                  </h3>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Menampilkan {dbLapanganUntukPeta.filter((d) => d.lat !== null).length} titik GPS terverifikasi
+                  </p>
+                </div>
+
+                {/* Dropdown Filter Kecamatan Peta */}
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-slate-600 whitespace-nowrap">Filter Titik:</span>
+                  <select
+                    value={filterPetaKecamatan}
+                    onChange={(e) => setFilterPetaKecamatan(e.target.value)}
+                    className="min-h-touch h-10 px-3 rounded-xl border border-slate-300 bg-slate-50 hover:bg-white focus:bg-white text-xs font-bold text-slate-800 focus:border-emerald-600 outline-none transition-colors"
+                  >
+                    <option value="Semua">🗺️ Semua Titik (Seluruh Kecamatan)</option>
+                    {kecamatanTerpakai.map((kec) => {
+                      const count = dbLapangan.filter((d) => d.kec === kec && d.lat !== null).length;
+                      return (
+                        <option key={kec} value={kec}>
+                          📍 Kecamatan {kec} ({count} Titik)
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
               </div>
 
-              <div className="w-full h-[400px] rounded-xl overflow-hidden border border-slate-200 bg-slate-100 relative">
+              <div className="w-full h-[420px] rounded-xl overflow-hidden border border-slate-200 bg-slate-100 relative">
                 <div id="map-dashboard" className="w-full h-full absolute inset-0 z-0" />
               </div>
             </div>
 
-            {/* List Grouped by Kecamatan */}
+            {/* List Grouped by Kecamatan (Menyesuaikan Filter Dropdown Peta) */}
             <div className="space-y-6">
-              {kecamatanTerpakai.map((kec) => {
-                const dataKec = dbLapangan.filter((d) => d.kec === kec);
-                const totalTernakKec = dataKec.reduce((acc, curr) => acc + hitungKondisi(curr.kondisi).i, 0);
+              {kecamatanTerpakai
+                .filter((kec) => (filterPetaKecamatan === 'Semua' ? true : kec === filterPetaKecamatan))
+                .map((kec) => {
+                  const dataKec = dbLapangan.filter((d) => d.kec === kec);
+                  const totalTernakKec = dataKec.reduce((acc, curr) => acc + hitungKondisi(curr.kondisi).i, 0);
 
-                return (
-                  <div key={kec} className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-                    <div className="bg-slate-50 p-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
-                      <h4 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                        <span>📍 Kecamatan {kec}</span>
-                      </h4>
-                      <span className="text-xs font-sans font-semibold px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-700">
-                        {dataKec.length} Kelompok · {totalTernakKec} Ekor Aset
-                      </span>
-                    </div>
+                  return (
+                    <div key={kec} className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+                      <div className="bg-slate-50 p-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+                        <h4 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                          <MapPin size={16} strokeWidth={2.5} className="text-emerald-600" />
+                          <span>Kecamatan {kec}</span>
+                        </h4>
+                        <span className="text-xs font-sans font-bold px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                          {dataKec.length} Kelompok · {totalTernakKec} Ekor Aset
+                        </span>
+                      </div>
 
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-left text-sm whitespace-nowrap">
-                        <thead className="bg-slate-50/50 text-slate-500 text-xs font-semibold uppercase tracking-wider border-b border-slate-200">
-                          <tr>
-                            <th className="p-3.5">WAKTU</th>
-                            <th className="p-3.5">TAHUN BANTUAN</th>
-                            <th className="p-3.5">NAMA KTT</th>
-                            <th className="p-3.5">DESA</th>
-                            <th className="p-3.5">KOMODITAS</th>
-                            <th className="p-3.5 text-right">AWAL</th>
-                            <th className="p-3.5 text-right">SISA</th>
-                            <th className="p-3.5 text-right">TOTAL ASET</th>
-                            <th className="p-3.5">GPS / FOTO</th>
-                            <th className="p-3.5 text-center w-24">AKSI</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-200 text-slate-800">
-                          {dataKec.map((d) => {
-                            const h = hitungKondisi(d.kondisi);
-                            return (
-                              <tr key={d.id} className="hover:bg-slate-50/80 transition-colors">
-                                <td className="p-3.5 font-sans text-xs text-slate-500">
-                                  {d.waktuMonev || new Date(Number(d.id)).toLocaleDateString('id-ID')}
-                                </td>
-                                <td className="p-3.5 font-bold text-xs text-slate-700">
-                                  {d.tahun}
-                                </td>
-                                <td className="p-3.5 font-bold text-slate-900">
-                                  {d.namaKtt}
-                                </td>
-                                <td className="p-3.5 text-slate-600 text-xs">{d.desa}</td>
-                                <td className="p-3.5 text-xs">
-                                  <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-800 font-semibold border border-slate-200">
-                                    {d.jenis}
-                                  </span>
-                                </td>
-                                <td className="p-3.5 text-right font-sans text-xs">{h.a}</td>
-                                <td className="p-3.5 text-right font-sans text-xs font-semibold text-slate-700">{h.e}</td>
-                                <td className="p-3.5 text-right font-sans text-xs font-bold text-emerald-600">{h.i} Ekor</td>
-                                <td className="p-3.5">
-                                  <div className="flex flex-wrap items-center gap-2 text-xs">
-                                    {d.lat ? (
-                                      <span className="text-emerald-700 font-bold flex items-center gap-0.5">
-                                        <CheckCircle2 size={12} /> GPS
-                                      </span>
-                                    ) : (
-                                      <span className="text-slate-400 text-[11px]">No GPS</span>
-                                    )}
-                                    {d.photo && (
-                                      <a
-                                        href={d.photo}
-                                        download={buatNamaFileFoto(d.namaKtt, d.id)}
-                                        className="text-emerald-700 hover:underline font-semibold"
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left text-sm whitespace-nowrap">
+                          <thead className="bg-slate-50/50 text-slate-500 text-xs font-semibold uppercase tracking-wider border-b border-slate-200">
+                            <tr>
+                              <th className="p-3.5">WAKTU</th>
+                              <th className="p-3.5">TAHUN</th>
+                              <th className="p-3.5">NAMA KTT</th>
+                              <th className="p-3.5">DESA</th>
+                              <th className="p-3.5">KOMODITAS</th>
+                              <th className="p-3.5 text-right">AWAL</th>
+                              <th className="p-3.5 text-right">SISA</th>
+                              <th className="p-3.5 text-right">TOTAL ASET</th>
+                              <th className="p-3.5 text-center">GPS &amp; BERKAS BA</th>
+                              <th className="p-3.5 text-center w-24">AKSI</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-200 text-slate-800">
+                            {dataKec.map((d) => {
+                              const h = hitungKondisi(d.kondisi);
+                              const baMati = d.kondisi.matiBangkaiBAPdf;
+                              const baJual = d.kondisi.jualBAPdf;
+                              const baLegacy = (d.kondisi as any)?.pdfBA;
+
+                              return (
+                                <tr key={d.id} className="hover:bg-slate-50/80 transition-colors">
+                                  <td className="p-3.5 font-sans text-xs text-slate-500">
+                                    {d.waktuMonev || new Date(Number(d.id)).toLocaleDateString('id-ID')}
+                                  </td>
+                                  <td className="p-3.5 font-bold text-xs text-slate-700">
+                                    {d.tahun}
+                                  </td>
+                                  <td className="p-3.5 font-bold text-slate-900">
+                                    {d.namaKtt}
+                                  </td>
+                                  <td className="p-3.5 text-slate-600 text-xs">{d.desa}</td>
+                                  <td className="p-3.5 text-xs">
+                                    <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-800 font-semibold border border-slate-200">
+                                      {d.jenis}
+                                    </span>
+                                  </td>
+                                  <td className="p-3.5 text-right font-sans text-xs font-bold text-slate-700">{h.a}</td>
+                                  <td className="p-3.5 text-right font-sans text-xs font-bold text-slate-700">{h.e}</td>
+                                  <td className="p-3.5 text-right font-sans text-xs font-extrabold text-emerald-600">{h.i} Ekor</td>
+                                  <td className="p-3.5 text-center">
+                                    <div className="flex flex-wrap items-center justify-center gap-1.5 text-xs">
+                                      {d.lat ? (
+                                        <span className="text-emerald-700 font-bold flex items-center gap-0.5">
+                                          <CheckCircle2 size={12} strokeWidth={2.5} /> GPS
+                                        </span>
+                                      ) : (
+                                        <span className="text-slate-400 text-[11px]">No GPS</span>
+                                      )}
+                                      {d.photo && (
+                                        <a
+                                          href={d.photo}
+                                          download={buatNamaFileFoto(d.namaKtt, d.id)}
+                                          className="text-emerald-700 hover:underline font-bold"
+                                        >
+                                          Foto
+                                        </a>
+                                      )}
+                                      {baMati && (
+                                        <a
+                                          href={baMati}
+                                          download={d.kondisi.matiBangkaiBAName || 'BA_Kematian.pdf'}
+                                          target="_blank"
+                                          rel="noreferrer"
+                                          className="text-red-700 hover:text-red-800 bg-red-50 hover:bg-red-100 border border-red-200 px-1.5 py-0.5 rounded font-bold flex items-center gap-0.5"
+                                          title="Berita Acara Kematian"
+                                        >
+                                          <FileText size={11} strokeWidth={2.5} className="text-red-600" />
+                                          <span>BA Mati</span>
+                                        </a>
+                                      )}
+                                      {baJual && (
+                                        <a
+                                          href={baJual}
+                                          download={d.kondisi.jualBAName || 'BA_Penjualan.pdf'}
+                                          target="_blank"
+                                          rel="noreferrer"
+                                          className="text-amber-800 hover:text-amber-900 bg-amber-50 hover:bg-amber-100 border border-amber-200 px-1.5 py-0.5 rounded font-bold flex items-center gap-0.5"
+                                          title="Berita Acara Penjualan"
+                                        >
+                                          <FileText size={11} strokeWidth={2.5} className="text-amber-700" />
+                                          <span>BA Jual</span>
+                                        </a>
+                                      )}
+                                      {!baMati && !baJual && baLegacy && (
+                                        <a
+                                          href={baLegacy}
+                                          download={(d.kondisi as any).pdfBAName || 'Berita_Acara.pdf'}
+                                          target="_blank"
+                                          rel="noreferrer"
+                                          className="text-red-700 hover:text-red-800 bg-red-50 hover:bg-red-100 border border-red-200 px-1.5 py-0.5 rounded font-bold flex items-center gap-0.5"
+                                        >
+                                          <FileText size={11} strokeWidth={2.5} className="text-red-600" />
+                                          <span>BA</span>
+                                        </a>
+                                      )}
+                                    </div>
+                                  </td>
+                                  <td className="p-3.5 text-center">
+                                    <div className="flex items-center justify-center gap-1">
+                                      <button
+                                        onClick={() => handleEditClick(d)}
+                                        className="min-h-touch h-8 w-8 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600 flex items-center justify-center transition-colors cursor-pointer"
+                                        aria-label="Edit"
                                       >
-                                        Foto
-                                      </a>
-                                    )}
-                                    {(d.kondisi as any)?.pdfBA && (
-                                      <a
-                                        href={(d.kondisi as any).pdfBA}
-                                        download={(d.kondisi as any).pdfBAName || 'Berita_Acara.pdf'}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="text-red-700 hover:text-red-800 bg-red-50 hover:bg-red-100 border border-red-200 px-2 py-0.5 rounded-md font-bold flex items-center gap-1 transition-colors"
-                                        title={(d.kondisi as any).pdfBAName || 'Berita Acara (PDF)'}
+                                        <Edit2 size={13} strokeWidth={2.5} />
+                                      </button>
+                                      <button
+                                        onClick={() => handleDeleteClick(d.id)}
+                                        className="min-h-touch h-8 w-8 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-red-600 flex items-center justify-center transition-colors cursor-pointer"
+                                        aria-label="Hapus"
                                       >
-                                        <FileText size={11} className="text-red-600" />
-                                        <span>BA</span>
-                                      </a>
-                                    )}
-                                  </div>
-                                </td>
-                                <td className="p-3.5 text-center">
-                                  <div className="flex items-center justify-center gap-1">
-                                    <button
-                                      onClick={() => handleEditClick(d)}
-                                      className="min-h-touch h-8 w-8 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600 flex items-center justify-center transition-colors"
-                                      aria-label="Edit"
-                                    >
-                                      <Edit2 size={13} />
-                                    </button>
-                                    <button
-                                      onClick={() => handleDeleteClick(d.id)}
-                                      className="min-h-touch h-8 w-8 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-red-600 flex items-center justify-center transition-colors"
-                                      aria-label="Hapus"
-                                    >
-                                      <Trash2 size={13} />
-                                    </button>
-                                  </div>
-                                </td>
-                              </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
+                                        <Trash2 size={13} strokeWidth={2.5} />
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
 
           </div>
@@ -1438,7 +1569,7 @@ export default function MonevKTT() {
           <div className="bg-white rounded-3xl p-6 sm:p-7 max-w-md w-full shadow-2xl space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
-                <Calendar size={18} className="text-emerald-600" />
+                <Calendar size={18} strokeWidth={2.5} className="text-emerald-600" />
                 <span>Tambah Tahun Bantuan Baru</span>
               </h3>
               <button
