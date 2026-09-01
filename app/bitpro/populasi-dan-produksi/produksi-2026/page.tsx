@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, Suspense } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import * as XLSX from 'xlsx';
 import {
   ArrowLeft,
@@ -186,7 +187,48 @@ function DonutChart({
   );
 }
 
-export default function Produksi2026() {
+const DAFTAR_KOMODITAS_IB = [
+  // Ruminansia Besar
+  'Sapi PO (Peranakan Ongole) Kebumen',
+  'Sapi Simmental',
+  'Sapi Limousin',
+  'Sapi FH (Friesian Holstein) Perah',
+  'Sapi Brahman Cross',
+  'Sapi Brangus',
+  'Sapi Bali / Madura',
+  'Kerbau Lumpur Potong',
+  'Kerbau Murrah',
+  'Kuda Sumbawa / Pacu',
+  
+  // Ruminansia Kecil
+  'Kambing PE (Peranakan Etawah)',
+  'Kambing Jawa Randu',
+  'Kambing Kacang',
+  'Kambing Boer',
+  'Domba Batur',
+  'Domba Garut',
+  'Domba Ekor Gemuk',
+  'Domba Texel',
+  
+  // Unggas
+  'Ayam Ras Pedaging (Broiler)',
+  'Ayam Ras Petelur (Layer)',
+  'Ayam Buras / Kampung',
+  'Ayam KUB',
+  'Itik Petelur / Bebek',
+  'Itik Manila / Entog',
+  'Burung Puyuh Petelur',
+  'Burung Merpati',
+  'Angsa',
+  
+  // Lainnya
+  'Kelinci Pedaging & Hias',
+  'Babi Ras Komersial',
+];
+
+function Produksi2026Content() {
+  const searchParams = useSearchParams();
+  const year = searchParams.get('year') || '2026';
   const [dataDaging, setDataDaging] = useState<any[]>([]);
   const [dataTelur, setDataTelur] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -194,12 +236,20 @@ export default function Produksi2026() {
   // Modal Tambah Data Produksi
   const [showAddModal, setShowAddModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showKomoditasSuggestions, setShowKomoditasSuggestions] = useState(false);
   const [formKategori, setFormKategori] = useState<'Daging' | 'Telur'>('Daging');
   const [formJenis, setFormJenis] = useState('');
   const [formBulanan, setFormBulanan] = useState<Record<string, string>>({
     jan: '', feb: '', mar: '', apr: '', mei: '', jun: '',
     jul: '', agt: '', sep: '', okt: '', nov: '', des: '',
   });
+
+  // Filtered Komoditas Suggestions based on IB Database
+  const filteredKomoditas = useMemo(() => {
+    const q = formJenis.toLowerCase().trim();
+    if (!q) return DAFTAR_KOMODITAS_IB.slice(0, 8);
+    return DAFTAR_KOMODITAS_IB.filter((k) => k.toLowerCase().includes(q)).slice(0, 10);
+  }, [formJenis]);
 
   const fetchData = async () => {
     try {
@@ -359,10 +409,10 @@ export default function Produksi2026() {
                   Bitpro
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-emerald-700 whitespace-nowrap">Produksi 2026</span>
+                <span className="text-xs font-bold text-emerald-700 whitespace-nowrap">Produksi {year}</span>
               </div>
               <h1 className="text-base sm:text-xl font-bold text-slate-900 tracking-tight leading-tight truncate">
-                Lembar Kerja Produksi Ternak Tahun 2026
+                Lembar Kerja Produksi Ternak Tahun {year}
               </h1>
             </div>
           </div>
@@ -601,18 +651,73 @@ export default function Produksi2026() {
                   </select>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                    Nama Komoditas / Ternak <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Contoh: Sapi Simmental / Ayam Petelur"
-                    value={formJenis}
-                    onChange={(e) => setFormJenis(e.target.value)}
-                    className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs font-bold focus:border-emerald-600 outline-none"
-                  />
+                <div className="relative">
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                      Nama Komoditas / Ternak <span className="text-red-500">*</span>
+                    </label>
+                    <span className="text-[10px] text-emerald-700 font-semibold">
+                      Live Search Database IB
+                    </span>
+                  </div>
+
+                  <div className="relative">
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ketik nama komoditas (cth: Sapi PO / Broiler)..."
+                      value={formJenis}
+                      onFocus={() => setShowKomoditasSuggestions(true)}
+                      onChange={(e) => {
+                        setFormJenis(e.target.value);
+                        setShowKomoditasSuggestions(true);
+                      }}
+                      className="w-full min-h-touch h-10 px-3.5 pr-8 rounded-xl border border-slate-200 bg-white text-xs font-bold focus:border-emerald-600 outline-none shadow-2xs"
+                    />
+                    {formJenis && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormJenis('');
+                          setShowKomoditasSuggestions(true);
+                        }}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Autocomplete Dropdown */}
+                  {showKomoditasSuggestions && (
+                    <>
+                      <div
+                        className="fixed inset-0 z-40"
+                        onClick={() => setShowKomoditasSuggestions(false)}
+                      />
+                      <div className="absolute z-50 left-0 right-0 top-full mt-1 bg-white rounded-2xl border border-slate-200 shadow-xl max-h-48 overflow-y-auto divide-y divide-slate-100 animate-in fade-in duration-150">
+                        <div className="px-3 py-1.5 bg-slate-50 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
+                          Rekomendasi Bibit & Komoditas IB
+                        </div>
+                        {filteredKomoditas.map((kom) => (
+                          <button
+                            key={kom}
+                            type="button"
+                            onClick={() => {
+                              setFormJenis(kom);
+                              setShowKomoditasSuggestions(false);
+                            }}
+                            className="w-full px-3 py-2 text-left hover:bg-emerald-50 text-xs font-bold text-slate-800 hover:text-emerald-900 transition-colors flex items-center justify-between group cursor-pointer"
+                          >
+                            <span className="truncate">{kom}</span>
+                            <span className="text-[10px] text-emerald-700 opacity-0 group-hover:opacity-100 font-semibold">
+                              Pilih →
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -669,5 +774,19 @@ export default function Produksi2026() {
       )}
 
     </div>
+  );
+}
+
+export default function Produksi2026() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center font-sans text-xs text-slate-500 uppercase tracking-widest animate-pulse">
+          Memuat Data Produksi Peternakan...
+        </div>
+      }
+    >
+      <Produksi2026Content />
+    </Suspense>
   );
 }

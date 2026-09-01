@@ -10,13 +10,16 @@ import {
   Activity,
   Landmark,
   Lock,
+  Users,
 } from 'lucide-react';
+import UserManagementModal from '@/components/UserManagementModal';
 
 export default function BerandaPage() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userEmail, setUserEmail] = useState('');
   const [hasFullAccess, setHasFullAccess] = useState(false);
+  const [showUserModal, setShowUserModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -96,6 +99,16 @@ export default function BerandaPage() {
           </div>
 
           <div className="flex items-center gap-2">
+            {/* Tombol Kelola Anggota (Bukan Kartu Modul, Tombol Kecil & Rapi) */}
+            <button
+              onClick={() => setShowUserModal(true)}
+              title="Kelola Anggota & Hak Akses"
+              className="min-h-touch h-10 px-3.5 rounded-xl bg-white/20 hover:bg-white/30 border border-white/30 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-xs backdrop-blur-md cursor-pointer"
+            >
+              <Users size={14} strokeWidth={2.5} />
+              <span className="hidden sm:inline">Kelola Anggota</span>
+            </button>
+
             <Link
               href="/"
               title="Portal Publik"
@@ -247,6 +260,13 @@ export default function BerandaPage() {
         </footer>
 
       </div>
+
+      {/* ── MODAL MANAJEMEN ANGGOTA & HAK AKSES ── */}
+      <UserManagementModal
+        isOpen={showUserModal}
+        onClose={() => setShowUserModal(false)}
+        currentUserEmail={userEmail}
+      />
 
     </div>
   );

@@ -81,7 +81,7 @@ function calculateAge(birthDate: string) {
 
 export default function SapiTimePage() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<'home' | 'database' | 'calendar' | 'history'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'database' | 'calendar' | 'history'>('database');
   const [cattleList, setCattleList] = useState<Cattle[]>([]);
   const [historyList, setHistoryList] = useState<any[]>([]);
 
@@ -196,7 +196,11 @@ export default function SapiTimePage() {
   const handleEditCattle = (cattle: Cattle) => {
     setEditingCattle(cattle);
     setFormData({ ...cattle });
-    setShowEditModal(true);
+    setShowEditModal(false);
+    setActiveTab('database');
+    setTimeout(() => {
+      document.getElementById('form-sapi')?.scrollIntoView({ behavior: 'smooth' });
+    }, 50);
   };
 
   const handleUpdateCattle = async () => {
@@ -471,6 +475,175 @@ export default function SapiTimePage() {
   ───────────────────────────────────────────── */
   const renderDatabase = () => (
     <div className="animate-in fade-in space-y-6">
+      
+      {/* ── FORM INLINE PENDAFTARAN / EDIT INDUKAN SAPI ── */}
+      <div id="form-sapi" className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 shadow-sm space-y-5">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div className="flex items-center gap-2.5">
+            <div className="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-bold shadow-xs">
+              <Plus size={20} strokeWidth={2.5} />
+            </div>
+            <div>
+              <h3 className="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                {editingCattle ? (
+                  <>
+                    <Edit2 size={18} className="text-emerald-700" />
+                    <span>Edit Data Sapi: {editingCattle.name}</span>
+                  </>
+                ) : (
+                  <span>Pendaftaran Indukan Sapi Baru</span>
+                )}
+              </h3>
+              <p className="text-xs text-slate-500">
+                Input data identitas peternak dan status reproduksi sapi secara langsung
+              </p>
+            </div>
+          </div>
+
+          {editingCattle && (
+            <button
+              onClick={() => {
+                setEditingCattle(null);
+                setFormData({ status: 'Estrus', cycleLength: 21, kecamatan: '', desa: '', ownerName: '' });
+              }}
+              className="text-xs font-bold px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
+            >
+              ✕ Batalkan Edit
+            </button>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div>
+            <label className="block text-xs font-bold mb-1 text-slate-700">Nama Sapi <span className="text-red-500">*</span></label>
+            <input
+              type="text"
+              className="w-full min-h-touch h-10 px-3.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-600 text-xs font-bold text-slate-900"
+              value={formData.name || ''}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              placeholder="Contoh: Si Manis"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold mb-1 text-slate-700">Nama Peternak <span className="text-red-500">*</span></label>
+            <input
+              type="text"
+              className="w-full min-h-touch h-10 px-3.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-600 text-xs font-bold text-slate-900"
+              value={formData.ownerName || ''}
+              onChange={(e) => setFormData({ ...formData, ownerName: e.target.value })}
+              placeholder="Nama pemilik peternak"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold mb-1 text-slate-700">Kecamatan</label>
+            <input
+              type="text"
+              className="w-full min-h-touch h-10 px-3.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-600 text-xs font-medium text-slate-900"
+              value={formData.kecamatan || ''}
+              onChange={(e) => setFormData({ ...formData, kecamatan: e.target.value })}
+              placeholder="Kecamatan"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold mb-1 text-slate-700">Desa</label>
+            <input
+              type="text"
+              className="w-full min-h-touch h-10 px-3.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-600 text-xs font-medium text-slate-900"
+              value={formData.desa || ''}
+              onChange={(e) => setFormData({ ...formData, desa: e.target.value })}
+              placeholder="Desa"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold mb-1 text-slate-700">Ras Sapi</label>
+            <input
+              type="text"
+              className="w-full min-h-touch h-10 px-3.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-600 text-xs font-medium text-slate-900"
+              value={formData.breed || ''}
+              onChange={(e) => setFormData({ ...formData, breed: e.target.value })}
+              placeholder="PO / Simmental / Limousin"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold mb-1 text-slate-700">Tanggal Lahir Sapi</label>
+            <input
+              type="date"
+              className="w-full min-h-touch h-10 px-3.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-600 text-xs font-medium text-slate-900"
+              value={formData.birthDate || ''}
+              onChange={(e) => setFormData({ ...formData, birthDate: e.target.value })}
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold mb-1 text-slate-700">Status Reproduksi</label>
+            <select
+              className="w-full min-h-touch h-10 px-3.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-600 text-xs font-bold text-slate-900"
+              value={formData.status || 'Estrus'}
+              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+            >
+              <option value="Estrus">Estrus (Birahi)</option>
+              <option value="Bunting">Bunting</option>
+              <option value="Laktasi">Laktasi / Menyusui</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-bold mb-1 text-slate-700">Tanggal Estrus Terakhir</label>
+            <input
+              type="date"
+              className="w-full min-h-touch h-10 px-3.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-600 text-xs font-medium text-slate-900"
+              value={formData.lastEstrus || ''}
+              onChange={(e) => setFormData({ ...formData, lastEstrus: e.target.value })}
+            />
+          </div>
+        </div>
+
+        {formData.status === 'Bunting' && (
+          <div className="bg-emerald-50 p-4 rounded-2xl border border-emerald-200 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-bold mb-1 text-emerald-900">
+                Tanggal Mulai Bunting (Tanggal IB Berhasil)
+              </label>
+              <input
+                type="date"
+                className="w-full min-h-touch h-10 px-3.5 border border-emerald-300 rounded-xl bg-white focus:outline-none focus:border-emerald-600 text-xs text-slate-900"
+                value={formData.pregnancyDate || ''}
+                onChange={(e) => setFormData({ ...formData, pregnancyDate: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold mb-1 text-emerald-900">Catatan Kebuntingan</label>
+              <input
+                type="text"
+                className="w-full min-h-touch h-10 px-3.5 border border-emerald-300 rounded-xl bg-white focus:outline-none focus:border-emerald-600 text-xs text-slate-900"
+                value={formData.pregnancyNotes || ''}
+                onChange={(e) => setFormData({ ...formData, pregnancyNotes: e.target.value })}
+                placeholder="Hasil USG / Palpasi Rektal"
+              />
+            </div>
+          </div>
+        )}
+
+        <div className="flex gap-2 justify-end pt-1">
+          {editingCattle && (
+            <button
+              onClick={() => {
+                setEditingCattle(null);
+                setFormData({ status: 'Estrus', cycleLength: 21, kecamatan: '', desa: '', ownerName: '' });
+              }}
+              className="min-h-touch h-10 px-5 rounded-xl border border-slate-200 bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 transition-colors"
+            >
+              Batal
+            </button>
+          )}
+          <button
+            onClick={editingCattle ? handleUpdateCattle : handleAddCattle}
+            className="min-h-touch h-10 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-xs transition-all cursor-pointer"
+          >
+            {editingCattle ? 'Simpan Perubahan Sapi' : 'Simpan Data Sapi Baru'}
+          </button>
+        </div>
+      </div>
+
+      {/* ── SEARCH & ACTION TOOLBAR ── */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
         <div className="relative w-full sm:w-1/2">
           <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -489,13 +662,6 @@ export default function SapiTimePage() {
           >
             <Syringe size={16} className="text-emerald-700" />
             <span>Database IB ↗</span>
-          </button>
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="min-h-touch h-11 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-xs"
-          >
-            <Plus size={16} />
-            <span>Tambah Sapi Baru</span>
           </button>
         </div>
       </div>
@@ -887,15 +1053,6 @@ export default function SapiTimePage() {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <button
-              onClick={() => setShowAddModal(true)}
-              title="Tambah Sapi"
-              aria-label="Tambah Sapi"
-              className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-5 rounded-xl bg-emerald-600 text-white text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 hover:bg-emerald-700 active:scale-95 transition-all shadow-xs cursor-pointer"
-            >
-              <Plus size={16} />
-              <span className="hidden sm:inline">Tambah Sapi</span>
-            </button>
           </div>
         </div>
       </header>
@@ -904,17 +1061,6 @@ export default function SapiTimePage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
         {/* Navigation Tabs */}
         <div className="flex gap-2 border-b border-slate-200 pb-px overflow-x-auto no-scrollbar scroll-smooth -mx-4 px-4 sm:mx-0 sm:px-0">
-          <button
-            onClick={() => setActiveTab('home')}
-            className={`min-h-touch h-11 px-4 sm:px-5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all shrink-0 cursor-pointer ${
-              activeTab === 'home'
-                ? 'bg-emerald-600 text-white shadow-xs'
-                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-            }`}
-          >
-            <LayoutDashboard size={16} />
-            <span>Ringkasan Siklus</span>
-          </button>
           <button
             onClick={() => setActiveTab('database')}
             className={`min-h-touch h-11 px-4 sm:px-5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all shrink-0 cursor-pointer ${
@@ -925,6 +1071,17 @@ export default function SapiTimePage() {
           >
             <Database size={16} />
             <span>Database Indukan</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('home')}
+            className={`min-h-touch h-11 px-4 sm:px-5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all shrink-0 cursor-pointer ${
+              activeTab === 'home'
+                ? 'bg-emerald-600 text-white shadow-xs'
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+            }`}
+          >
+            <LayoutDashboard size={16} />
+            <span>Ringkasan Siklus</span>
           </button>
           <button
             onClick={() => setActiveTab('calendar')}
@@ -950,8 +1107,8 @@ export default function SapiTimePage() {
           </button>
         </div>
 
-        {activeTab === 'home' && renderHome()}
         {activeTab === 'database' && renderDatabase()}
+        {activeTab === 'home' && renderHome()}
         {activeTab === 'calendar' && renderCalendar()}
         {activeTab === 'history' && renderHistory()}
       </main>

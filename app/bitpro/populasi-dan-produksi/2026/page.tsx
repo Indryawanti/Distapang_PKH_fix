@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, Suspense } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import * as XLSX from 'xlsx';
 import {
   ArrowLeft,
@@ -107,12 +108,14 @@ const ANEKA_TERNAK = [
 const CATEGORIES = [
   { id: 'besar', label: 'Ruminansia Besar', icon: '🐂', desc: 'Sapi Potong, Sapi Perah, Kerbau, Kuda' },
   { id: 'kecil', label: 'Ruminansia Kecil', icon: '🐐', desc: 'Kambing & Domba' },
+  { id: 'monogastrik', label: 'Babi', icon: '🐖', desc: 'Data Populasi Ternak Babi' },
   { id: 'unggas', label: 'Unggas', icon: '🐔', desc: 'Ayam, Itik, Entog, Puyuh, dll' },
   { id: 'aneka', label: 'Aneka Ternak', icon: '🐰', desc: 'Kelinci Jantan & Betina' },
-  { id: 'monogastrik', label: 'Ternak Lainnya', icon: '🐖', desc: 'Babi' },
 ];
 
-export default function InputPopulasi2026() {
+function InputPopulasi2026Content() {
+  const searchParams = useSearchParams();
+  const year = searchParams.get('year') || '2026';
   const [tw, setTw] = useState('TW 1');
   const [kec, setKec] = useState('');
   const [desa, setDesa] = useState('');
@@ -150,6 +153,41 @@ export default function InputPopulasi2026() {
     });
     return sum;
   }, [values]);
+
+  // Helper ringkasan spesies ringkas untuk mobile & desktop
+  const getConciseSummary = (vals: Record<string, string>) => {
+    if (!vals || typeof vals !== 'object') return [];
+    const summary: { name: string; total: number }[] = [];
+    
+    // Ruminansia Besar, Kecil & Monogastrik
+    [...RUMINANT_BIG, ...RUMINANT_SMALL, ...MONOGASTRIC].forEach((r) => {
+      const sum = ['AJ', 'AB', 'MJ', 'MB', 'DJ', 'DB'].reduce(
+        (acc, age) => acc + (Number(vals[`${age} ${r.prefix}`]) || 0),
+        0
+      );
+      if (sum > 0) {
+        summary.push({ name: r.name, total: sum });
+      } else if (Number(vals[r.totalKey]) > 0) {
+        summary.push({ name: r.name, total: Number(vals[r.totalKey]) });
+      }
+    });
+
+    // Unggas
+    UNGGAS.forEach((u) => {
+      const val = Number(vals[u.key]) || 0;
+      if (val > 0) summary.push({ name: u.name, total: val });
+    });
+
+    // Aneka Ternak (Kelinci)
+    const kelinci = (Number(vals['Kelinci Jantan']) || 0) + (Number(vals['Kelinci Betina']) || 0);
+    if (kelinci > 0) {
+      summary.push({ name: 'Kelinci', total: kelinci });
+    } else if (Number(vals['Kelinci']) > 0) {
+      summary.push({ name: 'Kelinci', total: Number(vals['Kelinci']) });
+    }
+
+    return summary;
+  };
 
   // Handler pengubahan nilai input angka
   const handleInputChange = (key: string, val: string) => {
@@ -293,7 +331,7 @@ export default function InputPopulasi2026() {
   };
 
   const handleDelete = (idx: number) => {
-    if (confirm('Hapus entri data sensus desa ini?')) {
+    if (confirm('Hapus entri data populasi desa ini?')) {
       setSavedData(savedData.filter((_, i) => i !== idx));
     }
   };
@@ -317,8 +355,8 @@ export default function InputPopulasi2026() {
 
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'SensusPopulasi2026');
-    XLSX.writeFile(wb, `Sensus_Populasi_Kebumen_2026_${tw}.xlsx`);
+    XLSX.utils.book_append_sheet(wb, ws, 'DataPopulasi2026');
+    XLSX.writeFile(wb, `Data_Populasi_Kebumen_2026_${tw}.xlsx`);
   };
 
   // Fitur Bulk Upload Excel
@@ -360,7 +398,7 @@ export default function InputPopulasi2026() {
 
         setSavedData((prev) => [...prev, ...imported]);
         setShowBulkUpload(false);
-        alert(`Berhasil mengimpor ${imported.length} data sensus desa!`);
+        alert(`Berhasil mengimpor ${imported.length} data populasi desa!`);
       } catch {
         alert('Gagal membaca file Excel. Pastikan format kolom sesuai.');
       }
@@ -390,10 +428,10 @@ export default function InputPopulasi2026() {
                   Bitpro
                 </Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-xs font-bold text-emerald-700 whitespace-nowrap">Populasi 2026</span>
+                <span className="text-xs font-bold text-emerald-700 whitespace-nowrap">Populasi {year}</span>
               </div>
               <h1 className="text-base sm:text-xl font-bold text-slate-900 tracking-tight leading-tight truncate">
-                Data Populasi Ternak 2026
+                Data Populasi Ternak {year}
               </h1>
             </div>
           </div>
@@ -426,7 +464,7 @@ export default function InputPopulasi2026() {
       {/* ── MAIN WORKSPACE ── */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
         
-        {/* ── FORMULIR SENSUS PER DESA ── */}
+        {/* ── FORMULIR DATA POPULASI PER DESA ── */}
         <form onSubmit={handleSave} className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
           
           {/* Header Form & Telemetri Realtime */}
@@ -435,7 +473,7 @@ export default function InputPopulasi2026() {
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
                 <h2 className="font-bold text-base sm:text-lg text-slate-900">
-                  {editIdx !== null ? 'Edit Data Sensus Desa ✏️' : 'Formulir Input Sensus Per Desa'}
+                  {editIdx !== null ? 'Edit Data Populasi Desa ✏️' : 'Formulir Input Data Populasi Per Desa'}
                 </h2>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
@@ -627,7 +665,7 @@ export default function InputPopulasi2026() {
                     <span className="text-2xl">🐰</span>
                     <div>
                       <h4 className="font-bold text-base text-slate-900">Populasi Kelinci</h4>
-                      <p className="text-xs text-slate-500">Sensus populasi ternak kelinci jantan dan betina</p>
+                      <p className="text-xs text-slate-500">Data populasi ternak kelinci jantan dan betina</p>
                     </div>
                   </div>
                   <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
@@ -773,19 +811,50 @@ export default function InputPopulasi2026() {
                       <td className="p-3.5 font-bold text-slate-900">{d.kec}</td>
                       <td className="p-3.5 text-slate-700 font-semibold">{d.desa}</td>
                       <td className="p-3.5">
-                        <div className="flex flex-wrap gap-1.5 max-w-xl py-1">
-                          {Object.entries(d.values)
-                            .filter(([k, v]) => v && v !== '0' && !k.startsWith('Total'))
-                            .map(([k, v]) => (
+                        {/* Tampilan Mobile: Ringkas & Padat */}
+                        <div className="sm:hidden space-y-1.5 py-1">
+                          {getConciseSummary(d.values).length > 0 ? (
+                            <div className="flex flex-wrap gap-1">
+                              {getConciseSummary(d.values).map((s) => (
+                                <span
+                                  key={s.name}
+                                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-950 border border-emerald-200 text-[11px]"
+                                >
+                                  <span className="font-semibold text-slate-600">{s.name}:</span>
+                                  <strong className="font-extrabold text-emerald-800">{s.total.toLocaleString('id-ID')}</strong>
+                                </span>
+                              ))}
+                            </div>
+                          ) : (
+                            <span className="text-xs text-slate-400 italic">Semua 0 / Belum terisi</span>
+                          )}
+                        </div>
+
+                        {/* Tampilan Desktop: Lengkap per Rincian Usia */}
+                        <div className="hidden sm:flex flex-wrap gap-1.5 max-w-xl py-1">
+                          {Object.entries(d.values).filter(([k, v]) => v && v !== '0' && !k.startsWith('Total')).length > 0 ? (
+                            Object.entries(d.values)
+                              .filter(([k, v]) => v && v !== '0' && !k.startsWith('Total'))
+                              .map(([k, v]) => (
+                                <span
+                                  key={k}
+                                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl border border-slate-300 bg-white text-slate-800 text-xs font-medium shadow-2xs hover:border-emerald-400 transition-colors"
+                                >
+                                  <span className="text-slate-500 font-semibold">{k}:</span>
+                                  <span className="font-extrabold text-emerald-700">{String(v)}</span>
+                                </span>
+                              ))
+                          ) : getConciseSummary(d.values).length > 0 ? (
+                            getConciseSummary(d.values).map((s) => (
                               <span
-                                key={k}
-                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl border border-slate-300 bg-white text-slate-800 text-xs font-medium shadow-2xs hover:border-emerald-400 transition-colors"
+                                key={s.name}
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl border border-emerald-300 bg-emerald-50 text-slate-800 text-xs font-medium shadow-2xs hover:border-emerald-400 transition-colors"
                               >
-                                <span className="text-slate-500 font-semibold">{k}:</span>
-                                <span className="font-extrabold text-emerald-700">{String(v)}</span>
+                                <span className="text-slate-600 font-semibold">{s.name}:</span>
+                                <span className="font-extrabold text-emerald-800">{s.total.toLocaleString('id-ID')}</span>
                               </span>
-                            ))}
-                          {Object.entries(d.values).filter(([k, v]) => v && v !== '0' && !k.startsWith('Total')).length === 0 && (
+                            ))
+                          ) : (
                             <span className="text-xs text-slate-400 italic">Semua 0 / Belum terisi</span>
                           )}
                         </div>
@@ -834,8 +903,8 @@ export default function InputPopulasi2026() {
                   <UploadCloud size={20} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-base text-slate-900">Import File Excel Sensus</h3>
-                  <p className="text-xs text-slate-500">Unggah berkas rekap data sensus seluruh desa</p>
+                  <h3 className="font-bold text-base text-slate-900">Import File Excel Data Populasi</h3>
+                  <p className="text-xs text-slate-500">Unggah berkas rekap data populasi seluruh desa</p>
                 </div>
               </div>
               <button
@@ -919,14 +988,13 @@ function RuminantInputCard({
       {/* Matriks Input: Jantan & Betina */}
       <div className="grid grid-cols-2 gap-3">
         
-        {/* Kolom Jantan (Solid Blue) */}
+        {/* Kolom Jantan */}
         <div className="p-3.5 rounded-2xl bg-blue-50 border-2 border-blue-300 space-y-2.5 shadow-2xs">
           <div className="flex items-center justify-between pb-1.5 border-b border-blue-200 text-blue-900 font-extrabold text-xs">
             <span className="flex items-center gap-1">
               <span>♂️</span>
               <span>JANTAN</span>
             </span>
-            <span className="px-1.5 py-0.5 rounded bg-blue-600 text-white text-[10px] font-bold">Solid</span>
           </div>
 
           <div className="space-y-2">
@@ -966,14 +1034,13 @@ function RuminantInputCard({
           </div>
         </div>
 
-        {/* Kolom Betina (Solid Rose/Pink) */}
+        {/* Kolom Betina */}
         <div className="p-3.5 rounded-2xl bg-rose-50 border-2 border-rose-300 space-y-2.5 shadow-2xs">
           <div className="flex items-center justify-between pb-1.5 border-b border-rose-200 text-rose-900 font-extrabold text-xs">
             <span className="flex items-center gap-1">
               <span>♀️</span>
               <span>BETINA</span>
             </span>
-            <span className="px-1.5 py-0.5 rounded bg-rose-600 text-white text-[10px] font-bold">Solid</span>
           </div>
 
           <div className="space-y-2">
@@ -1018,3 +1085,18 @@ function RuminantInputCard({
     </div>
   );
 }
+
+export default function InputPopulasi2026() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center font-sans text-xs text-slate-500 uppercase tracking-widest animate-pulse">
+          Memuat Data Populasi...
+        </div>
+      }
+    >
+      <InputPopulasi2026Content />
+    </Suspense>
+  );
+}
+

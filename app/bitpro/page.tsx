@@ -85,7 +85,7 @@ export default function BitproPage() {
     },
     {
       title: 'Populasi & Produksi',
-      desc: 'Statistik sensus populasi 16 komoditas ternak serta laporan tonase produksi daging dan telur',
+      desc: 'Statistik data populasi 16 komoditas ternak serta laporan tonase produksi daging dan telur',
       icon: BarChart3,
       path: '/bitpro/populasi-dan-produksi',
       badge: 'Statistik 2025/2026',
@@ -173,7 +173,7 @@ export default function BitproPage() {
                 Bidang Bitpro
               </h2>
               <p className="text-xs sm:text-sm md:text-base text-emerald-50 max-w-2xl leading-relaxed text-justify">
-                Pusat data perbibitan, sensus populasi ternak, evaluasi inseminasi buatan, sertifikasi bibit unggul, dan rekapitulasi produksi daging/telur Kabupaten Kebumen.
+                Pusat data perbibitan, data populasi ternak, evaluasi inseminasi buatan, sertifikasi bibit unggul, dan rekapitulasi produksi daging/telur Kabupaten Kebumen.
               </p>
             </div>
           </div>
@@ -197,7 +197,6 @@ export default function BitproPage() {
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-600" />
               Menu &amp; Pelayanan Data Bitpro
             </h3>
-            <span className="text-xs text-slate-500 font-medium">Pilih menu untuk membuka tabel atau formulir</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">

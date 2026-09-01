@@ -39,7 +39,7 @@ export default function KesmavetPage() {
       title: 'Nomor Kontrol Veteriner (NKV)',
       desc: 'Pendataan unit usaha pemotongan hewan yang telah memiliki sertifikat NKV dari Kementerian Pertanian RI',
       icon: ShieldCheck,
-      path: '/kesmavet/rph-tph-tpu',
+      path: '/kesmavet/nkv',
       badge: 'Sertifikasi NKV',
     },
     {
@@ -161,7 +161,6 @@ export default function KesmavetPage() {
               <span className="w-2.5 h-2.5 rounded-full bg-purple-600" />
               Menu & Pelayanan Data Kesmavet
             </h3>
-            <span className="text-xs text-slate-500 font-medium">Pilih menu untuk melihat database</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">

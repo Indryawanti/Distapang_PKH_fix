@@ -38,32 +38,11 @@ export default function AsetPage() {
 
   const menus = [
     {
-      title: 'Inventaris Sarpras & Ternak Hibah',
-      desc: 'Pencatatan database bantuan ternak hibah, sarana dan prasarana peternakan seluruh kecamatan se-Kabupaten Kebumen',
+      title: 'Inventaris Kendaraan',
+      desc: 'Pencatatan database kendaraan dinas operasional, nama pemegang, merk/tipe, tahun, nomor polisi lama & baru, serta nomor mesin dan rangka',
       icon: Boxes,
-      path: '/bitpro/monev-ktt',
-      badge: 'Sarpras & Hibah',
-    },
-    {
-      title: 'Titik Koordinat & Peta Lokasi Kandang',
-      desc: 'Pemetaan geospasial titik koordinat GPS kandang kelompok ternak penerima bantuan pemerintah',
-      icon: MapPin,
-      path: '/bitpro/monev-ktt',
-      badge: 'Geotagging GPS',
-    },
-    {
-      title: 'Berita Acara & Mutasi Ternak',
-      desc: 'Dokumen administrasi Berita Acara Serah Terima (BAST), berita acara kematian, dan mutasi populasi',
-      icon: FileSpreadsheet,
-      path: '/bitpro/monev-ktt',
-      badge: 'Dokumen BAST',
-    },
-    {
-      title: 'Katalog Sarana Prasarana Peternakan',
-      desc: 'Inventarisasi mesin pengolah pakan (chopper), biogas, instalasi kandang komunal, dan peralatan kesehatan',
-      icon: Building2,
-      path: '/bitpro/monev-ktt',
-      badge: 'Katalog Alat',
+      path: '/aset/inventaris-kendaraan',
+      badge: 'Kendaraan Dinas',
     },
   ];
 
@@ -107,7 +86,7 @@ export default function AsetPage() {
                 <span className="text-xs font-bold text-amber-700 whitespace-nowrap">Bidang Aset</span>
               </div>
               <h1 className="text-base sm:text-xl font-bold text-slate-900 tracking-tight leading-tight truncate">
-                Manajemen Aset &amp; Sarpras
+                Manajemen Aset PKH
               </h1>
             </div>
           </div>
@@ -136,7 +115,7 @@ export default function AsetPage() {
             </div>
             <div className="space-y-1.5 sm:space-y-2 min-w-0">
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white">
-                Manajemen Aset &amp; Sarpras
+                Manajemen Aset PKH
               </h2>
               <p className="text-xs sm:text-sm md:text-base text-amber-50 max-w-2xl leading-relaxed text-justify">
                 Pusat data monitoring inventaris aset ternak hibah pemerintah, geolokasi GPS kandang komunal, berita acara mutasi, serta sarana prasarana peternakan Kabupaten Kebumen.
@@ -163,7 +142,6 @@ export default function AsetPage() {
               <span className="w-2.5 h-2.5 rounded-full bg-amber-600" />
               Menu &amp; Pelayanan Manajemen Aset
             </h3>
-            <span className="text-xs text-slate-500 font-medium">Pilih menu untuk melihat database</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">

@@ -290,7 +290,7 @@ export default function KegiatanKTTPage() {
       lng: kegiatan.lng || null,
       photo: kegiatan.photo || null,
     });
-    setShowModal(true);
+    document.getElementById('form-catat-kegiatan')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   // Handle Delete
@@ -463,19 +463,6 @@ export default function KegiatanKTTPage() {
               <Download size={16} strokeWidth={2.5} />
               <span className="hidden sm:inline">Export Excel</span>
             </button>
-
-            <button
-              onClick={() => {
-                resetForm();
-                setShowModal(true);
-              }}
-              title="Catat Kegiatan KTT Baru"
-              aria-label="Catat Kegiatan KTT Baru"
-              className="min-h-touch min-w-touch h-11 w-11 sm:w-auto sm:px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold flex items-center justify-center sm:gap-2 transition-all active:scale-95 shadow-xs cursor-pointer"
-            >
-              <Plus size={16} strokeWidth={2.5} />
-              <span className="hidden sm:inline">Catat Kegiatan Baru</span>
-            </button>
           </div>
 
         </div>
@@ -483,6 +470,339 @@ export default function KegiatanKTTPage() {
 
       {/* ── MAIN CONTENT ── */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
+        
+        {/* ── FORM INLINE CATAT KEGIATAN KTT BARU (POSISI UTAMA / PALING ATAS) ── */}
+        <section id="form-catat-kegiatan" className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+          <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-bold shadow-xs">
+                <Plus size={20} strokeWidth={2.5} />
+              </div>
+              <div>
+                <h3 className="font-extrabold text-slate-900 text-base sm:text-lg flex items-center gap-2">
+                  {editingId ? (
+                    <>
+                      <Edit2 size={18} className="text-emerald-700" />
+                      <span>Edit Catatan Kegiatan Lapangan</span>
+                    </>
+                  ) : (
+                    <span>Catat Kegiatan / Pembinaan KTT Baru</span>
+                  )}
+                </h3>
+                <p className="text-xs text-slate-500">
+                  {editingId ? `Sedang mengubah data ID: ${editingId}` : 'Formulir pencatatan langsung aktivitas pendampingan kelompok tani ternak'}
+                </p>
+              </div>
+            </div>
+
+            {editingId && (
+              <button
+                type="button"
+                onClick={resetForm}
+                className="text-xs font-bold px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
+              >
+                ✕ Batalkan Edit
+              </button>
+            )}
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Tanggal Kegiatan <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="date"
+                  required
+                  value={formData.tanggal}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, tanggal: e.target.value }))}
+                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs font-medium focus:border-emerald-600 outline-none shadow-2xs"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Tim Pelaksana <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={formData.tim_pelaksana}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, tim_pelaksana: e.target.value }))}
+                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs font-bold focus:border-emerald-600 outline-none shadow-2xs"
+                >
+                  {DAFTAR_TIM_PELAKSANA.map((tim) => (
+                    <option key={tim} value={tim}>
+                      {tim}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Pilih KTT dengan Live Autocomplete Search */}
+            <div className="relative">
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                  Nama Kelompok Tani Ternak (KTT) <span className="text-red-500">*</span>
+                </label>
+                <span className="text-[11px] text-emerald-700 font-semibold">
+                  Live Search Database KTT (ketik cth: &quot;gom&quot;)
+                </span>
+              </div>
+
+              <div className="relative">
+                <input
+                  type="text"
+                  required
+                  placeholder="Ketik nama kelompok, kecamatan, atau desa..."
+                  value={formData.nama_ktt}
+                  onFocus={() => setShowKttSuggestions(true)}
+                  onChange={(e) => {
+                    handleSelectKTTInForm(e.target.value);
+                    setShowKttSuggestions(true);
+                  }}
+                  className="w-full min-h-touch h-11 px-3.5 pr-10 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-900 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-500 outline-none shadow-2xs"
+                />
+                {formData.nama_ktt && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        nama_ktt: '',
+                        ktt_id: '',
+                        kecamatan: '',
+                        desa: '',
+                      }));
+                      setShowKttSuggestions(true);
+                    }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 w-6 h-6 flex items-center justify-center text-xs font-bold cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+
+              {/* Smart Dropdown Autocomplete */}
+              {showKttSuggestions && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setShowKttSuggestions(false)}
+                  />
+                  <div className="absolute z-50 left-0 right-0 top-full mt-1.5 bg-white rounded-2xl border border-slate-200 shadow-2xl max-h-60 overflow-y-auto divide-y divide-slate-100 animate-in fade-in duration-150">
+                    <div className="px-3.5 py-2 bg-slate-50 text-[10px] font-extrabold uppercase tracking-wider text-slate-500 flex items-center justify-between">
+                      <span>Pilihan Master KTT ({filteredKttSuggestions.length})</span>
+                      <span className="text-[10px] text-emerald-700 font-normal">Klik untuk memilih</span>
+                    </div>
+
+                    {filteredKttSuggestions.length > 0 ? (
+                      filteredKttSuggestions.map((k) => (
+                        <button
+                          key={k.id}
+                          type="button"
+                          onClick={() => {
+                            setFormData((prev) => ({
+                              ...prev,
+                              ktt_id: String(k.id),
+                              nama_ktt: k.namaKelompok,
+                              kecamatan: k.kecamatan || '',
+                              desa: k.desa || '',
+                            }));
+                            setShowKttSuggestions(false);
+                          }}
+                          className="w-full px-3.5 py-2.5 text-left hover:bg-emerald-50/80 transition-colors flex items-center justify-between group cursor-pointer"
+                        >
+                          <div className="min-w-0 flex-1">
+                            <span className="font-extrabold text-xs text-slate-900 group-hover:text-emerald-800 block truncate">
+                              {k.namaKelompok}
+                            </span>
+                            <span className="text-[11px] text-slate-500 block truncate">
+                              Desa {k.desa || '-'}, Kec. {k.kecamatan || '-'}
+                            </span>
+                          </div>
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 group-hover:bg-emerald-100 group-hover:text-emerald-800 shrink-0 ml-2">
+                            Pilih →
+                          </span>
+                        </button>
+                      ))
+                    ) : (
+                      <div className="p-4 text-center text-slate-400 text-xs">
+                        Tidak ditemukan KTT yang cocok dengan &quot;{formData.nama_ktt}&quot;.<br />
+                        <span className="text-[10px] text-slate-500 mt-1 block">
+                          (Anda tetap dapat mengetik nama KTT baru secara manual)
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Kecamatan
+                </label>
+                <input
+                  type="text"
+                  placeholder="Contoh: Petanahan"
+                  value={formData.kecamatan}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, kecamatan: e.target.value }))}
+                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs font-medium focus:border-emerald-600 outline-none shadow-2xs"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Desa
+                </label>
+                <input
+                  type="text"
+                  placeholder="Contoh: Karangduwur"
+                  value={formData.desa}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, desa: e.target.value }))}
+                  className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs font-medium focus:border-emerald-600 outline-none shadow-2xs"
+                />
+              </div>
+            </div>
+
+            {/* Jenis Kegiatan */}
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                  Nama / Jenis Kegiatan <span className="text-red-500">*</span>
+                </label>
+                <span className="text-[11px] text-slate-400">Pilih rekomendasi di bawah</span>
+              </div>
+              <input
+                type="text"
+                required
+                placeholder="Contoh: Pembinaan Manajemen Kelompok & Kandang"
+                value={formData.nama_kegiatan}
+                onChange={(e) => setFormData((prev) => ({ ...prev, nama_kegiatan: e.target.value }))}
+                className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-white text-xs font-bold focus:border-emerald-600 outline-none mb-2 shadow-2xs"
+              />
+              
+              {/* Preset Kegiatan Chips */}
+              <div className="flex flex-wrap gap-1.5">
+                {PRESET_KEGIATAN.map((preset) => (
+                  <button
+                    key={preset}
+                    type="button"
+                    onClick={() => setFormData((prev) => ({ ...prev, nama_kegiatan: preset }))}
+                    className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-800 text-slate-600 text-[11px] font-semibold transition-colors cursor-pointer"
+                  >
+                    + {preset}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Hasil & Catatan Kegiatan */}
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                Uraian Hasil Kegiatan &amp; Arahan Petugas
+              </label>
+              <textarea
+                rows={3}
+                placeholder="Tuliskan hasil evaluasi lapangan, kendala kelompok, rekomendasi pakan/kesehatan, dll..."
+                value={formData.hasil_kegiatan}
+                onChange={(e) => setFormData((prev) => ({ ...prev, hasil_kegiatan: e.target.value }))}
+                className="w-full p-3 rounded-xl border border-slate-200 bg-white text-xs focus:border-emerald-600 outline-none leading-relaxed shadow-2xs"
+              />
+            </div>
+
+            {/* Titik GPS & Foto Dokumentasi */}
+            <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50 space-y-3">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                <MapPin size={15} strokeWidth={2.5} className="text-emerald-600" />
+                <span>Titik Lokasi GPS &amp; Foto Dokumentasi</span>
+              </h4>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600">
+                      Koordinat GPS
+                    </label>
+                    <button
+                      type="button"
+                      onClick={handleGetLocation}
+                      disabled={isGettingLocation}
+                      className="text-xs text-emerald-700 font-bold hover:underline cursor-pointer flex items-center gap-1"
+                    >
+                      <MapPin size={12} />
+                      <span>{isGettingLocation ? 'Mencari GPS...' : 'Ambil GPS Otomatis'}</span>
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      step="any"
+                      placeholder="Latitude"
+                      value={formData.lat ?? ''}
+                      onChange={(e) => setFormData((prev) => ({ ...prev, lat: e.target.value ? parseFloat(e.target.value) : null }))}
+                      className="w-full min-h-touch h-9 px-2.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:border-emerald-600 outline-none"
+                    />
+                    <input
+                      type="number"
+                      step="any"
+                      placeholder="Longitude"
+                      value={formData.lng ?? ''}
+                      onChange={(e) => setFormData((prev) => ({ ...prev, lng: e.target.value ? parseFloat(e.target.value) : null }))}
+                      className="w-full min-h-touch h-9 px-2.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:border-emerald-600 outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
+                    Dokumentasi Foto
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={openCamera}
+                      className="min-h-touch h-9 px-3 rounded-lg border border-slate-200 bg-white text-xs font-bold flex items-center gap-1 hover:bg-slate-50 cursor-pointer"
+                    >
+                      <Camera size={13} strokeWidth={2.5} /> Kamera
+                    </button>
+                    <label className="min-h-touch h-9 px-3 rounded-lg border border-slate-200 bg-white text-xs font-bold flex items-center gap-1 hover:bg-slate-50 cursor-pointer">
+                      <ImageIcon size={13} strokeWidth={2.5} /> Galeri
+                      <input type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" />
+                    </label>
+                    {formData.photo && (
+                      <span className="text-xs font-bold text-emerald-700 flex items-center gap-0.5">
+                        <CheckCircle2 size={13} strokeWidth={2.5} /> Foto Siap
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex gap-2 pt-2">
+              {editingId && (
+                <button
+                  type="button"
+                  onClick={resetForm}
+                  className="min-h-touch h-11 px-5 rounded-xl border border-slate-200 bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 transition-colors cursor-pointer"
+                >
+                  Batal
+                </button>
+              )}
+              <button
+                type="submit"
+                className="flex-1 min-h-touch h-11 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-xs transition-all cursor-pointer"
+              >
+                {editingId ? 'Simpan Perubahan Kegiatan' : 'Simpan Log Kegiatan'}
+              </button>
+            </div>
+
+          </form>
+        </section>
         
         {/* KPI Metrics */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -865,330 +1185,6 @@ export default function KegiatanKTTPage() {
 
       </main>
 
-      {/* ── MODAL FORM CATAT KEGIATAN KTT ── */}
-      {showModal && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto">
-            
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div>
-                <h3 className="font-extrabold text-slate-900 text-lg">
-                  {editingId ? 'Edit Catatan Kegiatan KTT' : 'Catat Kegiatan / Pembinaan KTT Baru'}
-                </h3>
-                <p className="text-xs text-slate-500">
-                  Simpan log aktivitas pendampingan kelompok tani ternak
-                </p>
-              </div>
-              <button
-                onClick={() => {
-                  setShowModal(false);
-                  resetForm();
-                }}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold"
-              >
-                ✕
-              </button>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                    Tanggal Kegiatan <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="date"
-                    required
-                    value={formData.tanggal}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, tanggal: e.target.value }))}
-                    className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs font-medium focus:border-emerald-600 outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                    Tim Pelaksana <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    value={formData.tim_pelaksana}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, tim_pelaksana: e.target.value }))}
-                    className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs font-bold focus:border-emerald-600 outline-none"
-                  >
-                    {DAFTAR_TIM_PELAKSANA.map((tim) => (
-                      <option key={tim} value={tim}>
-                        {tim}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Pilih KTT dengan Live Autocomplete Search */}
-              <div className="relative">
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                    Nama Kelompok Tani Ternak (KTT) <span className="text-red-500">*</span>
-                  </label>
-                  <span className="text-[11px] text-emerald-700 font-semibold">
-                    Ketik kata kunci (misal: &quot;gom&quot;)
-                  </span>
-                </div>
-
-                <div className="relative">
-                  <input
-                    type="text"
-                    required
-                    placeholder="Ketik nama kelompok, kecamatan, atau desa..."
-                    value={formData.nama_ktt}
-                    onFocus={() => setShowKttSuggestions(true)}
-                    onChange={(e) => {
-                      handleSelectKTTInForm(e.target.value);
-                      setShowKttSuggestions(true);
-                    }}
-                    className="w-full min-h-touch h-11 px-3.5 pr-10 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-900 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-500 outline-none shadow-2xs"
-                  />
-                  {formData.nama_ktt && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setFormData((prev) => ({
-                          ...prev,
-                          nama_ktt: '',
-                          ktt_id: '',
-                          kecamatan: '',
-                          desa: '',
-                        }));
-                        setShowKttSuggestions(true);
-                      }}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 w-6 h-6 flex items-center justify-center text-xs font-bold"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-
-                {/* Smart Dropdown Autocomplete */}
-                {showKttSuggestions && (
-                  <>
-                    <div
-                      className="fixed inset-0 z-40"
-                      onClick={() => setShowKttSuggestions(false)}
-                    />
-                    <div className="absolute z-50 left-0 right-0 top-full mt-1.5 bg-white rounded-2xl border border-slate-200 shadow-2xl max-h-60 overflow-y-auto divide-y divide-slate-100 animate-in fade-in duration-150">
-                      <div className="px-3.5 py-2 bg-slate-50 text-[10px] font-extrabold uppercase tracking-wider text-slate-500 flex items-center justify-between">
-                        <span>Pilihan Master KTT ({filteredKttSuggestions.length})</span>
-                        <span className="text-[10px] text-emerald-700 font-normal">Klik untuk memilih</span>
-                      </div>
-
-                      {filteredKttSuggestions.length > 0 ? (
-                        filteredKttSuggestions.map((k) => (
-                          <button
-                            key={k.id}
-                            type="button"
-                            onClick={() => {
-                              setFormData((prev) => ({
-                                ...prev,
-                                ktt_id: String(k.id),
-                                nama_ktt: k.namaKelompok,
-                                kecamatan: k.kecamatan || '',
-                                desa: k.desa || '',
-                              }));
-                              setShowKttSuggestions(false);
-                            }}
-                            className="w-full px-3.5 py-2.5 text-left hover:bg-emerald-50/80 transition-colors flex items-center justify-between group cursor-pointer"
-                          >
-                            <div className="min-w-0 flex-1">
-                              <span className="font-extrabold text-xs text-slate-900 group-hover:text-emerald-800 block truncate">
-                                {k.namaKelompok}
-                              </span>
-                              <span className="text-[11px] text-slate-500 block truncate">
-                                📍 Desa {k.desa || '-'}, Kec. {k.kecamatan || '-'}
-                              </span>
-                            </div>
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 group-hover:bg-emerald-100 group-hover:text-emerald-800 shrink-0 ml-2">
-                              Pilih →
-                            </span>
-                          </button>
-                        ))
-                      ) : (
-                        <div className="p-4 text-center text-slate-400 text-xs">
-                          Tidak ditemukan KTT yang cocok dengan &quot;{formData.nama_ktt}&quot;.<br />
-                          <span className="text-[10px] text-slate-500 mt-1 block">
-                            (Anda tetap dapat mengetik nama KTT baru secara manual)
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </>
-                )}
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                    Kecamatan
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Contoh: Petanahan"
-                    value={formData.kecamatan}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, kecamatan: e.target.value }))}
-                    className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs font-medium focus:border-emerald-600 outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                    Desa
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Contoh: Karangduwur"
-                    value={formData.desa}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, desa: e.target.value }))}
-                    className="w-full min-h-touch h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs font-medium focus:border-emerald-600 outline-none"
-                  />
-                </div>
-              </div>
-
-              {/* Jenis Kegiatan */}
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                    Nama / Jenis Kegiatan <span className="text-red-500">*</span>
-                  </label>
-                  <span className="text-[11px] text-slate-400">Pilih rekomendasi di bawah</span>
-                </div>
-                <input
-                  type="text"
-                  required
-                  placeholder="Contoh: Pembinaan Manajemen Kelompok & Kandang"
-                  value={formData.nama_kegiatan}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, nama_kegiatan: e.target.value }))}
-                  className="w-full min-h-touch h-10 px-3.5 rounded-xl border border-slate-200 bg-white text-xs font-bold focus:border-emerald-600 outline-none mb-2"
-                />
-                
-                {/* Preset Kegiatan Chips */}
-                <div className="flex flex-wrap gap-1.5">
-                  {PRESET_KEGIATAN.map((preset) => (
-                    <button
-                      key={preset}
-                      type="button"
-                      onClick={() => setFormData((prev) => ({ ...prev, nama_kegiatan: preset }))}
-                      className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-800 text-slate-600 text-[11px] font-semibold transition-colors"
-                    >
-                      + {preset}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Hasil & Catatan Kegiatan */}
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                  Uraian Hasil Kegiatan &amp; Arahan Petugas
-                </label>
-                <textarea
-                  rows={3}
-                  placeholder="Tuliskan hasil evaluasi lapangan, kendala kelompok, rekomendasi pakan/kesehatan, dll..."
-                  value={formData.hasil_kegiatan}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, hasil_kegiatan: e.target.value }))}
-                  className="w-full p-3 rounded-xl border border-slate-200 bg-white text-xs focus:border-emerald-600 outline-none leading-relaxed"
-                />
-              </div>
-
-              {/* Titik GPS & Foto Dokumentasi */}
-              <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50 space-y-3">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                  <MapPin size={15} strokeWidth={2.5} className="text-emerald-600" />
-                  <span>Titik Lokasi GPS &amp; Foto Dokumentasi</span>
-                </h4>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <div className="flex items-center justify-between mb-1">
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600">
-                        Koordinat GPS
-                      </label>
-                      <button
-                        type="button"
-                        onClick={handleGetLocation}
-                        disabled={isGettingLocation}
-                        className="text-xs text-emerald-700 font-bold hover:underline cursor-pointer"
-                      >
-                        {isGettingLocation ? 'Mencari GPS...' : '📍 Ambil GPS Otomatis'}
-                      </button>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <input
-                        type="number"
-                        step="any"
-                        placeholder="Latitude (-7.668)"
-                        value={formData.lat ?? ''}
-                        onChange={(e) => setFormData((prev) => ({ ...prev, lat: e.target.value ? Number(e.target.value) : null }))}
-                        className="min-h-touch h-9 px-2.5 rounded-lg border border-slate-200 bg-white text-xs font-medium"
-                      />
-                      <input
-                        type="number"
-                        step="any"
-                        placeholder="Longitude (109.651)"
-                        value={formData.lng ?? ''}
-                        onChange={(e) => setFormData((prev) => ({ ...prev, lng: e.target.value ? Number(e.target.value) : null }))}
-                        className="min-h-touch h-9 px-2.5 rounded-lg border border-slate-200 bg-white text-xs font-medium"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
-                      Foto Dokumentasi
-                    </label>
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={openCamera}
-                        className="min-h-touch h-9 px-3 rounded-lg border border-slate-200 bg-white text-xs font-bold flex items-center gap-1 hover:bg-slate-50 cursor-pointer"
-                      >
-                        <Camera size={13} strokeWidth={2.5} /> Kamera
-                      </button>
-                      <label className="min-h-touch h-9 px-3 rounded-lg border border-slate-200 bg-white text-xs font-bold flex items-center gap-1 hover:bg-slate-50 cursor-pointer">
-                        <ImageIcon size={13} strokeWidth={2.5} /> Galeri
-                        <input type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" />
-                      </label>
-                      {formData.photo && (
-                        <span className="text-xs font-bold text-emerald-700 flex items-center gap-0.5">
-                          <CheckCircle2 size={13} strokeWidth={2.5} /> Siap
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Buttons */}
-              <div className="flex gap-2 pt-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowModal(false);
-                    resetForm();
-                  }}
-                  className="min-h-touch h-11 px-5 rounded-xl border border-slate-200 bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 transition-colors"
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 min-h-touch h-11 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-xs transition-all cursor-pointer"
-                >
-                  {editingId ? 'Simpan Perubahan Kegiatan' : 'Simpan Log Kegiatan'}
-                </button>
-              </div>
-
-            </form>
-          </div>
-        </div>
-      )}
 
       {/* ── MODAL KAMERA ── */}
       {showCameraModal && (

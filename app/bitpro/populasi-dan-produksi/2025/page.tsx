@@ -73,7 +73,7 @@ export default function Populasi2025() {
     const ws = XLSX.utils.json_to_sheet(rows);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Populasi_2025');
-    XLSX.writeFile(wb, `Sensus_Populasi_Ternak_2025_${new Date().toISOString().split('T')[0]}.xlsx`);
+    XLSX.writeFile(wb, `Data_Populasi_Ternak_2025_${new Date().toISOString().split('T')[0]}.xlsx`);
   };
 
   return (
@@ -101,7 +101,7 @@ export default function Populasi2025() {
                 <span className="text-xs font-bold text-emerald-700 whitespace-nowrap">Populasi 2025</span>
               </div>
               <h1 className="text-base sm:text-xl font-bold text-slate-900 tracking-tight leading-tight truncate">
-                Sensus Populasi Ternak TW 4 Tahun 2025
+                Data Populasi Ternak TW 4 Tahun 2025
               </h1>
             </div>
           </div>
@@ -139,7 +139,7 @@ export default function Populasi2025() {
           
           <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
             <h2 className="font-bold text-sm text-slate-900">
-              Tabel Sensus Lengkap (16 Komoditas Ternak)
+              Tabel Data Populasi Lengkap (16 Komoditas Ternak)
             </h2>
             <span className="font-sans text-xs text-slate-500">
               Menampilkan {filteredData.length} baris desa terdaftar

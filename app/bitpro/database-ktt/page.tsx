@@ -19,6 +19,7 @@ import {
   CheckCircle2,
   AlertTriangle,
   Download,
+  User,
 } from "lucide-react";
 
 /* =========================================================
@@ -453,7 +454,10 @@ export default function DatabaseKTTPage() {
                             </span>
                           </td>
                           <td className="p-4 text-slate-700 text-xs font-medium">
-                            👤 {row.namaKetuaKelompok || '-'}
+                            <span className="flex items-center gap-1.5">
+                              <User size={13} className="text-slate-400 shrink-0" />
+                              <span>{row.namaKetuaKelompok || '-'}</span>
+                            </span>
                           </td>
                           <td className="p-4 text-center">
                             <KelasBadge kelas={row.kelasKelompok} />

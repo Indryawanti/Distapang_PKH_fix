@@ -487,7 +487,7 @@ export default function LandingPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <h4 className="text-base sm:text-lg font-bold text-slate-900">
-                    {detailView === 'populasi' && 'Data Lengkap Sensus Populasi & Produksi Ternak'}
+                    {detailView === 'populasi' && 'Data Lengkap Populasi & Produksi Ternak'}
                     {detailView === 'farm' && 'Sebaran Data Farm Peternakan Kebumen'}
                     {detailView === 'ktt' && 'Database Kelompok Tani Ternak (KTT)'}
                     {detailView === 'sklb' && 'Surat Keterangan Layak Bibit (SKLB)'}
@@ -741,7 +741,7 @@ export default function LandingPage() {
                       <div>
                         <p className="font-bold text-sm text-slate-900 mb-0.5">Populasi & Produksi</p>
                         <p className="text-xs text-slate-500">
-                          Tabel sensus 16 komoditas ternak
+                          Tabel data populasi 16 komoditas ternak
                         </p>
                       </div>
                     </button>
